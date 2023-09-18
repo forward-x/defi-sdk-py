@@ -1,5 +1,11 @@
 # defi-sdk-py
 
+# Installation
+
+```bash
+pip install git+https://github.com/forward-x/defi-sdk-py
+```
+
 # Usage
 
 ## Deposit Collateral
@@ -11,12 +17,12 @@ import defi_sdk_py
 provider = web3.Web3.HTTPProvider(HOST)
 w3 = web3.Web3(provider)
 signer = web3.Account.privateKeyToAccount(PRIVATE_KEY)
-IAPHCore = w3.eth.contract(address=CORE_ADDRESS, abi=defi_sdk_py.IAPHCORE_ABI)
-IMembership = w3.eth.contract(address=MEMBERSHIP_ADDRESS, abi=defi_sdk_py.IMEMBERSHIP_ABI)
+IAPHCore = w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["UAT"]["CORE_MODULE"]["PROXY"], abi=defi_sdk_py.IAPHCORE_ABI)
+IMembership = w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["UAT"]["MEMBERSHIP_MODULE"]["MEMBERSHIP"], abi=defi_sdk_py.IMEMBERSHIP_ABI)
 nftId = IMembership.functions.getDefaultMembership(signer.address).call()
 amount =  10000 * 10**18
 # create tx
-tx = IAPHCore.functions.depositCollateral(nftId, TOKEN_ADDRESS["USDT"], TOKEN_ADDRESS["ETH"], amount).buildTransaction( 
+tx = IAPHCore.functions.depositCollateral(nftId, defi_sdk_py.ADDRESSES["AVAX"]["UAT"]["TOKEN"]["USDC"], defi_sdk_py.ADDRESSES["AVAX"]["UAT"]["TOKEN"]["ETH"], amount).buildTransaction( 
     {
         'from': signer.address,
         'nonce': w3.eth.get_transaction_count(signer.address),
@@ -41,13 +47,12 @@ import defi_sdk_py
 provider = web3.Web3.HTTPProvider(HOST)
 w3 = web3.Web3(provider)
 signer = web3.Account.privateKeyToAccount(PRIVATE_KEY)
-print(signer.address)
-IAPHCore = w3.eth.contract(address=CORE_ADDRESS, abi=defi_sdk_py.IAPHCORE_ABI)
-IMembership = w3.eth.contract(address=MEMBERSHIP_ADDRESS, abi=defi_sdk_py.IMEMBERSHIP_ABI)
+IAPHCore = w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["UAT"]["CORE_MODULE"]["PROXY"], abi=defi_sdk_py.IAPHCORE_ABI)
+IMembership = w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["UAT"]["MEMBERSHIP_MODULE"]["MEMBERSHIP"], abi=defi_sdk_py.IMEMBERSHIP_ABI)
 nftId = IMembership.functions.getDefaultMembership(signer.address).call()
 amount =  10000 * 10**18
 # create tx
-tx = IAPHCore.functions.withdrawCollateral(nftId, TOKEN_ADDRESS["USDT"], TOKEN_ADDRESS["ETH"], amount).buildTransaction( 
+tx = IAPHCore.functions.withdrawCollateral(nftId, defi_sdk_py.ADDRESSES["AVAX"]["UAT"]["TOKEN"]["USDC"], defi_sdk_py.ADDRESSES["AVAX"]["UAT"]["TOKEN"]["ETH"], amount).buildTransaction( 
     {
         'from': signer.address,
         'nonce': w3.eth.get_transaction_count(signer.address),
