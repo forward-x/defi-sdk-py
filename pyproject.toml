@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "defi_sdk_py"
-version = "0.0.3"
+version = "0.1.0"
 description = ""
 authors = ["nedondev <nedondev@gmail.com>"]
 readme = "README.md"
