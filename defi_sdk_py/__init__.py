@@ -9,3 +9,4 @@ from defi_sdk_py.abis.IInterestVault_ABI import IINTERESTVAULT_ABI
 from defi_sdk_py.abis.IMembership_ABI import IMEMBERSHIP_ABI
 from defi_sdk_py.abis.IStakePool_ABI import ISTAKEPOOL_ABI
 from defi_sdk_py.constants import ADDRESSES
+import defi_sdk_py.fwx_provider
