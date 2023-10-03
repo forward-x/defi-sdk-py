@@ -67,3 +67,11 @@ signed_tx = w3.eth.account.sign_transaction(tx, signer.key)
 # Send tx
 w3.eth.send_raw_transaction(signed_tx.rawTransaction)
 ```
+
+# Test
+
+```bash
+poetry run brownie test
+```
+
+If you have error with install `yaml 5.4.1`, [This solution](https://github.com/eth-brownie/brownie/issues/1701#issuecomment-1667707955) might help.

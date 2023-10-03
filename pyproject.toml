@@ -7,9 +7,11 @@ readme = "README.md"
 packages = [{ include = "defi_sdk_py" }]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.7.2,<3.10"
 web3 = "^5.30.0"
 
+[tool.poetry.group.dev.dependencies]
+eth-brownie = "^1.19.3"
 
 [build-system]
 requires = ["poetry-core"]
