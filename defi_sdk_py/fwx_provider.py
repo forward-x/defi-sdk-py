@@ -24,7 +24,8 @@ class FwxWeb3:
     #     - slippage: BigNumberish
     # - **Output**
     #     - result: CoreBase.Position (struct from solidity)
-    def openPosition(self, isLong, collateralTokenSymbol, underlyingTokenSymbol, nftId, entryPrice, contractSize, leverage, slippage):
+    def openPosition(self, isLong, collateralTokenSymbol, underlyingTokenSymbol, nftId, entryPrice, contractSize, leverage, slippage, gas=1300000, gasPrice=25):
+        validatePair(collateralTokenSymbol, underlyingTokenSymbol)
         pass
 
     # closePosition
@@ -35,8 +36,7 @@ class FwxWeb3:
     #     - closingSize: BigNumberish
     # - **Output**
     #     - result: CoreBase.Position (struct from solidity)
-
-    def closePosition(self, nftId, posId, closingSize):
+    def closePosition(self, nftId, posId, closingSize, gas=1300000, gasPrice=25):
         pass
 
     # depositCollateral
@@ -48,7 +48,6 @@ class FwxWeb3:
     #     - amount: BigNumberish
     # - **Output**
     #     - balance: BigNumberish
-
     def depositCollateral(self, collateralTokenSymbol, underlyingTokenSymbol, nftId, amount, gas=1300000, gasPrice=25):
         validatePair(collateralTokenSymbol, underlyingTokenSymbol)
         collateralDecimal = self.__getTokenDecimal(collateralTokenSymbol)
@@ -89,7 +88,6 @@ class FwxWeb3:
     #     - amount: BigNumberish
     # - **Output**
     #     - balance: BigNumberish
-
     def withdrawCollateral(self, collateralTokenSymbol, underlyingTokenSymbol, nftId, amount, gas=1300000, gasPrice=25):
         validatePair(collateralTokenSymbol, underlyingTokenSymbol)
         collateralDecimal = self.__getTokenDecimal(collateralTokenSymbol)
@@ -135,11 +133,8 @@ class FwxWeb3:
     #         - interestOwed: BigNumberish
     #         - interestOwedPerDay: BigNumberish
     #         - lastSettleTimestamp: BigNumberish
-
     def getAllActivePosition(self, nftId, pairs):
         activePositions = []
-        IAPHCore = self.w3.eth.contract(
-            address=defi_sdk_py.ADDRESSES["AVAX"]["CORE"], abi=defi_sdk_py.IAPHCORE_ABI)
         for pair in pairs:
             collateralTokenSymbol = pair["collateral"]
             underlyingTokenSymbol = pair["underlying"]
