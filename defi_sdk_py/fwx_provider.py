@@ -157,10 +157,6 @@ class FwxWeb3:
             nftId, collateralTokenSymbol, underlyingTokenSymbol)
         positionStateOutput = self.__getPositionStateInfo(
             nftId, positionOutput["positions"]["id"])
-        if positionStateOutput["isLong"]:
-            pass
-        else:
-            pass
         if positionOutput["positions"]["id"] == 0:
             return {
                 "id": 0,
@@ -282,10 +278,6 @@ class FwxWeb3:
         if abi["name"] == functionName:
             return True
         return False
-
-
-class FwxWebsocketProvider(web3.WebsocketProvider):
-    pass
 
 
 def getClient(url):
