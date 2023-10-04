@@ -6,6 +6,49 @@ class FwxWeb3:
     def __init__(self, url):
         self.w3 = web3.Web3(web3.HTTPProvider(url))
 
+    # openPosition
+    # - **Instance**: APHPool
+    # - **Note**: The user doesn’t have to know borrow token and swap token, just choose collateral and underlying then trade.
+    # - **Parameters**
+    #     - isLong: boolean
+    #     - collateral: TokenSymbols
+    #     - underlying: TokenSymbols
+    #     - nftId: BigNumberish
+    #     - entryPrice: BigNumberish
+    #     - contracSize: BigNumberish
+    #     - leverage: BigNumberish
+    #     - slippage: BigNumberish
+    # - **Output**
+    #     - result: CoreBase.Position (struct from solidity)
+    def openPosition(self, isLong, collateral, underlying, ):
+        pass
+    
+
+    # closePosition
+    # - **Instance**: APHCore
+    # - **Parameters**
+    #     - nftId: BigNumberish
+    #     - posId: BigNumberish
+    #     - closingSize: BigNumberish
+    # - **Output**
+    #     - result: CoreBase.Position (struct from solidity)
+    def closePosition(self, nftId, pairs):
+        pass
+
+
+    # depositCollateral
+    # - **Instance**: APHCore
+    # - **Parameters**
+    #     - collateral: TokenSymbols
+    #     - underlying: TokenSymbols
+    #     - nftId: BigNumberish
+    #     - amount: BigNumberish
+    # - **Output**
+    #     - balance: BigNumberish
+    def depositCollateral(self, nftId, pairs):
+        pass
+
+
     #  getAllActivePosition
     # - **Instance**: APHCore
     # - **Parameters**
@@ -20,7 +63,7 @@ class FwxWeb3:
     #         - collateralUsed: BigNumberish (collateral swapped)
     #         - interestOwed: BigNumberish
     #         - interestOwedPerDay: BigNumberish
-    #         - lastSettleTimstamp: BigNumberish
+    #         - lastSettleTimestamp: BigNumberish
     def getAllActivePosition(self, nftId, pairs):
         activePositions = []
         IAPHLibrary = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["APH_LIBRARY"], abi=defi_sdk_py.IAPHLIBRARY_ABI)
