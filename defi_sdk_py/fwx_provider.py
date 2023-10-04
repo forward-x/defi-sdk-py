@@ -51,7 +51,7 @@ class FwxWeb3:
     def depositCollateral(self, collateral, underlying, nftId, amount):
         validatePair(collateral,underlying)
         collateralDecimal = self.__getTokenDecimal(collateral)
-        amount = int(amount * collateralDecimal // 1)
+        amount = int(amount * collateralDecimal)
         IAPHCore = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["CORE"], abi=defi_sdk_py.IAPHCORE_ABI)
         IAPHLibrary = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["APH_LIBRARY"], abi=defi_sdk_py.IAPHLIBRARY_ABI)
         tx = IAPHCore.functions.depositCollateral(nftId, defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateral], defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlying], amount).buildTransaction( 
@@ -90,7 +90,7 @@ class FwxWeb3:
     def withdrawCollateral(self, collateral, underlying, nftId, amount):
         validatePair(collateral,underlying)
         collateralDecimal = self.__getTokenDecimal(collateral)
-        amount = int(amount * collateralDecimal // 1)
+        amount = int(amount * collateralDecimal)
         IAPHCore = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["CORE"], abi=defi_sdk_py.IAPHCORE_ABI)
         IAPHLibrary = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["APH_LIBRARY"], abi=defi_sdk_py.IAPHLIBRARY_ABI)
         tx = IAPHCore.functions.withdrawCollateral(nftId, defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateral], defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlying], amount).buildTransaction( 
