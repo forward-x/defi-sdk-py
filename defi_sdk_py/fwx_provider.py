@@ -48,7 +48,7 @@ class FwxWeb3:
     #     - amount: BigNumberish
     # - **Output**
     #     - balance: BigNumberish
-    def depositCollateral(self, collateralTokenSymbol, underlyingTokenSymbol, nftId, amount):
+    def depositCollateral(self, collateralTokenSymbol, underlyingTokenSymbol, nftId, amount, gas=1300000, gasPrice=25):
         validatePair(collateralTokenSymbol,underlyingTokenSymbol)
         collateralDecimal = self.__getTokenDecimal(collateralTokenSymbol)
         amount = int(amount * collateralDecimal)
@@ -58,8 +58,8 @@ class FwxWeb3:
             {
                 'from': self.signer.address,
                 'nonce': self.w3.eth.get_transaction_count(self.signer.address),
-                'gas': 1300000,
-                'gasPrice': self.w3.toWei(25, 'gwei'),
+                'gas': gas,
+                'gasPrice': self.w3.toWei(gasPrice, 'gwei'),
             }
         )
 
@@ -87,7 +87,7 @@ class FwxWeb3:
     #     - amount: BigNumberish
     # - **Output**
     #     - balance: BigNumberish
-    def withdrawCollateral(self, collateralTokenSymbol, underlyingTokenSymbol, nftId, amount):
+    def withdrawCollateral(self, collateralTokenSymbol, underlyingTokenSymbol, nftId, amount, gas=1300000, gasPrice=25):
         validatePair(collateralTokenSymbol,underlyingTokenSymbol)
         collateralDecimal = self.__getTokenDecimal(collateralTokenSymbol)
         amount = int(amount * collateralDecimal)
@@ -97,8 +97,8 @@ class FwxWeb3:
             {
                 'from': self.signer.address,
                 'nonce': self.w3.eth.get_transaction_count(self.signer.address),
-                'gas': 1300000,
-                'gasPrice': self.w3.toWei(25, 'gwei'),
+                'gas': gas,
+                'gasPrice': self.w3.toWei(gasPrice, 'gwei'),
             }
         )
 
