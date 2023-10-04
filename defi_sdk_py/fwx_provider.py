@@ -6,6 +6,9 @@ class FwxWeb3:
     def __init__(self, url):
         self.w3 = web3.Web3(web3.HTTPProvider(url))
 
+    def setSigner(self, privateKey):
+        self.signer = web3.Account.privateKeyToAccount(privateKey)
+
     # openPosition
     # - **Instance**: APHPool
     # - **Note**: The user doesn’t have to know borrow token and swap token, just choose collateral and underlying then trade.
@@ -15,12 +18,12 @@ class FwxWeb3:
     #     - underlying: TokenSymbols
     #     - nftId: BigNumberish
     #     - entryPrice: BigNumberish
-    #     - contracSize: BigNumberish
+    #     - contractSize: BigNumberish
     #     - leverage: BigNumberish
     #     - slippage: BigNumberish
     # - **Output**
     #     - result: CoreBase.Position (struct from solidity)
-    def openPosition(self, isLong, collateral, underlying, ):
+    def openPosition(self, isLong, collateral, underlying, nftId, entryPrice, contractSize, leverage, slippage):
         pass
     
 
@@ -32,7 +35,7 @@ class FwxWeb3:
     #     - closingSize: BigNumberish
     # - **Output**
     #     - result: CoreBase.Position (struct from solidity)
-    def closePosition(self, nftId, pairs):
+    def closePosition(self, nftId, posId, closingSize):
         pass
 
 
@@ -45,8 +48,72 @@ class FwxWeb3:
     #     - amount: BigNumberish
     # - **Output**
     #     - balance: BigNumberish
-    def depositCollateral(self, nftId, pairs):
-        pass
+    def depositCollateral(self, collateral, underlying, nftId, amount):
+        validatePair(collateral,underlying)
+        collateralDecimal = self.__getTokenDecimal(collateral)
+        amount = int(amount * collateralDecimal // 1)
+        IAPHCore = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["CORE"], abi=defi_sdk_py.IAPHCORE_ABI)
+        IAPHLibrary = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["APH_LIBRARY"], abi=defi_sdk_py.IAPHLIBRARY_ABI)
+        tx = IAPHCore.functions.depositCollateral(nftId, defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateral], defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlying], amount).buildTransaction( 
+            {
+                'from': self.signer.address,
+                'nonce': self.w3.eth.get_transaction_count(self.signer.address),
+                'gas': 1300000,
+                'gasPrice': self.w3.toWei(25, 'gwei'),
+            }
+        )
+
+        # Sign tx
+        signed_tx = self.w3.eth.account.sign_transaction(tx, self.signer.key)
+
+        # Send tx
+        tx_hash = self.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+        self.w3.eth.wait_for_transaction_receipt(tx_hash)
+        pairByte = IAPHLibrary.functions.hashPair(
+                defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateral],
+                defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlying],
+                ).call()
+        balance = IAPHCore.functions.wallets(nftId, pairByte).call()
+        return balance / collateralDecimal
+
+
+    # withdrawCollateral
+    # 
+    # - **Instance**: APHCore
+    # - **Parameters**
+    #     - collateral: TokenSymbols
+    #     - underlying: TokenSymbols
+    #     - nftId: BigNumberish
+    #     - amount: BigNumberish
+    # - **Output**
+    #     - balance: BigNumberish
+    def withdrawCollateral(self, collateral, underlying, nftId, amount):
+        validatePair(collateral,underlying)
+        collateralDecimal = self.__getTokenDecimal(collateral)
+        amount = int(amount * collateralDecimal // 1)
+        IAPHCore = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["CORE"], abi=defi_sdk_py.IAPHCORE_ABI)
+        IAPHLibrary = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["APH_LIBRARY"], abi=defi_sdk_py.IAPHLIBRARY_ABI)
+        tx = IAPHCore.functions.withdrawCollateral(nftId, defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateral], defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlying], amount).buildTransaction( 
+            {
+                'from': self.signer.address,
+                'nonce': self.w3.eth.get_transaction_count(self.signer.address),
+                'gas': 1300000,
+                'gasPrice': self.w3.toWei(25, 'gwei'),
+            }
+        )
+
+        # Sign tx
+        signed_tx = self.w3.eth.account.sign_transaction(tx, self.signer.key)
+
+        # Send tx
+        tx_hash = self.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+        self.w3.eth.wait_for_transaction_receipt(tx_hash)
+        pairByte = IAPHLibrary.functions.hashPair(
+                defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateral],
+                defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlying],
+                ).call()
+        balance = IAPHCore.functions.wallets(nftId, pairByte).call()
+        return balance / collateralDecimal
 
 
     #  getAllActivePosition
