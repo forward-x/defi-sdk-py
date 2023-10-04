@@ -66,32 +66,111 @@ class FwxWeb3:
     #         - lastSettleTimestamp: BigNumberish
     def getAllActivePosition(self, nftId, pairs):
         activePositions = []
-        IAPHLibrary = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["APH_LIBRARY"], abi=defi_sdk_py.IAPHLIBRARY_ABI)
         IAPHCore = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["CORE"], abi=defi_sdk_py.IAPHCORE_ABI)
         for pair in pairs:
             collateralTokenSymbol = pair["collateral"]
             underlyingTokenSymbol = pair["underlying"]
             validatePair(collateralTokenSymbol,underlyingTokenSymbol)
-            pairByte = IAPHLibrary.functions.hashPair(
-                    defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol],
-                    defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol],
-                    ).call()
-            position = IAPHCore.functions.positions(nftId, pairByte).call()
-            abi = next(filter(lambda abis: FwxWeb3.filterFunctionABI(abis, "positions"),IAPHCore.abi))
-            output = FwxWeb3.tupleOutputDecode(position, abi)
-            if output["positions"]["id"] != 0:
-                position = {
-                    "id": output["positions"]["id"],
-                    "entryPrice": output["positions"]["entryPrice"],
-                    "contractSize": output["positions"]["contractSize"],
-                    "borrowAmount": output["positions"]["borrowAmount"],
-                    "collateralUsed": output["positions"]["collateralSwappedAmount"],
-                    "interestOwed": output["positions"]["interestOwed"],
-                    "interestOwedPerDay": output["positions"]["interestOwePerDay"],
-                    "lastSettleTimestamp": output["positions"]["lastSettleTimestamp"],
-                    }
+            position = self.__getPositionInfo(nftId, collateralTokenSymbol, underlyingTokenSymbol)
+            if position["id"] != 0:
                 activePositions.append(position)
         return activePositions
+
+    def __getPositionInfo(self, nftId, collateralTokenSymbol, underlyingTokenSymbol):
+        collateralDecimal = self.__getTokenDecimal(collateralTokenSymbol)
+        underlyingDecimal = self.__getTokenDecimal(underlyingTokenSymbol)
+        positionOutput = self.__getPosition(nftId, collateralTokenSymbol, underlyingTokenSymbol)
+        positionStateOutput = self.__getPositionStateInfo(nftId, positionOutput["positions"]["id"])
+        if positionStateOutput["isLong"]:
+            pass
+        else:
+            pass
+        if positionOutput["positions"]["id"] == 0:
+            return {
+            "id": 0,
+            "entryPrice": 0,
+            "contractSize": 0,
+            "borrowAmount": 0,
+            "collateralUsed": 0,
+            "interestOwed": 0,
+            "interestOwedPerDay": 0,
+            "lastSettleTimestamp": 0,
+            }
+        borrowingDecimal = collateralDecimal if positionStateOutput["isLong"] else underlyingDecimal
+        position = {
+            "id": positionOutput["positions"]["id"],
+            "entryPrice": positionOutput["positions"]["entryPrice"] / 10**collateralDecimal,
+            "contractSize": positionOutput["positions"]["contractSize"] / 10**borrowingDecimal,
+            "borrowAmount": positionOutput["positions"]["borrowAmount"] / 10**borrowingDecimal,
+            "collateralUsed": positionOutput["positions"]["collateralSwappedAmount"] / 10**collateralDecimal,
+            "interestOwed": positionOutput["positions"]["interestOwed"] / 10**borrowingDecimal,
+            "interestOwedPerDay": positionOutput["positions"]["interestOwePerDay"] / 10**borrowingDecimal,
+            "lastSettleTimestamp": positionOutput["positions"]["lastSettleTimestamp"],
+            }
+        return position
+
+    def __getPositionStateInfo(self, nftId, posId):
+        positionStateOutput = self.__getPositionState(nftId,posId)
+        pair = self.__getPair(positionStateOutput["positionStates"]["pairByte"])
+        if positionStateOutput["positionStates"]["pairByte"] == 0:
+            return {
+                "active": 0,
+                "isLong": 0,
+                "PNL": 0,
+                "averageEntryPrice": 0,
+                "startTimestamp": 0,
+                "interestPaid": 0,
+                "totalSwapFeePaid": 0,
+                "totalTradingFeePaid": 0,
+            }
+        
+        collateralDecimal = self.__getTokenDecimalFromAddress(pair["collateralAddress"])
+        underlyingDecimal = self.__getTokenDecimalFromAddress(pair["underlyingAddress"])
+        borrowingDecimal = collateralDecimal if positionStateOutput["positionStates"]["isLong"] else underlyingDecimal
+        positionState = {
+                "active": positionStateOutput["positionStates"]["active"],
+                "isLong": positionStateOutput["positionStates"]["isLong"],
+                "PNL": positionStateOutput["positionStates"]["PNL"] / 10**18,
+                "averageEntryPrice": positionStateOutput["positionStates"]["averageEntryPrice"] / 10**collateralDecimal,
+                "startTimestamp": positionStateOutput["positionStates"]["startTimestamp"],
+                "interestPaid": positionStateOutput["positionStates"]["interestPaid"] / 10**borrowingDecimal,
+                "totalSwapFeePaid": positionStateOutput["positionStates"]["totalSwapFee"] / 10**borrowingDecimal,
+                "totalTradingFeePaid": positionStateOutput["positionStates"]["totalTradingFee"] / 10**collateralDecimal,
+            }
+        return positionState
+
+    def __getPosition(self, nftId, collateralTokenSymbol, underlyingTokenSymbol):
+        IAPHLibrary = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["APH_LIBRARY"], abi=defi_sdk_py.IAPHLIBRARY_ABI)
+        IAPHCore = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["CORE"], abi=defi_sdk_py.IAPHCORE_ABI)
+        pairByte = IAPHLibrary.functions.hashPair(
+                defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol],
+                defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol],
+                ).call()
+        position = IAPHCore.functions.positions(nftId, pairByte).call()
+        abi = next(filter(lambda abis: FwxWeb3.filterFunctionABI(abis, "positions"),IAPHCore.abi))
+        return FwxWeb3.tupleOutputDecode(position, abi)
+
+    def __getPositionState(self, nftId, posId):
+        IAPHCore = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["CORE"], abi=defi_sdk_py.IAPHCORE_ABI)
+        positionState = IAPHCore.functions.positionStates(nftId, posId).call()
+        abi = next(filter(lambda abis: FwxWeb3.filterFunctionABI(abis, "positionStates"),IAPHCore.abi))
+        return FwxWeb3.tupleOutputDecode(positionState, abi)
+
+    def __getPair(self, pairByte):
+        IAPHCore = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["CORE"], abi=defi_sdk_py.IAPHCORE_ABI)
+        pair = IAPHCore.functions.pairs(pairByte).call()
+        return {"collateralAddress":pair[0],"underlyingAddress":pair[1]}
+
+    def __getTokenDecimal(self, tokenSymbol):
+        IERC20 = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][tokenSymbol], abi=defi_sdk_py.IERC20_ABI)
+        decimal = IERC20.functions.decimals().call()
+        return decimal
+
+    def __getTokenDecimalFromAddress(self, tokenAddress):
+        IERC20 = self.w3.eth.contract(address=tokenAddress, abi=defi_sdk_py.IERC20_ABI)
+        decimal = IERC20.functions.decimals().call()
+        return decimal
+
 
     @staticmethod
     def tupleOutputDecode(value, abi):
