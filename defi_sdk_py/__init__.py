@@ -8,4 +8,6 @@ from defi_sdk_py.abis.IHelperPool_ABI import IHELPERPOOL_ABI
 from defi_sdk_py.abis.IInterestVault_ABI import IINTERESTVAULT_ABI
 from defi_sdk_py.abis.IMembership_ABI import IMEMBERSHIP_ABI
 from defi_sdk_py.abis.IStakePool_ABI import ISTAKEPOOL_ABI
+from defi_sdk_py.abis.IERC20_ABI import IERC20_ABI
 from defi_sdk_py.constants import ADDRESSES
+import defi_sdk_py.fwx_provider
