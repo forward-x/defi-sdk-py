@@ -23,7 +23,7 @@ class FwxWeb3:
     #     - slippage: BigNumberish
     # - **Output**
     #     - result: CoreBase.Position (struct from solidity)
-    def openPosition(self, isLong, collateral, underlying, nftId, entryPrice, contractSize, leverage, slippage):
+    def openPosition(self, isLong, collateralTokenSymbol, underlyingTokenSymbol, nftId, entryPrice, contractSize, leverage, slippage):
         pass
     
 
@@ -48,13 +48,13 @@ class FwxWeb3:
     #     - amount: BigNumberish
     # - **Output**
     #     - balance: BigNumberish
-    def depositCollateral(self, collateral, underlying, nftId, amount):
-        validatePair(collateral,underlying)
-        collateralDecimal = self.__getTokenDecimal(collateral)
+    def depositCollateral(self, collateralTokenSymbol, underlyingTokenSymbol, nftId, amount):
+        validatePair(collateralTokenSymbol,underlyingTokenSymbol)
+        collateralDecimal = self.__getTokenDecimal(collateralTokenSymbol)
         amount = int(amount * collateralDecimal)
         IAPHCore = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["CORE"], abi=defi_sdk_py.IAPHCORE_ABI)
         IAPHLibrary = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["APH_LIBRARY"], abi=defi_sdk_py.IAPHLIBRARY_ABI)
-        tx = IAPHCore.functions.depositCollateral(nftId, defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateral], defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlying], amount).buildTransaction( 
+        tx = IAPHCore.functions.depositCollateral(nftId, defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol], defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol], amount).buildTransaction( 
             {
                 'from': self.signer.address,
                 'nonce': self.w3.eth.get_transaction_count(self.signer.address),
@@ -70,8 +70,8 @@ class FwxWeb3:
         tx_hash = self.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
         self.w3.eth.wait_for_transaction_receipt(tx_hash)
         pairByte = IAPHLibrary.functions.hashPair(
-                defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateral],
-                defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlying],
+                defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol],
+                defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol],
                 ).call()
         balance = IAPHCore.functions.wallets(nftId, pairByte).call()
         return balance / collateralDecimal
@@ -87,13 +87,13 @@ class FwxWeb3:
     #     - amount: BigNumberish
     # - **Output**
     #     - balance: BigNumberish
-    def withdrawCollateral(self, collateral, underlying, nftId, amount):
-        validatePair(collateral,underlying)
-        collateralDecimal = self.__getTokenDecimal(collateral)
+    def withdrawCollateral(self, collateralTokenSymbol, underlyingTokenSymbol, nftId, amount):
+        validatePair(collateralTokenSymbol,underlyingTokenSymbol)
+        collateralDecimal = self.__getTokenDecimal(collateralTokenSymbol)
         amount = int(amount * collateralDecimal)
         IAPHCore = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["CORE"], abi=defi_sdk_py.IAPHCORE_ABI)
         IAPHLibrary = self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["APH_LIBRARY"], abi=defi_sdk_py.IAPHLIBRARY_ABI)
-        tx = IAPHCore.functions.withdrawCollateral(nftId, defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateral], defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlying], amount).buildTransaction( 
+        tx = IAPHCore.functions.withdrawCollateral(nftId, defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol], defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol], amount).buildTransaction( 
             {
                 'from': self.signer.address,
                 'nonce': self.w3.eth.get_transaction_count(self.signer.address),
@@ -109,8 +109,8 @@ class FwxWeb3:
         tx_hash = self.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
         self.w3.eth.wait_for_transaction_receipt(tx_hash)
         pairByte = IAPHLibrary.functions.hashPair(
-                defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateral],
-                defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlying],
+                defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol],
+                defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol],
                 ).call()
         balance = IAPHCore.functions.wallets(nftId, pairByte).call()
         return balance / collateralDecimal
