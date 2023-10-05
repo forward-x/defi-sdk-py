@@ -4,6 +4,32 @@ import defi_sdk_py
 
 
 class FwxWeb3:
+
+    POSITION_FUNCTION_NAME = "positions"
+    POSITION_STATE_FUNCTION_NAME = "positionStates"
+    POSITION_ID = "id"
+    POSITION_ENTRYPRICE = "entryPrice"
+    POSITION_CONTRACTSIZE = "contractSize"
+    POSITION_BORROWAMOUNT = "borrowAmount"
+    POSITION_COLLATERALUSED = "collateralUsed"
+    POSITION_COLLATERALSWAPPEDAMOUNT = "collateralSwappedAmount"
+    POSITION_INTERESTOWED = "interestOwed"
+    POSITION_INTERESTOWEDPERDAY = "interestOwedPerDay"
+    POSITION_INTERESTOWEPERDAY = "interestOwePerDay"
+    POSITION_LASTSETTLETIMESTAMP = "lastSettleTimestamp"
+
+    POSITION_STATE_ACTIVE = "active"
+    POSITION_STATE_ISLONG = "isLong"
+    POSITION_STATE_PNL = "PNL"
+    POSITION_STATE_AVERAGEENTRYPRICE = "averageEntryPrice"
+    POSITION_STATE_STARTTIMESTAMP = "startTimestamp"
+    POSITION_STATE_INTERESTPAID = "interestPaid"
+    POSITION_STATE_TOTALSWAPFEEPAID = "totalSwapFeePaid"
+    POSITION_STATE_TOTALSWAPFEE = "totalSwapFee"
+    POSITION_STATE_TOTALTRADINGFEEPAID = "totalTradingFeePaid"
+    POSITION_STATE_TOTALTRADINGFEE = "totalTradingFee"
+    POSITION_STATE_PAIRBYTE = "pairByte"
+
     def __init__(self, url):
         self.w3 = web3.Web3(web3.HTTPProvider(url))
 
@@ -52,11 +78,9 @@ class FwxWeb3:
         validatePair(collateralTokenSymbol, underlyingTokenSymbol)
         collateralDecimal = self.__getTokenDecimal(collateralTokenSymbol)
         amount = int(amount * collateralDecimal)
-        IAPHCore = self.w3.eth.contract(
-            address=defi_sdk_py.ADDRESSES["AVAX"]["CORE"], abi=defi_sdk_py.IAPHCORE_ABI)
-        IAPHLibrary = self.w3.eth.contract(
-            address=defi_sdk_py.ADDRESSES["AVAX"]["APH_LIBRARY"], abi=defi_sdk_py.IAPHLIBRARY_ABI)
-        tx = IAPHCore.functions.depositCollateral(nftId, defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol], defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol], amount).buildTransaction(
+        core = self.__getCore()
+        library = self.__getLibrary()
+        tx = core.functions.depositCollateral(nftId, defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol], defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol], amount).buildTransaction(
             {
                 'from': self.signer.address,
                 'nonce': self.w3.eth.get_transaction_count(self.signer.address),
@@ -71,11 +95,11 @@ class FwxWeb3:
         # Send tx
         txHash = self.w3.eth.send_raw_transaction(signedTx.rawTransaction)
         self.w3.eth.wait_for_transaction_receipt(txHash)
-        pairByte = IAPHLibrary.functions.hashPair(
+        pairByte = library.functions.hashPair(
             defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol],
             defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol],
         ).call()
-        balance = IAPHCore.functions.wallets(nftId, pairByte).call()
+        balance = core.functions.wallets(nftId, pairByte).call()
         return (txHash, balance / collateralDecimal)
 
     # withdrawCollateral
@@ -92,11 +116,9 @@ class FwxWeb3:
         validatePair(collateralTokenSymbol, underlyingTokenSymbol)
         collateralDecimal = self.__getTokenDecimal(collateralTokenSymbol)
         amount = int(amount * collateralDecimal)
-        IAPHCore = self.w3.eth.contract(
-            address=defi_sdk_py.ADDRESSES["AVAX"]["CORE"], abi=defi_sdk_py.IAPHCORE_ABI)
-        IAPHLibrary = self.w3.eth.contract(
-            address=defi_sdk_py.ADDRESSES["AVAX"]["APH_LIBRARY"], abi=defi_sdk_py.IAPHLIBRARY_ABI)
-        tx = IAPHCore.functions.withdrawCollateral(nftId, defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol], defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol], amount).buildTransaction(
+        core = self.__getCore()
+        library = self.__getLibrary()
+        tx = core.functions.withdrawCollateral(nftId, defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol], defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol], amount).buildTransaction(
             {
                 'from': self.signer.address,
                 'nonce': self.w3.eth.get_transaction_count(self.signer.address),
@@ -111,11 +133,11 @@ class FwxWeb3:
         # Send tx
         txHash = self.w3.eth.send_raw_transaction(signedTx.rawTransaction)
         self.w3.eth.wait_for_transaction_receipt(txHash)
-        pairByte = IAPHLibrary.functions.hashPair(
+        pairByte = library.functions.hashPair(
             defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol],
             defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol],
         ).call()
-        balance = IAPHCore.functions.wallets(nftId, pairByte).call()
+        balance = core.functions.wallets(nftId, pairByte).call()
         return (txHash, balance / collateralDecimal)
 
     #  getAllActivePosition
@@ -151,45 +173,68 @@ class FwxWeb3:
         positionOutput = self.__getPosition(
             nftId, collateralTokenSymbol, underlyingTokenSymbol)
         positionStateOutput = self.__getPositionStateInfo(
-            nftId, positionOutput["positions"]["id"])
-        if positionOutput["positions"]["id"] == 0:
+            nftId, positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_ID])
+        if positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_ID] == 0:
             return {
-                "id": 0,
-                "entryPrice": 0,
-                "contractSize": 0,
-                "borrowAmount": 0,
-                "collateralUsed": 0,
-                "interestOwed": 0,
-                "interestOwedPerDay": 0,
-                "lastSettleTimestamp": 0,
+                FwxWeb3.POSITION_ID: 0,
+                FwxWeb3.POSITION_ENTRYPRICE: 0,
+                FwxWeb3.POSITION_CONTRACTSIZE: 0,
+                FwxWeb3.POSITION_BORROWAMOUNT: 0,
+                FwxWeb3.POSITION_COLLATERALUSED: 0,
+                FwxWeb3.POSITION_INTERESTOWED: 0,
+                FwxWeb3.POSITION_INTERESTOWEDPERDAY: 0,
+                FwxWeb3.POSITION_LASTSETTLETIMESTAMP: 0,
             }
-        borrowingDecimal = collateralDecimal if positionStateOutput["isLong"] else underlyingDecimal
+        borrowingDecimal = collateralDecimal if positionStateOutput["ISLONG"] else underlyingDecimal
         position = {
-            "id": positionOutput["positions"]["id"],
-            "entryPrice": positionOutput["positions"]["entryPrice"] / 10**collateralDecimal,
-            "contractSize": positionOutput["positions"]["contractSize"] / 10**borrowingDecimal,
-            "borrowAmount": positionOutput["positions"]["borrowAmount"] / 10**borrowingDecimal,
-            "collateralUsed": positionOutput["positions"]["collateralSwappedAmount"] / 10**collateralDecimal,
-            "interestOwed": positionOutput["positions"]["interestOwed"] / 10**borrowingDecimal,
-            "interestOwedPerDay": positionOutput["positions"]["interestOwePerDay"] / 10**borrowingDecimal,
-            "lastSettleTimestamp": positionOutput["positions"]["lastSettleTimestamp"],
+            FwxWeb3.POSITION_ID: positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_ID],
+            FwxWeb3.POSITION_ENTRYPRICE: positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_ENTRYPRICE] / 10**collateralDecimal,
+            FwxWeb3.POSITION_CONTRACTSIZE: positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_CONTRACTSIZE] / 10**borrowingDecimal,
+            FwxWeb3.POSITION_BORROWAMOUNT: positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_BORROWAMOUNT] / 10**borrowingDecimal,
+            FwxWeb3.POSITION_COLLATERALUSED: positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_COLLATERALSWAPPEDAMOUNT] / 10**collateralDecimal,
+            FwxWeb3.POSITION_INTERESTOWED: positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_INTERESTOWED] / 10**borrowingDecimal,
+            FwxWeb3.POSITION_INTERESTOWEDPERDAY: positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_INTERESTOWEPERDAY] / 10**borrowingDecimal,
+            FwxWeb3.POSITION_LASTSETTLETIMESTAMP: positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_LASTSETTLETIMESTAMP],
         }
         return position
+
+    POSITION_FUNCTION_NAME = "positions"
+    POSITION_STATE_FUNCTION_NAME = "positionStates"
+    POSITION_ID = "id"
+    POSITION_ENTRYPRICE = "entryPrice"
+    POSITION_CONTRACTSIZE = "contractSize"
+    POSITION_BORROWAMOUNT = "borrowAmount"
+    POSITION_COLLATERALUSED = "collateralUsed"
+    POSITION_INTERESTOWED = "interestOwed"
+    POSITION_INTERESTOWEDPERDAY = "interestOwedPerDay"
+    POSITION_INTERESTOWEPERDAY = "interestOwePerDay"
+    POSITION_LASTSETTLETIMESTAMP = "lastSettleTimestamp"
+
+    POSITION_STATE_ACTIVE = "active"
+    POSITION_STATE_ISLONG = "isLong"
+    POSITION_STATE_PNL = "PNL"
+    POSITION_STATE_AVERAGEENTRYPRICE = "averageEntryPrice"
+    POSITION_STATE_STARTTIMESTAMP = "startTimestamp"
+    POSITION_STATE_INTERESTPAID = "interestPaid"
+    POSITION_STATE_TOTALSWAPFEEPAID = "totalSwapFeePaid"
+    POSITION_STATE_TOTALSWAPFEE = "totalSwapFee"
+    POSITION_STATE_TOTALTRADINGFEEPAID = "totalTradingFeePaid"
+    POSITION_STATE_TOTALTRADINGFEE = "totalTradingFee"
 
     def __getPositionStateInfo(self, nftId, posId):
         positionStateOutput = self.__getPositionState(nftId, posId)
         pair = self.__getPair(
-            positionStateOutput["positionStates"]["pairByte"])
-        if positionStateOutput["positionStates"]["pairByte"] == 0:
+            positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_PAIRBYTE])
+        if positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_PAIRBYTE] == 0:
             return {
-                "active": 0,
-                "isLong": 0,
-                "PNL": 0,
-                "averageEntryPrice": 0,
-                "startTimestamp": 0,
-                "interestPaid": 0,
-                "totalSwapFeePaid": 0,
-                "totalTradingFeePaid": 0,
+                FwxWeb3.POSITION_STATE_ACTIVE: 0,
+                FwxWeb3.POSITION_STATE_ISLONG: 0,
+                FwxWeb3.POSITION_STATE_PNL: 0,
+                FwxWeb3.POSITION_STATE_AVERAGEENTRYPRICE: 0,
+                FwxWeb3.POSITION_STATE_STARTTIMESTAMP: 0,
+                FwxWeb3.POSITION_STATE_INTERESTPAID: 0,
+                FwxWeb3.POSITION_STATE_TOTALSWAPFEEPAID: 0,
+                FwxWeb3.POSITION_STATE_TOTALTRADINGFEEPAID: 0,
             }
 
         collateralDecimal = self.__getTokenDecimalFromAddress(
@@ -197,58 +242,62 @@ class FwxWeb3:
         underlyingDecimal = self.__getTokenDecimalFromAddress(
             pair["underlyingAddress"])
         borrowingDecimal = collateralDecimal if positionStateOutput[
-            "positionStates"]["isLong"] else underlyingDecimal
+            FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_ISLONG] else underlyingDecimal
         positionState = {
-            "active": positionStateOutput["positionStates"]["active"],
-            "isLong": positionStateOutput["positionStates"]["isLong"],
-            "PNL": positionStateOutput["positionStates"]["PNL"] / 10**18,
-            "averageEntryPrice": positionStateOutput["positionStates"]["averageEntryPrice"] / 10**collateralDecimal,
-            "startTimestamp": positionStateOutput["positionStates"]["startTimestamp"],
-            "interestPaid": positionStateOutput["positionStates"]["interestPaid"] / 10**borrowingDecimal,
-            "totalSwapFeePaid": positionStateOutput["positionStates"]["totalSwapFee"] / 10**borrowingDecimal,
-            "totalTradingFeePaid": positionStateOutput["positionStates"]["totalTradingFee"] / 10**collateralDecimal,
+            FwxWeb3.POSITION_STATE_ACTIVE: positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_ACTIVE],
+            FwxWeb3.POSITION_STATE_ISLONG: positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_ISLONG],
+            FwxWeb3.POSITION_STATE_PNL: positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_PNL] / 10**18,
+            FwxWeb3.POSITION_STATE_AVERAGEENTRYPRICE: positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_AVERAGEENTRYPRICE] / 10**collateralDecimal,
+            FwxWeb3.POSITION_STATE_STARTTIMESTAMP: positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_STARTTIMESTAMP],
+            FwxWeb3.POSITION_STATE_INTERESTPAID: positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_INTERESTPAID] / 10**borrowingDecimal,
+            FwxWeb3.POSITION_STATE_TOTALSWAPFEEPAID: positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_TOTALSWAPFEE] / 10**borrowingDecimal,
+            FwxWeb3.POSITION_STATE_TOTALTRADINGFEEPAID: positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_TOTALTRADINGFEE] / 10**collateralDecimal,
         }
         return positionState
 
     def __getPosition(self, nftId, collateralTokenSymbol, underlyingTokenSymbol):
-        IAPHLibrary = self.w3.eth.contract(
-            address=defi_sdk_py.ADDRESSES["AVAX"]["APH_LIBRARY"], abi=defi_sdk_py.IAPHLIBRARY_ABI)
-        IAPHCore = self.w3.eth.contract(
-            address=defi_sdk_py.ADDRESSES["AVAX"]["CORE"], abi=defi_sdk_py.IAPHCORE_ABI)
-        pairByte = IAPHLibrary.functions.hashPair(
+        core = self.__getCore()
+        library = self.__getLibrary()
+        pairByte = library.functions.hashPair(
             defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol],
             defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol],
         ).call()
-        position = IAPHCore.functions.positions(nftId, pairByte).call()
+        position = core.functions.positions(nftId, pairByte).call()
         abi = next(filter(lambda abis: FwxWeb3.filterFunctionABI(
-            abis, "positions"), IAPHCore.abi))
+            abis, "positions"), core.abi))
         return FwxWeb3.tupleOutputDecode(position, abi)
 
     def __getPositionState(self, nftId, posId):
-        IAPHCore = self.w3.eth.contract(
-            address=defi_sdk_py.ADDRESSES["AVAX"]["CORE"], abi=defi_sdk_py.IAPHCORE_ABI)
-        positionState = IAPHCore.functions.positionStates(nftId, posId).call()
+        core = self.__getCore()
+        positionState = core.functions.positionStates(nftId, posId).call()
         abi = next(filter(lambda abis: FwxWeb3.filterFunctionABI(
-            abis, "positionStates"), IAPHCore.abi))
+            abis, "positionStates"), core.abi))
         return FwxWeb3.tupleOutputDecode(positionState, abi)
 
     def __getPair(self, pairByte):
-        IAPHCore = self.w3.eth.contract(
-            address=defi_sdk_py.ADDRESSES["AVAX"]["CORE"], abi=defi_sdk_py.IAPHCORE_ABI)
-        pair = IAPHCore.functions.pairs(pairByte).call()
+        core = self.__getCore()
+        pair = core.functions.pairs(pairByte).call()
         return {"collateralAddress": pair[0], "underlyingAddress": pair[1]}
 
     def __getTokenDecimal(self, tokenSymbol):
-        IERC20 = self.w3.eth.contract(
-            address=defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][tokenSymbol], abi=defi_sdk_py.IERC20_ABI)
-        decimal = IERC20.functions.decimals().call()
+        token = self.__getToken(
+            defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][tokenSymbol])
+        decimal = token.functions.decimals().call()
         return decimal
 
     def __getTokenDecimalFromAddress(self, tokenAddress):
-        IERC20 = self.w3.eth.contract(
-            address=tokenAddress, abi=defi_sdk_py.IERC20_ABI)
-        decimal = IERC20.functions.decimals().call()
+        token = self.__getToken(tokenAddress)
+        decimal = token.functions.decimals().call()
         return decimal
+
+    def __getCore(self):
+        return self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["CORE"], abi=defi_sdk_py.IAPHCORE_ABI)
+
+    def __getLibrary(self):
+        return self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["APH_LIBRARY"], abi=defi_sdk_py.IAPHLIBRARY_ABI)
+
+    def __getToken(self, tokenAddress):
+        return self.w3.eth.contract(address=tokenAddress, abi=defi_sdk_py.IERC20_ABI)
 
     @staticmethod
     def tupleOutputDecode(value, abi):
