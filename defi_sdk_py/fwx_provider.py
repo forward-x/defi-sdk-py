@@ -52,7 +52,61 @@ class FwxWeb3:
     #     - result: CoreBase.Position (struct from solidity)
     def openPosition(self, isLong, collateralTokenSymbol, underlyingTokenSymbol, nftId, entryPrice, contractSize, leverage, slippage, gas=1300000, gasPrice=25):
         validatePair(collateralTokenSymbol, underlyingTokenSymbol)
-        pass
+        collateralDecimal = self.__getTokenDecimal(collateralTokenSymbol)
+        underlyingDecimal = self.__getTokenDecimal(underlyingTokenSymbol)
+
+        tx = None
+        contractSize = int(contractSize * 10**underlyingDecimal)
+        leverage = int(leverage * 10**18)
+        slippage = int(slippage * 10**18)
+        entryPrice = entryPrice * 10**collateralDecimal
+        if isLong:
+            pool = self.__getPool(
+                defi_sdk_py.ADDRESSES["AVAX"]["POOL"][collateralTokenSymbol])
+            tx = pool.functions.openPosition(
+                nftId,
+                defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol],
+                defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol],
+                entryPrice,
+                contractSize,
+                leverage,
+                slippage
+            ).buildTransaction(
+                {
+                    'from': self.signer.address,
+                    'nonce': self.w3.eth.get_transaction_count(self.signer.address),
+                    'gas': 1500000,
+                    'gasPrice': self.w3.toWei(25, 'gwei'),
+                }
+            )
+        else:
+            pool = self.__getPool(
+                defi_sdk_py.ADDRESSES["AVAX"]["POOL"][underlyingTokenSymbol])
+            tx = pool.functions.openPosition(
+                nftId,
+                defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol],
+                defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol],
+                entryPrice,
+                contractSize,
+                leverage,
+                slippage
+            ).buildTransaction(
+                {
+                    'from': self.signer.address,
+                    'nonce': self.w3.eth.get_transaction_count(self.signer.address),
+                    'gas': gas,
+                    'gasPrice': self.w3.toWei(gasPrice, 'gwei'),
+                }
+            )
+        # Sign tx
+        signedTx = self.w3.eth.account.sign_transaction(tx, self.signer.key)
+
+        # Send tx
+        txHash = self.w3.eth.send_raw_transaction(signedTx.rawTransaction)
+        self.w3.eth.wait_for_transaction_receipt(txHash)
+        position = self.__getPosition(
+            nftId, collateralTokenSymbol, underlyingTokenSymbol)
+        return (txHash, position)
 
     # closePosition
     # - **Instance**: APHCore
@@ -292,6 +346,9 @@ class FwxWeb3:
 
     def __getCore(self):
         return self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["CORE"], abi=defi_sdk_py.IAPHCORE_ABI)
+
+    def __getPool(self, poolAddress):
+        return self.w3.eth.contract(address=poolAddress, abi=defi_sdk_py.IAPHPOOL_ABI)
 
     def __getLibrary(self):
         return self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["APH_LIBRARY"], abi=defi_sdk_py.IAPHLIBRARY_ABI)
