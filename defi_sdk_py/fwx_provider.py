@@ -30,6 +30,9 @@ class FwxWeb3:
     POSITION_STATE_TOTALTRADINGFEE = "totalTradingFee"
     POSITION_STATE_PAIRBYTE = "pairByte"
 
+    COLLATERAL_ADDRESS = "collateralAddress"
+    UNDERLYING_ADDRESS = "underlyingAddress"
+
     def __init__(self, url):
         self.w3 = web3.Web3(web3.HTTPProvider(url))
 
@@ -252,29 +255,6 @@ class FwxWeb3:
         }
         return position
 
-    POSITION_FUNCTION_NAME = "positions"
-    POSITION_STATE_FUNCTION_NAME = "positionStates"
-    POSITION_ID = "id"
-    POSITION_ENTRYPRICE = "entryPrice"
-    POSITION_CONTRACTSIZE = "contractSize"
-    POSITION_BORROWAMOUNT = "borrowAmount"
-    POSITION_COLLATERALUSED = "collateralUsed"
-    POSITION_INTERESTOWED = "interestOwed"
-    POSITION_INTERESTOWEDPERDAY = "interestOwedPerDay"
-    POSITION_INTERESTOWEPERDAY = "interestOwePerDay"
-    POSITION_LASTSETTLETIMESTAMP = "lastSettleTimestamp"
-
-    POSITION_STATE_ACTIVE = "active"
-    POSITION_STATE_ISLONG = "isLong"
-    POSITION_STATE_PNL = "PNL"
-    POSITION_STATE_AVERAGEENTRYPRICE = "averageEntryPrice"
-    POSITION_STATE_STARTTIMESTAMP = "startTimestamp"
-    POSITION_STATE_INTERESTPAID = "interestPaid"
-    POSITION_STATE_TOTALSWAPFEEPAID = "totalSwapFeePaid"
-    POSITION_STATE_TOTALSWAPFEE = "totalSwapFee"
-    POSITION_STATE_TOTALTRADINGFEEPAID = "totalTradingFeePaid"
-    POSITION_STATE_TOTALTRADINGFEE = "totalTradingFee"
-
     def __getPositionStateInfo(self, nftId, posId):
         positionStateOutput = self.__getPositionState(nftId, posId)
         pair = self.__getPair(
@@ -292,9 +272,9 @@ class FwxWeb3:
             }
 
         collateralDecimal = self.__getTokenDecimalFromAddress(
-            pair["collateralAddress"])
+            pair[FwxWeb3.COLLATERAL_ADDRESS])
         underlyingDecimal = self.__getTokenDecimalFromAddress(
-            pair["underlyingAddress"])
+            pair[FwxWeb3.UNDERLYING_ADDRESS])
         borrowingDecimal = collateralDecimal if positionStateOutput[
             FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_ISLONG] else underlyingDecimal
         positionState = {
@@ -317,21 +297,22 @@ class FwxWeb3:
             defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol],
         ).call()
         position = core.functions.positions(nftId, pairByte).call()
+
         abi = next(filter(lambda abis: FwxWeb3.filterFunctionABI(
-            abis, "positions"), core.abi))
+            abis, FwxWeb3.POSITION_FUNCTION_NAME), core.abi))
         return FwxWeb3.tupleOutputDecode(position, abi)
 
     def __getPositionState(self, nftId, posId):
         core = self.__getCore()
         positionState = core.functions.positionStates(nftId, posId).call()
         abi = next(filter(lambda abis: FwxWeb3.filterFunctionABI(
-            abis, "positionStates"), core.abi))
+            abis, FwxWeb3.POSITION_STATE_FUNCTION_NAME), core.abi))
         return FwxWeb3.tupleOutputDecode(positionState, abi)
 
     def __getPair(self, pairByte):
         core = self.__getCore()
         pair = core.functions.pairs(pairByte).call()
-        return {"collateralAddress": pair[0], "underlyingAddress": pair[1]}
+        return {FwxWeb3.COLLATERAL_ADDRESS: pair[0], FwxWeb3.UNDERLYING_ADDRESS: pair[1]}
 
     def __getTokenDecimal(self, tokenSymbol):
         token = self.__getToken(
