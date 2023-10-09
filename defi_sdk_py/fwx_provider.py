@@ -120,7 +120,35 @@ class FwxWeb3:
     # - **Output**
     #     - result: CoreBase.Position (struct from solidity)
     def closePosition(self, nftId, posId, closingSize, gas=1300000, gasPrice=25):
-        pass
+        positionState = self.__getPositionState(nftId, posId)
+        pair = self.__getPair(
+            positionState[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_PAIRBYTE])
+        underlyingDecimal = self.__getTokenDecimalFromAddress(
+            pair[FwxWeb3.UNDERLYING_ADDRESS])
+        closingSize = int(closingSize * 10**underlyingDecimal)
+        core = self.__getCore()
+        tx = core.functions.closePosition(
+            nftId,
+            posId,
+            closingSize
+        ).buildTransaction(
+            {
+                'from': self.signer.address,
+                'nonce': self.w3.eth.get_transaction_count(self.signer.address),
+                'gas': gas,
+                'gasPrice': self.w3.toWei(gasPrice, 'gwei'),
+            }
+        )
+
+        # Sign tx
+        signedTx = self.w3.eth.account.sign_transaction(tx, self.signer.key)
+
+        # Send tx
+        txHash = self.w3.eth.send_raw_transaction(signedTx.rawTransaction)
+        self.w3.eth.wait_for_transaction_receipt(txHash)
+        position = self.__getPositionFromAddress(
+            nftId, pair[FwxWeb3.COLLATERAL_ADDRESS], pair[FwxWeb3.UNDERLYING_ADDRESS])
+        return (txHash, position)
 
     # depositCollateral
     # - **Instance**: APHCore
@@ -134,7 +162,7 @@ class FwxWeb3:
     def depositCollateral(self, collateralTokenSymbol, underlyingTokenSymbol, nftId, amount, gas=1300000, gasPrice=25):
         validatePair(collateralTokenSymbol, underlyingTokenSymbol)
         collateralDecimal = self.__getTokenDecimal(collateralTokenSymbol)
-        amount = int(amount * collateralDecimal)
+        amount = int(amount * 10 ** collateralDecimal)
         core = self.__getCore()
         library = self.__getLibrary()
         tx = core.functions.depositCollateral(nftId, defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol], defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol], amount).buildTransaction(
@@ -157,7 +185,7 @@ class FwxWeb3:
             defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol],
         ).call()
         balance = core.functions.wallets(nftId, pairByte).call()
-        return (txHash, balance / collateralDecimal)
+        return (txHash, balance / 10 ** collateralDecimal)
 
     # withdrawCollateral
     #
@@ -172,7 +200,7 @@ class FwxWeb3:
     def withdrawCollateral(self, collateralTokenSymbol, underlyingTokenSymbol, nftId, amount, gas=1300000, gasPrice=25):
         validatePair(collateralTokenSymbol, underlyingTokenSymbol)
         collateralDecimal = self.__getTokenDecimal(collateralTokenSymbol)
-        amount = int(amount * collateralDecimal)
+        amount = int(amount * 10**collateralDecimal)
         core = self.__getCore()
         library = self.__getLibrary()
         tx = core.functions.withdrawCollateral(nftId, defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol], defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol], amount).buildTransaction(
@@ -195,7 +223,7 @@ class FwxWeb3:
             defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol],
         ).call()
         balance = core.functions.wallets(nftId, pairByte).call()
-        return (txHash, balance / collateralDecimal)
+        return (txHash, balance / 10 ** collateralDecimal)
 
     #  getAllActivePosition
     # - **Instance**: APHCore
@@ -290,11 +318,14 @@ class FwxWeb3:
         return positionState
 
     def __getPosition(self, nftId, collateralTokenSymbol, underlyingTokenSymbol):
+        return self.__getPositionFromAddress(nftId, defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol], defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol])
+
+    def __getPositionFromAddress(self, nftId, collateralTokenAddress, underlyingTokenAddress):
         core = self.__getCore()
         library = self.__getLibrary()
         pairByte = library.functions.hashPair(
-            defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol],
-            defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol],
+            collateralTokenAddress,
+            underlyingTokenAddress,
         ).call()
         position = core.functions.positions(nftId, pairByte).call()
 
