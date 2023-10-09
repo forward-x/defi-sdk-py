@@ -30,6 +30,10 @@ class FwxWeb3:
     POSITION_STATE_TOTALTRADINGFEE = "totalTradingFee"
     POSITION_STATE_PAIRBYTE = "pairByte"
 
+    BALANCE_DETAIL_FREE_BALANCE = "freeBalance"
+    BALANCE_DETAIL_USED_BALANCE = "usedBalance"
+    BALANCE_DETAIL_TOTAL_BALANCE = "totalBalance"
+
     COLLATERAL_ADDRESS = "collateralAddress"
     UNDERLYING_ADDRESS = "underlyingAddress"
 
@@ -188,7 +192,6 @@ class FwxWeb3:
         return (txHash, balance / 10 ** collateralDecimal)
 
     # withdrawCollateral
-    #
     # - **Instance**: APHCore
     # - **Parameters**
     #     - collateral: TokenSymbols
@@ -225,6 +228,24 @@ class FwxWeb3:
         balance = core.functions.wallets(nftId, pairByte).call()
         return (txHash, balance / 10 ** collateralDecimal)
 
+    # getPositionInfo
+    # - **Instance**: APHCore
+    # - **Parameters**
+    #     - nftId: BigNumberish
+    #     - collateral: TokenSymbols
+    #     - underlying: TokenSymbols
+    # - **Output**
+    #     - id: BigNumberish
+    #     - entryPrice: BigNumberish
+    #     - contractSize: BigNumberish
+    #     - borrowAmount: BigNumberish
+    #     - collateralUsed: BigNumberish (collateral swapped)
+    #     - interestOwed: BigNumberish
+    #     - interestOwedPerDay: BigNumberish
+    #     - lastSettleTimstamp: BigNumberish
+    def getPositionInfo(self, nftId, collateralTokenSymbol, underlyingTokenSymbol):
+        return self.__getPositionInfo(nftId, collateralTokenSymbol, underlyingTokenSymbol)
+
     #  getAllActivePosition
     # - **Instance**: APHCore
     # - **Parameters**
@@ -252,12 +273,74 @@ class FwxWeb3:
                 activePositions.append(position)
         return activePositions
 
+    # getPositionStateInfo
+    # - **Instance**: APHCore
+    # - **Parameters**
+    #     - nftId: BigNumberish
+    #     - posId: BigNumberish
+    # - **Output**
+    #     - active: boolean
+    #     - isLong: boolean
+    #     - PNL: BigNumberish
+    #     - averateEntryProce: BigNumberish
+    #     - startTimstamp: BigNumberish
+    #     - interestPaid: BigNumberish
+    #     - totalSwapFeePaid: BigNumberish
+    #     - totalTradingFeePaid: BigNumberish
+    def getPositionStateInfo(self, nftId, posId):
+        return self.__getPositionStateInfo(nftId, posId)
+
+    # getCurrentMargin
+    # - **Instance**: APHCore
+    # - **Parameters**
+    #     - nftId: BigNumberish
+    #     - collateral: TokenSymbols
+    #     - underlying: TokenSymbols
+    # - **Output**
+    #     - PNL: BigNumberish (optional, can be separated to another function)
+    #     - margin: BigNumberish
+    def getCurrentMargin(self, nftId, collateralTokenSymbol, underlyingTokenSymbol):
+        helperFutureTrade = self.__getHelperFutureTrade()
+        library = self.__getLibrary()
+        pairByte = library.functions.hashPair(
+            defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol],
+            defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol]
+        ).call()
+
+        return helperFutureTrade.functions.getPositionMargin(nftId, pairByte).call() / 10 ** 18
+
+    # getAvailableCollateral
+    # - **Instance**: APHCore
+    # - **Parameters**
+    #     - nftId: BigNumberish
+    #     - collateral: TokenSymbols
+    #     - underlying: TokenSymbols
+    # - **Output**
+    #     - freeBalance: BigNumberish
+    #     - usedBalance: BigNumberish
+    #     - totalBalance: BigNumberish
+    def getAvailableCollateral(self, nftId, collateralTokenSymbol, underlyingTokenSymbol):
+        helperFutureTrade = self.__getHelperFutureTrade()
+        library = self.__getLibrary()
+        pairByte = library.functions.hashPair(
+            defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][collateralTokenSymbol],
+            defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][underlyingTokenSymbol]
+        ).call()
+        collateralDecimal = self.__getTokenDecimal(collateralTokenSymbol)
+        balanceDetail = helperFutureTrade.functions.getBalanceDetails(
+            nftId, pairByte).call()
+        return {
+            FwxWeb3.BALANCE_DETAIL_FREE_BALANCE: balanceDetail[0] / 10 ** collateralDecimal,
+            FwxWeb3.BALANCE_DETAIL_USED_BALANCE: balanceDetail[1] / 10 ** collateralDecimal,
+            FwxWeb3.BALANCE_DETAIL_TOTAL_BALANCE: balanceDetail[2] / 10 ** collateralDecimal,
+        }
+
     def __getPositionInfo(self, nftId, collateralTokenSymbol, underlyingTokenSymbol):
         collateralDecimal = self.__getTokenDecimal(collateralTokenSymbol)
         underlyingDecimal = self.__getTokenDecimal(underlyingTokenSymbol)
         positionOutput = self.__getPosition(
             nftId, collateralTokenSymbol, underlyingTokenSymbol)
-        positionStateOutput = self.__getPositionStateInfo(
+        positionState = self.__getPositionStateInfo(
             nftId, positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_ID])
         if positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_ID] == 0:
             return {
@@ -270,7 +353,8 @@ class FwxWeb3:
                 FwxWeb3.POSITION_INTERESTOWEDPERDAY: 0,
                 FwxWeb3.POSITION_LASTSETTLETIMESTAMP: 0,
             }
-        borrowingDecimal = collateralDecimal if positionStateOutput["ISLONG"] else underlyingDecimal
+        borrowingDecimal = collateralDecimal if positionState[
+            FwxWeb3.POSITION_STATE_ISLONG] else underlyingDecimal
         position = {
             FwxWeb3.POSITION_ID: positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_ID],
             FwxWeb3.POSITION_ENTRYPRICE: positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_ENTRYPRICE] / 10**collateralDecimal,
@@ -287,10 +371,10 @@ class FwxWeb3:
         positionStateOutput = self.__getPositionState(nftId, posId)
         pair = self.__getPair(
             positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_PAIRBYTE])
-        if positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_PAIRBYTE] == 0:
+        if int.from_bytes(positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_PAIRBYTE], 'big') == 0:
             return {
-                FwxWeb3.POSITION_STATE_ACTIVE: 0,
-                FwxWeb3.POSITION_STATE_ISLONG: 0,
+                FwxWeb3.POSITION_STATE_ACTIVE: False,
+                FwxWeb3.POSITION_STATE_ISLONG: False,
                 FwxWeb3.POSITION_STATE_PNL: 0,
                 FwxWeb3.POSITION_STATE_AVERAGEENTRYPRICE: 0,
                 FwxWeb3.POSITION_STATE_STARTTIMESTAMP: 0,
@@ -361,6 +445,9 @@ class FwxWeb3:
 
     def __getPool(self, poolAddress):
         return self.w3.eth.contract(address=poolAddress, abi=defi_sdk_py.IAPHPOOL_ABI)
+
+    def __getHelperFutureTrade(self):
+        return self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["HELPER_FUTURETRADE"], abi=defi_sdk_py.IHELPERFUTURETRADE_ABI)
 
     def __getLibrary(self):
         return self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["APH_LIBRARY"], abi=defi_sdk_py.IAPHLIBRARY_ABI)
