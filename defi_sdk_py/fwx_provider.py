@@ -5,34 +5,34 @@ import defi_sdk_py
 
 class FwxWeb3:
 
-    POSITION_FUNCTION_NAME = "positions"
-    POSITION_STATE_FUNCTION_NAME = "positionStates"
-    POSITION_ID = "id"
-    POSITION_ENTRYPRICE = "entryPrice"
-    POSITION_CONTRACTSIZE = "contractSize"
-    POSITION_BORROWAMOUNT = "borrowAmount"
-    POSITION_COLLATERALUSED = "collateralUsed"
-    POSITION_COLLATERALSWAPPEDAMOUNT = "collateralSwappedAmount"
-    POSITION_INTERESTOWED = "interestOwed"
-    POSITION_INTERESTOWEDPERDAY = "interestOwedPerDay"
-    POSITION_INTERESTOWEPERDAY = "interestOwePerDay"
-    POSITION_LASTSETTLETIMESTAMP = "lastSettleTimestamp"
+    FUNCTION_NAME = "positions"
+    FUNCTION_NAME = "positionStates"
+    ID = "id"
+    ENTRYPRICE = "entryPrice"
+    CONTRACTSIZE = "contractSize"
+    BORROWAMOUNT = "borrowAmount"
+    COLLATERALUSED = "collateralUsed"
+    COLLATERALSWAPPEDAMOUNT = "collateralSwappedAmount"
+    INTERESTOWED = "interestOwed"
+    INTERESTOWEDPERDAY = "interestOwedPerDay"
+    INTERESTOWEPERDAY = "interestOwePerDay"
+    LASTSETTLETIMESTAMP = "lastSettleTimestamp"
 
-    POSITION_STATE_ACTIVE = "active"
-    POSITION_STATE_ISLONG = "isLong"
-    POSITION_STATE_PNL = "PNL"
-    POSITION_STATE_AVERAGEENTRYPRICE = "averageEntryPrice"
-    POSITION_STATE_STARTTIMESTAMP = "startTimestamp"
-    POSITION_STATE_INTERESTPAID = "interestPaid"
-    POSITION_STATE_TOTALSWAPFEEPAID = "totalSwapFeePaid"
-    POSITION_STATE_TOTALSWAPFEE = "totalSwapFee"
-    POSITION_STATE_TOTALTRADINGFEEPAID = "totalTradingFeePaid"
-    POSITION_STATE_TOTALTRADINGFEE = "totalTradingFee"
-    POSITION_STATE_PAIRBYTE = "pairByte"
+    ACTIVE = "active"
+    ISLONG = "isLong"
+    PNL = "PNL"
+    AVERAGEENTRYPRICE = "averageEntryPrice"
+    STARTTIMESTAMP = "startTimestamp"
+    INTERESTPAID = "interestPaid"
+    TOTALSWAPFEEPAID = "totalSwapFeePaid"
+    TOTALSWAPFEE = "totalSwapFee"
+    TOTALTRADINGFEEPAID = "totalTradingFeePaid"
+    TOTALTRADINGFEE = "totalTradingFee"
+    PAIRBYTE = "pairByte"
 
-    BALANCE_DETAIL_FREE_BALANCE = "freeBalance"
-    BALANCE_DETAIL_USED_BALANCE = "usedBalance"
-    BALANCE_DETAIL_TOTAL_BALANCE = "totalBalance"
+    FREE_BALANCE = "freeBalance"
+    USED_BALANCE = "usedBalance"
+    TOTAL_BALANCE = "totalBalance"
 
     COLLATERAL_ADDRESS = "collateralAddress"
     UNDERLYING_ADDRESS = "underlyingAddress"
@@ -126,7 +126,7 @@ class FwxWeb3:
     def closePosition(self, nftId, posId, closingSize, gas=1300000, gasPrice=25):
         positionState = self.__getPositionState(nftId, posId)
         pair = self.__getPair(
-            positionState[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_PAIRBYTE])
+            positionState[FwxWeb3.FUNCTION_NAME][FwxWeb3.PAIRBYTE])
         underlyingDecimal = self.__getTokenDecimalFromAddress(
             pair[FwxWeb3.UNDERLYING_ADDRESS])
         closingSize = int(closingSize * 10**underlyingDecimal)
@@ -330,9 +330,9 @@ class FwxWeb3:
         balanceDetail = helperFutureTrade.functions.getBalanceDetails(
             nftId, pairByte).call()
         return {
-            FwxWeb3.BALANCE_DETAIL_FREE_BALANCE: balanceDetail[0] / 10 ** collateralDecimal,
-            FwxWeb3.BALANCE_DETAIL_USED_BALANCE: balanceDetail[1] / 10 ** collateralDecimal,
-            FwxWeb3.BALANCE_DETAIL_TOTAL_BALANCE: balanceDetail[2] / 10 ** collateralDecimal,
+            FwxWeb3.FREE_BALANCE: balanceDetail[0] / 10 ** collateralDecimal,
+            FwxWeb3.USED_BALANCE: balanceDetail[1] / 10 ** collateralDecimal,
+            FwxWeb3.TOTAL_BALANCE: balanceDetail[2] / 10 ** collateralDecimal,
         }
 
     def __getPositionInfo(self, nftId, collateralTokenSymbol, underlyingTokenSymbol):
@@ -341,46 +341,46 @@ class FwxWeb3:
         positionOutput = self.__getPosition(
             nftId, collateralTokenSymbol, underlyingTokenSymbol)
         positionState = self.__getPositionStateInfo(
-            nftId, positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_ID])
-        if positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_ID] == 0:
+            nftId, positionOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.ID])
+        if positionOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.ID] == 0:
             return {
-                FwxWeb3.POSITION_ID: 0,
-                FwxWeb3.POSITION_ENTRYPRICE: 0,
-                FwxWeb3.POSITION_CONTRACTSIZE: 0,
-                FwxWeb3.POSITION_BORROWAMOUNT: 0,
-                FwxWeb3.POSITION_COLLATERALUSED: 0,
-                FwxWeb3.POSITION_INTERESTOWED: 0,
-                FwxWeb3.POSITION_INTERESTOWEDPERDAY: 0,
-                FwxWeb3.POSITION_LASTSETTLETIMESTAMP: 0,
+                FwxWeb3.ID: 0,
+                FwxWeb3.ENTRYPRICE: 0,
+                FwxWeb3.CONTRACTSIZE: 0,
+                FwxWeb3.BORROWAMOUNT: 0,
+                FwxWeb3.COLLATERALUSED: 0,
+                FwxWeb3.INTERESTOWED: 0,
+                FwxWeb3.INTERESTOWEDPERDAY: 0,
+                FwxWeb3.LASTSETTLETIMESTAMP: 0,
             }
         borrowingDecimal = collateralDecimal if positionState[
-            FwxWeb3.POSITION_STATE_ISLONG] else underlyingDecimal
+            FwxWeb3.ISLONG] else underlyingDecimal
         position = {
-            FwxWeb3.POSITION_ID: positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_ID],
-            FwxWeb3.POSITION_ENTRYPRICE: positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_ENTRYPRICE] / 10**collateralDecimal,
-            FwxWeb3.POSITION_CONTRACTSIZE: positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_CONTRACTSIZE] / 10**borrowingDecimal,
-            FwxWeb3.POSITION_BORROWAMOUNT: positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_BORROWAMOUNT] / 10**borrowingDecimal,
-            FwxWeb3.POSITION_COLLATERALUSED: positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_COLLATERALSWAPPEDAMOUNT] / 10**collateralDecimal,
-            FwxWeb3.POSITION_INTERESTOWED: positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_INTERESTOWED] / 10**borrowingDecimal,
-            FwxWeb3.POSITION_INTERESTOWEDPERDAY: positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_INTERESTOWEPERDAY] / 10**borrowingDecimal,
-            FwxWeb3.POSITION_LASTSETTLETIMESTAMP: positionOutput[FwxWeb3.POSITION_FUNCTION_NAME][FwxWeb3.POSITION_LASTSETTLETIMESTAMP],
+            FwxWeb3.ID: positionOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.ID],
+            FwxWeb3.ENTRYPRICE: positionOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.ENTRYPRICE] / 10**collateralDecimal,
+            FwxWeb3.CONTRACTSIZE: positionOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.CONTRACTSIZE] / 10**borrowingDecimal,
+            FwxWeb3.BORROWAMOUNT: positionOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.BORROWAMOUNT] / 10**borrowingDecimal,
+            FwxWeb3.COLLATERALUSED: positionOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.COLLATERALSWAPPEDAMOUNT] / 10**collateralDecimal,
+            FwxWeb3.INTERESTOWED: positionOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.INTERESTOWED] / 10**borrowingDecimal,
+            FwxWeb3.INTERESTOWEDPERDAY: positionOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.INTERESTOWEPERDAY] / 10**borrowingDecimal,
+            FwxWeb3.LASTSETTLETIMESTAMP: positionOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.LASTSETTLETIMESTAMP],
         }
         return position
 
     def __getPositionStateInfo(self, nftId, posId):
         positionStateOutput = self.__getPositionState(nftId, posId)
         pair = self.__getPair(
-            positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_PAIRBYTE])
-        if int.from_bytes(positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_PAIRBYTE], 'big') == 0:
+            positionStateOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.PAIRBYTE])
+        if int.from_bytes(positionStateOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.PAIRBYTE], 'big') == 0:
             return {
-                FwxWeb3.POSITION_STATE_ACTIVE: False,
-                FwxWeb3.POSITION_STATE_ISLONG: False,
-                FwxWeb3.POSITION_STATE_PNL: 0,
-                FwxWeb3.POSITION_STATE_AVERAGEENTRYPRICE: 0,
-                FwxWeb3.POSITION_STATE_STARTTIMESTAMP: 0,
-                FwxWeb3.POSITION_STATE_INTERESTPAID: 0,
-                FwxWeb3.POSITION_STATE_TOTALSWAPFEEPAID: 0,
-                FwxWeb3.POSITION_STATE_TOTALTRADINGFEEPAID: 0,
+                FwxWeb3.ACTIVE: False,
+                FwxWeb3.ISLONG: False,
+                FwxWeb3.PNL: 0,
+                FwxWeb3.AVERAGEENTRYPRICE: 0,
+                FwxWeb3.STARTTIMESTAMP: 0,
+                FwxWeb3.INTERESTPAID: 0,
+                FwxWeb3.TOTALSWAPFEEPAID: 0,
+                FwxWeb3.TOTALTRADINGFEEPAID: 0,
             }
 
         collateralDecimal = self.__getTokenDecimalFromAddress(
@@ -388,16 +388,16 @@ class FwxWeb3:
         underlyingDecimal = self.__getTokenDecimalFromAddress(
             pair[FwxWeb3.UNDERLYING_ADDRESS])
         borrowingDecimal = collateralDecimal if positionStateOutput[
-            FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_ISLONG] else underlyingDecimal
+            FwxWeb3.FUNCTION_NAME][FwxWeb3.ISLONG] else underlyingDecimal
         positionState = {
-            FwxWeb3.POSITION_STATE_ACTIVE: positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_ACTIVE],
-            FwxWeb3.POSITION_STATE_ISLONG: positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_ISLONG],
-            FwxWeb3.POSITION_STATE_PNL: positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_PNL] / 10**18,
-            FwxWeb3.POSITION_STATE_AVERAGEENTRYPRICE: positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_AVERAGEENTRYPRICE] / 10**collateralDecimal,
-            FwxWeb3.POSITION_STATE_STARTTIMESTAMP: positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_STARTTIMESTAMP],
-            FwxWeb3.POSITION_STATE_INTERESTPAID: positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_INTERESTPAID] / 10**borrowingDecimal,
-            FwxWeb3.POSITION_STATE_TOTALSWAPFEEPAID: positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_TOTALSWAPFEE] / 10**borrowingDecimal,
-            FwxWeb3.POSITION_STATE_TOTALTRADINGFEEPAID: positionStateOutput[FwxWeb3.POSITION_STATE_FUNCTION_NAME][FwxWeb3.POSITION_STATE_TOTALTRADINGFEE] / 10**collateralDecimal,
+            FwxWeb3.ACTIVE: positionStateOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.ACTIVE],
+            FwxWeb3.ISLONG: positionStateOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.ISLONG],
+            FwxWeb3.PNL: positionStateOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.PNL] / 10**18,
+            FwxWeb3.AVERAGEENTRYPRICE: positionStateOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.AVERAGEENTRYPRICE] / 10**collateralDecimal,
+            FwxWeb3.STARTTIMESTAMP: positionStateOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.STARTTIMESTAMP],
+            FwxWeb3.INTERESTPAID: positionStateOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.INTERESTPAID] / 10**borrowingDecimal,
+            FwxWeb3.TOTALSWAPFEEPAID: positionStateOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.TOTALSWAPFEE] / 10**borrowingDecimal,
+            FwxWeb3.TOTALTRADINGFEEPAID: positionStateOutput[FwxWeb3.FUNCTION_NAME][FwxWeb3.TOTALTRADINGFEE] / 10**collateralDecimal,
         }
         return positionState
 
@@ -414,14 +414,14 @@ class FwxWeb3:
         position = core.functions.positions(nftId, pairByte).call()
 
         abi = next(filter(lambda abis: FwxWeb3.filterFunctionABI(
-            abis, FwxWeb3.POSITION_FUNCTION_NAME), core.abi))
+            abis, FwxWeb3.FUNCTION_NAME), core.abi))
         return FwxWeb3.tupleOutputDecode(position, abi)
 
     def __getPositionState(self, nftId, posId):
         core = self.__getCore()
         positionState = core.functions.positionStates(nftId, posId).call()
         abi = next(filter(lambda abis: FwxWeb3.filterFunctionABI(
-            abis, FwxWeb3.POSITION_STATE_FUNCTION_NAME), core.abi))
+            abis, FwxWeb3.FUNCTION_NAME), core.abi))
         return FwxWeb3.tupleOutputDecode(positionState, abi)
 
     def __getPair(self, pairByte):
