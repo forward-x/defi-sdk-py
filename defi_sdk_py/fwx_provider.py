@@ -82,8 +82,8 @@ class FwxWeb3:
                 {
                     'from': self.signer.address,
                     'nonce': self.w3.eth.get_transaction_count(self.signer.address),
-                    'gas': 1500000,
-                    'gasPrice': self.w3.toWei(25, 'gwei'),
+                    'gas': gas,
+                    'gasPrice': self.w3.toWei(gasPrice, 'gwei'),
                 }
             )
         else:
