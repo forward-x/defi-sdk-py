@@ -20,11 +20,12 @@ networks:
         cmd_settings:
             port: 8545
             gas_limit: 6721975
-            fork: ${NODE_URL}
+            # @block_number
+            fork: ${NODE_URL}@26674016
             accounts: 10
             mnemonic: test
-            block_time: 0
-            default_balance: 100
+            block_time: 0 
+            default_balance: 1000000
             unlock: null
     live:
         gas_limit: auto
