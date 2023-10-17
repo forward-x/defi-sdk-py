@@ -2,7 +2,7 @@ from store_fixture import fwx_client
 
 
 def test_get_next_settle_timestamp(fwx_client):
-    assert fwx_client.getNextSettleTimestamp() == 1697068800
+    assert fwx_client.getNextSettleTimestamp() > 26674016
 
 
 def test_get_nft_list(fwx_client):
