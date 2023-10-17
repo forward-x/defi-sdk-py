@@ -652,15 +652,21 @@ class FwxWeb3:
         """Decode tuple as dict."""
         abiOutputs = {}
         if "outputs" in abi:
-            abiOutputs = abi.get("outputs", abi)[0]
-
-        # complex value
-        if 'components' in abiOutputs:
-            inner = {}
-            for x, y in zip(value, abiOutputs["components"]):
-                inner.update(FwxWeb3.tupleOutputDecode(x, y))
-            result = {abi["name"]: inner}
-            return result.get("", result)
+            output = {}
+            for index, abiOutputs in enumerate(abi.get("outputs", abi)):
+                # complex value
+                inner = {}
+                if 'components' in abiOutputs:
+                    for x, y in zip(value if type(value[index]) != list and type(value[index]) != tuple else value[index], abiOutputs["components"]):
+                        inner.update(FwxWeb3.tupleOutputDecode(x, y))
+                    if abiOutputs["name"] == "":
+                        output.update(inner)
+                    else:
+                        output.update({abiOutputs["name"]: inner})
+                else:
+                    output.update({abiOutputs["name"]: value[index]})
+            result = {abi["name"]: output}
+            return result
 
         # basic value
         return {abi["name"]: value}
