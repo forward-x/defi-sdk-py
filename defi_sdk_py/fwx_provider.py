@@ -30,6 +30,38 @@ class FwxWeb3:
     TOTAL_TRADING_FEE = "totalTradingFee"
     PAIR_BYTE = "pairByte"
 
+    MINTED_P = "mintedP"
+    MINTED_ATP = "mintedAtp"
+    MINTED_ITP = "mintedItp"
+    MINTED_IFP = "mintedIfp"
+
+    PRINCIPLE = "principle"
+    TOKEN_INTEREST = "tokenInterest"
+    FORW_INTEREST = "forwInterest"
+    P_TOKEN_BURN = "pTokenBurn"
+    ATP_TOKEN_BURN = "atpTokenBurn"
+    LOSS_BURN = "lossBurn"
+    ITP_TOKEN_BURN = "itpTokenBurn"
+    IFP_TOKEN_BURN = "ifpTokenBurn"
+    TOKEN_INTEREST_BONUS = "tokenInterestBonus"
+    FORW_INTEREST_BONUS = "forwInterestBonus"
+
+    GET_LENDING_INFO = "getLendingInfo"
+
+    INTEREST_TOKEN_GAINED = "interestTokenGained"
+    INTEREST_FORW_GAINED = "interestForwGained"
+    INTEREST_OBTAINED = "interestObtained"
+    INTEREST_FWX_OBTAINED = "interestFwxObtained"
+
+    ATP_PRICE = "atpPrice"
+    ITP_PRICE = "itpPrice"
+    IFP_PRICE = "ifpPrice"
+    TOTAL_SUPPLY = "totalSupply"
+    AVAILABLE_SUPPLY = "availableSupply"
+    UTILIZATION_RATE = "utilizationRate"
+    INTEREST_RATE = "interestRate"
+    INTEREST_FWX_RATE = "interestFwxRate"
+
     ACTIVE_LOAN = "activeLoan"
     ACTIVE_LOAN_INFO = "activeLoanInfo"
 
@@ -91,6 +123,265 @@ class FwxWeb3:
         result = helperMembershipAndStakePool.functions.getNFTList(
             self.signer.address).call()
         return (txHash, result[1][len(result[1])-1])
+
+    # Lending
+
+    # deposit
+    # - **Instance**: APHPool
+    # - **Parameters**
+    #     - pool: TokenSymbols
+    #     - nftId: BigNumberish
+    #     - depositAmount: BigNumberish
+    # - **Output**
+    #     - mintedP: BigNumberish
+    #     - mintedAtp: BigNumberish
+    #     - mintedItp: BigNumberish
+    #     - mintedIfp: BigNumberish
+    def deposit(self, poolTokenSymbol, nftId, depositAmount, gas=500000, gasPrice=25, nonce=0):
+        validateToken(poolTokenSymbol)
+        poolTokenDecimal = self.__getTokenDecimal(poolTokenSymbol)
+        depositAmount = int(depositAmount * 10**poolTokenDecimal)
+        pool = self.__getPool(poolTokenSymbol)
+        tx = pool.functions.deposit(nftId, depositAmount).buildTransaction(
+            {
+                'from': self.signer.address,
+                'nonce': nonce if nonce else self.w3.eth.get_transaction_count(self.signer.address),
+                'gas': gas,
+                'gasPrice': self.w3.toWei(gasPrice, 'gwei'),
+                'value': depositAmount if self.__isTokenSymbolNative(poolTokenSymbol) else 0
+            }
+        )
+        # Sign tx
+        signedTx = self.w3.eth.account.sign_transaction(tx, self.signer.key)
+
+        # Send tx
+        txHash = self.w3.eth.send_raw_transaction(signedTx.rawTransaction)
+        txRecipt = self.w3.eth.wait_for_transaction_receipt(txHash)
+
+        result = {}
+        for log in txRecipt["logs"]:
+            if log["topics"][0].hex() == "0x55e1b84deec6eefe49c2c96afe1d5b43ca37768907f7388696c6009e7bbe3b54":
+                data = log["data"][2:]
+                result[FwxWeb3.MINTED_P] = int(data[32:64], 16)
+                result[FwxWeb3.MINTED_ATP] = int(data[64:96], 16)
+                result[FwxWeb3.MINTED_ITP] = int(data[96:128], 16)
+                result[FwxWeb3.MINTED_IFP] = int(data[128:160], 16)
+
+        return (txHash, result)
+
+    # withdraw
+    # - **Instance**: APHPool
+    # - **Parameters**
+    #     - token: TokenSymbols
+    #     - nftId: BigNumberish
+    #     - withdrawAmount: BigNumberish
+    # - **Output**
+    #     - result: WithdrawResult (struct from solidity)
+    def withdraw(self, poolTokenSymbol, nftId, withdrawAmount, gas=700000, gasPrice=25, nonce=0):
+        validateToken(poolTokenSymbol)
+        poolTokenDecimal = self.__getTokenDecimal(poolTokenSymbol)
+        withdrawAmount = int(withdrawAmount * 10**poolTokenDecimal)
+        pool = self.__getPool(poolTokenSymbol)
+        tx = pool.functions.withdraw(nftId, withdrawAmount).buildTransaction(
+            {
+                'from': self.signer.address,
+                'nonce': nonce if nonce else self.w3.eth.get_transaction_count(self.signer.address),
+                'gas': gas,
+                'gasPrice': self.w3.toWei(gasPrice, 'gwei')
+            }
+        )
+        # Sign tx
+        signedTx = self.w3.eth.account.sign_transaction(tx, self.signer.key)
+
+        # Send tx
+        txHash = self.w3.eth.send_raw_transaction(signedTx.rawTransaction)
+        txRecipt = self.w3.eth.wait_for_transaction_receipt(txHash)
+        result = {
+            FwxWeb3.PRINCIPLE: 0,
+            FwxWeb3.TOKEN_INTEREST: 0,
+            FwxWeb3.FORW_INTEREST: 0,
+            FwxWeb3.P_TOKEN_BURN: 0,
+            FwxWeb3.ATP_TOKEN_BURN: 0,
+            FwxWeb3.LOSS_BURN: 0,
+            FwxWeb3.ITP_TOKEN_BURN: 0,
+            FwxWeb3.IFP_TOKEN_BURN: 0,
+            FwxWeb3.TOKEN_INTEREST_BONUS: 0,
+            FwxWeb3.FORW_INTEREST_BONUS: 0
+        }
+
+        for log in txRecipt["logs"]:
+            if log["topics"][0].hex() == "0x25dd09722d1e76ffb961a71292eafb472dcb7453dd24aafe730779e6d6cf7190":
+                data = log["data"][2:]
+                result[FwxWeb3.PRINCIPLE] += int(data[0:32], 16)
+                result[FwxWeb3.P_TOKEN_BURN] += int(data[32:64], 16)
+                result[FwxWeb3.ATP_TOKEN_BURN] += int(data[64:96], 16)
+                result[FwxWeb3.LOSS_BURN] += int(data[96:128], 16)
+                result[FwxWeb3.ITP_TOKEN_BURN] += int(data[128:160], 16)
+                result[FwxWeb3.IFP_TOKEN_BURN] += int(data[160:192], 16)
+            elif log["topics"][0].hex() == "0x199a7a8ae450da3700d2c3bd80f41a0f29b853dbde55f79199d8956ec3267dd6":
+                data = log["data"][2:]
+                result[FwxWeb3.TOKEN_INTEREST] += int(data[0:32], 16)
+                result[FwxWeb3.TOKEN_INTEREST_BONUS] += int(data[32:64], 16)
+                result[FwxWeb3.ITP_TOKEN_BURN] += int(data[64:96], 16)
+            elif log["topics"][0].hex() == "0x7306e65aafc988ed7e1a7a3546c7a79dace207c76c10db147dc0e3a1a218e0af":
+                data = log["data"][2:]
+                result[FwxWeb3.FORW_INTEREST] += int(data[0:32], 16)
+                result[FwxWeb3.FORW_INTEREST_BONUS] += int(data[32:64], 16)
+                result[FwxWeb3.IFP_TOKEN_BURN] += int(data[64:96], 16)
+        return (txHash, result)
+
+    # claimAllInterest
+    # - **Instance**: APHPool
+    # - **Parameters**
+    #     - pool: TokenSymbols
+    #     - nftId: BigNumberish
+    # - **Output**
+    #     - result: WithdrawResult (struct from solidity)
+    def claimAllInterest(self, poolTokenSymbol, nftId, gas=700000, gasPrice=25, nonce=0):
+        validateToken(poolTokenSymbol)
+        pool = self.__getPool(poolTokenSymbol)
+        tx = pool.functions.claimAllInterest(nftId).buildTransaction(
+            {
+                'from': self.signer.address,
+                'nonce': nonce if nonce else self.w3.eth.get_transaction_count(self.signer.address),
+                'gas': gas,
+                'gasPrice': self.w3.toWei(gasPrice, 'gwei')
+            }
+        )
+        # Sign tx
+        signedTx = self.w3.eth.account.sign_transaction(tx, self.signer.key)
+
+        # Send tx
+        txHash = self.w3.eth.send_raw_transaction(signedTx.rawTransaction)
+        txRecipt = self.w3.eth.wait_for_transaction_receipt(txHash)
+        result = {
+            FwxWeb3.PRINCIPLE: 0,
+            FwxWeb3.TOKEN_INTEREST: 0,
+            FwxWeb3.FORW_INTEREST: 0,
+            FwxWeb3.P_TOKEN_BURN: 0,
+            FwxWeb3.ATP_TOKEN_BURN: 0,
+            FwxWeb3.LOSS_BURN: 0,
+            FwxWeb3.ITP_TOKEN_BURN: 0,
+            FwxWeb3.IFP_TOKEN_BURN: 0,
+            FwxWeb3.TOKEN_INTEREST_BONUS: 0,
+            FwxWeb3.FORW_INTEREST_BONUS: 0
+        }
+
+        for log in txRecipt["logs"]:
+            if log["topics"][0].hex() == "0x25dd09722d1e76ffb961a71292eafb472dcb7453dd24aafe730779e6d6cf7190":
+                data = log["data"][2:]
+                result[FwxWeb3.PRINCIPLE] += int(data[0:32], 16)
+                result[FwxWeb3.P_TOKEN_BURN] += int(data[32:64], 16)
+                result[FwxWeb3.ATP_TOKEN_BURN] += int(data[64:96], 16)
+                result[FwxWeb3.LOSS_BURN] += int(data[96:128], 16)
+                result[FwxWeb3.ITP_TOKEN_BURN] += int(data[128:160], 16)
+                result[FwxWeb3.IFP_TOKEN_BURN] += int(data[160:192], 16)
+            elif log["topics"][0].hex() == "0x199a7a8ae450da3700d2c3bd80f41a0f29b853dbde55f79199d8956ec3267dd6":
+                data = log["data"][2:]
+                result[FwxWeb3.TOKEN_INTEREST] += int(data[0:32], 16)
+                result[FwxWeb3.TOKEN_INTEREST_BONUS] += int(data[32:64], 16)
+                result[FwxWeb3.ITP_TOKEN_BURN] += int(data[64:96], 16)
+            elif log["topics"][0].hex() == "0x7306e65aafc988ed7e1a7a3546c7a79dace207c76c10db147dc0e3a1a218e0af":
+                data = log["data"][2:]
+                result[FwxWeb3.FORW_INTEREST] += int(data[0:32], 16)
+                result[FwxWeb3.FORW_INTEREST_BONUS] += int(data[32:64], 16)
+                result[FwxWeb3.IFP_TOKEN_BURN] += int(data[64:96], 16)
+        return (txHash, result)
+
+    # getLendingInfo
+    # - **Instance**: APHPool
+    # - **Parameters**
+    #     - pool: TokenSymbols
+    #     - nftId: BigNumberish
+    # - **Output**
+    #     - lendingBalance: BigNumberish
+    #     - interestObtained: BigNumberish
+    #     - interestFwxObtained: BigNumberish
+    #     - rank: BigNumberish
+    #     - rankInfo: StakePool.RankInfo (struct from solidity)
+    def getLendingInfo(self, poolTokenSymbol, nftId):
+        helper = self.__getHelperPool()
+        info = helper.functions.getLendingInfo(
+            defi_sdk_py.ADDRESSES["AVAX"]["POOL"][poolTokenSymbol], nftId).call()
+        abi = next(filter(lambda abis: FwxWeb3.filterFunctionABI(
+            abis, FwxWeb3.GET_LENDING_INFO), helper.abi))
+        result = FwxWeb3.tupleOutputDecode(info, abi)[FwxWeb3.GET_LENDING_INFO]
+
+        result[FwxWeb3.INTEREST_OBTAINED] = result[FwxWeb3.INTEREST_TOKEN_GAINED]
+        result[FwxWeb3.INTEREST_FWX_OBTAINED] = result[FwxWeb3.INTEREST_FORW_GAINED]
+        result.pop(FwxWeb3.INTEREST_TOKEN_GAINED)
+        result.pop(FwxWeb3.INTEREST_FORW_GAINED)
+        return result
+
+    # getLendingInfoPlatform
+    # - **Instance**: APHPool
+    # - **Parameters**
+    #     - pool: TokenSymbols
+    # - **Output**
+    #     - atpPrice: BigNumberish
+    #     - itpPrice: BigNumberish
+    #     - ifpPrice: BigNumberish
+    #     - totalSupply: BigNumberish
+    #     - availableSupply: BigNumberish
+    #     - utilizationRate: BigNumberish
+    #     - interestRate: BigNumberish (current rate)
+    #     - interestFwxRate: BigNumberish (current rate)
+    def getLendingInfoPlatform(self, poolTokenSymbol, forwPriceRate=15000000000000000000, forwPricePrecision=10000000000000000000):
+        validateToken(poolTokenSymbol)
+        helper = self.__getHelperPool()
+        pool = self.__getPool(poolTokenSymbol)
+        aptPrice = pool.functions.getActualTokenPrice().call()
+        itpPrice = pool.functions.getInterestTokenPrice().call()
+        ifpPrice = pool.functions.getInterestForwPrice().call()
+        totalSupply = pool.functions.pTokenTotalSupply().call()
+        availableSupply = pool.functions.currentSupply().call()
+        utilizationRate = pool.functions.utilizationRate().call()
+        interestRate = helper.functions.getNextLendingInterest(
+            defi_sdk_py.ADDRESSES["AVAX"]["POOL"][poolTokenSymbol], 0).call()
+        interestFwxRate = helper.functions.getNextLendingForwInterest(
+            defi_sdk_py.ADDRESSES["AVAX"]["POOL"][poolTokenSymbol], 0, forwPriceRate, forwPricePrecision).call()
+
+        result = {
+            FwxWeb3.ATP_PRICE: aptPrice,
+            FwxWeb3.ITP_PRICE: itpPrice,
+            FwxWeb3.IFP_PRICE: ifpPrice,
+            FwxWeb3.TOTAL_SUPPLY: totalSupply,
+            FwxWeb3.AVAILABLE_SUPPLY: availableSupply,
+            FwxWeb3.UTILIZATION_RATE: utilizationRate,
+            FwxWeb3.INTEREST_RATE: interestRate,
+            FwxWeb3.INTEREST_FWX_RATE: interestFwxRate,
+        }
+        return result
+
+    # getInterestRate
+    # - **Instance**: APHPool
+    # - **Parameters**
+    #     - pool: TokenSymbols
+    #     - depositAmount?: BigNumberish
+    # - **Output**
+    #     - interestRate: BigNumberish
+    def getInterestRate(self, poolTokenSymbol, depositAmount):
+        validateToken(poolTokenSymbol)
+        helper = self.__getHelperPool()
+        poolTokenDecimal = self.__getTokenDecimal(poolTokenSymbol)
+        depositAmount = int(depositAmount * 10**poolTokenDecimal)
+        return helper.functions.getNextLendingInterest(
+            defi_sdk_py.ADDRESSES["AVAX"]["POOL"][poolTokenSymbol], depositAmount).call()
+
+    # getFwxInterestRate
+    # - **Instance**: APHPool
+    # - **Parameters**
+    #     - pool: TokenSymbols
+    #     - depositAmount?: BigNumberish
+    # - **Output**
+    #     - fwxInterestRate: BigNumberish
+    def getFwxInterestRate(self, poolTokenSymbol, depositAmount, forwPriceRate=15000000000000000000, forwPricePrecision=10000000000000000000):
+        validateToken(poolTokenSymbol)
+        helper = self.__getHelperPool()
+        poolTokenDecimal = self.__getTokenDecimal(poolTokenSymbol)
+        depositAmount = int(depositAmount * 10**poolTokenDecimal)
+        return helper.functions.getNextLendingForwInterest(
+            defi_sdk_py.ADDRESSES["AVAX"]["POOL"][poolTokenSymbol], 0, forwPriceRate, forwPricePrecision).call()
 
     # Borrowing
 
@@ -617,6 +908,9 @@ class FwxWeb3:
     def __getHelperCore(self):
         return self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["HELPER_CORE"], abi=defi_sdk_py.IHELPERCORE_ABI)
 
+    def __getHelperPool(self):
+        return self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["HELPER_POOL"], abi=defi_sdk_py.IHELPERPOOL_ABI)
+
     def __getHelperMembershipAndStakePool(self):
         return self.w3.eth.contract(address=defi_sdk_py.ADDRESSES["AVAX"]["HELPER_MEMBERSHIP_AND_STAKEPOOL"], abi=defi_sdk_py.IHELPERMEMBERSHIPANDSTAKEPOOL_ABI)
 
@@ -680,6 +974,10 @@ class FwxWeb3:
 
 def getClient(url):
     return FwxWeb3(url)
+
+
+def validateToken(token):
+    assert token in defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"], "token not allowed"
 
 
 def validatePair(collateral, underlying):
