@@ -53,6 +53,16 @@ class FwxWeb3:
     INTEREST_OBTAINED = "interestObtained"
     INTEREST_FWX_OBTAINED = "interestFwxObtained"
 
+    LENDING_BALANCE = "lendingBalance"
+    RANK = "rank"
+    RANK_INFO = "rankInfo"
+    INTEREST_BONUS_LENDING = "interestBonusLending"
+    FORWARD_BONUS_LENDING = "forwardBonusLending"
+    MINIMUM_STAKE_AMOUNT = "minimumStakeAmount"
+    MAX_LTV_BONUS = "maxLTVBonus"
+    TRADING_FEE = "tradingFee"
+    TRADING_BONUS = "tradingBonus"
+
     ATP_PRICE = "atpPrice"
     ITP_PRICE = "itpPrice"
     IFP_PRICE = "ifpPrice"
@@ -162,10 +172,13 @@ class FwxWeb3:
         for log in txRecipt["logs"]:
             if log["topics"][0].hex() == "0x55e1b84deec6eefe49c2c96afe1d5b43ca37768907f7388696c6009e7bbe3b54":
                 data = log["data"][2:]
-                result[FwxWeb3.MINTED_P] = int(data[32:64], 16)
-                result[FwxWeb3.MINTED_ATP] = int(data[64:96], 16)
-                result[FwxWeb3.MINTED_ITP] = int(data[96:128], 16)
-                result[FwxWeb3.MINTED_IFP] = int(data[128:160], 16)
+                result[FwxWeb3.MINTED_P] = int(
+                    data[32:64], 16) / 10**poolTokenDecimal
+                result[FwxWeb3.MINTED_ATP] = int(
+                    data[64:96], 16) / 10**poolTokenDecimal
+                result[FwxWeb3.MINTED_ITP] = int(
+                    data[96:128], 16) / 10**poolTokenDecimal
+                result[FwxWeb3.MINTED_IFP] = int(data[128:160], 16) / 10**18
 
         return (txHash, result)
 
@@ -197,37 +210,47 @@ class FwxWeb3:
         txHash = self.w3.eth.send_raw_transaction(signedTx.rawTransaction)
         txRecipt = self.w3.eth.wait_for_transaction_receipt(txHash)
         result = {
-            FwxWeb3.PRINCIPLE: 0,
-            FwxWeb3.TOKEN_INTEREST: 0,
-            FwxWeb3.FORW_INTEREST: 0,
-            FwxWeb3.P_TOKEN_BURN: 0,
-            FwxWeb3.ATP_TOKEN_BURN: 0,
-            FwxWeb3.LOSS_BURN: 0,
-            FwxWeb3.ITP_TOKEN_BURN: 0,
-            FwxWeb3.IFP_TOKEN_BURN: 0,
+            FwxWeb3.PRINCIPLE: 0.0,
+            FwxWeb3.TOKEN_INTEREST: 0.0,
+            FwxWeb3.FORW_INTEREST: 0.0,
+            FwxWeb3.P_TOKEN_BURN: 0.0,
+            FwxWeb3.ATP_TOKEN_BURN: 0.0,
+            FwxWeb3.LOSS_BURN: 0.0,
+            FwxWeb3.ITP_TOKEN_BURN: 0.0,
+            FwxWeb3.IFP_TOKEN_BURN: 0.0,
             FwxWeb3.TOKEN_INTEREST_BONUS: 0,
-            FwxWeb3.FORW_INTEREST_BONUS: 0
+            FwxWeb3.FORW_INTEREST_BONUS: 0.0
         }
 
         for log in txRecipt["logs"]:
             if log["topics"][0].hex() == "0x25dd09722d1e76ffb961a71292eafb472dcb7453dd24aafe730779e6d6cf7190":
                 data = log["data"][2:]
-                result[FwxWeb3.PRINCIPLE] += int(data[0:32], 16)
-                result[FwxWeb3.P_TOKEN_BURN] += int(data[32:64], 16)
-                result[FwxWeb3.ATP_TOKEN_BURN] += int(data[64:96], 16)
-                result[FwxWeb3.LOSS_BURN] += int(data[96:128], 16)
-                result[FwxWeb3.ITP_TOKEN_BURN] += int(data[128:160], 16)
-                result[FwxWeb3.IFP_TOKEN_BURN] += int(data[160:192], 16)
+                result[FwxWeb3.PRINCIPLE] += int(data[0:32], 16) / \
+                    10**poolTokenDecimal
+                result[FwxWeb3.P_TOKEN_BURN] += int(
+                    data[32:64], 16) / 10**poolTokenDecimal
+                result[FwxWeb3.ATP_TOKEN_BURN] += int(
+                    data[64:96], 16) / 10**poolTokenDecimal
+                result[FwxWeb3.LOSS_BURN] += int(data[96:128],
+                                                 16) / 10**poolTokenDecimal
+                result[FwxWeb3.ITP_TOKEN_BURN] += int(
+                    data[128:160], 16) / 10**poolTokenDecimal
+                result[FwxWeb3.IFP_TOKEN_BURN] += int(
+                    data[160:192], 16) / 10**18
             elif log["topics"][0].hex() == "0x199a7a8ae450da3700d2c3bd80f41a0f29b853dbde55f79199d8956ec3267dd6":
                 data = log["data"][2:]
-                result[FwxWeb3.TOKEN_INTEREST] += int(data[0:32], 16)
-                result[FwxWeb3.TOKEN_INTEREST_BONUS] += int(data[32:64], 16)
-                result[FwxWeb3.ITP_TOKEN_BURN] += int(data[64:96], 16)
+                result[FwxWeb3.TOKEN_INTEREST] += int(
+                    data[0:32], 16) / 10**poolTokenDecimal
+                result[FwxWeb3.TOKEN_INTEREST_BONUS] += int(
+                    data[32:64], 16) / 10**poolTokenDecimal
+                result[FwxWeb3.ITP_TOKEN_BURN] += int(
+                    data[64:96], 16) / 10**poolTokenDecimal
             elif log["topics"][0].hex() == "0x7306e65aafc988ed7e1a7a3546c7a79dace207c76c10db147dc0e3a1a218e0af":
                 data = log["data"][2:]
-                result[FwxWeb3.FORW_INTEREST] += int(data[0:32], 16)
-                result[FwxWeb3.FORW_INTEREST_BONUS] += int(data[32:64], 16)
-                result[FwxWeb3.IFP_TOKEN_BURN] += int(data[64:96], 16)
+                result[FwxWeb3.FORW_INTEREST] += int(data[0:32], 16) / 10**18
+                result[FwxWeb3.FORW_INTEREST_BONUS] += int(
+                    data[32:64], 16) / 10**18
+                result[FwxWeb3.IFP_TOKEN_BURN] += int(data[64:96], 16) / 10**18
         return (txHash, result)
 
     # claimAllInterest
@@ -239,6 +262,7 @@ class FwxWeb3:
     #     - result: WithdrawResult (struct from solidity)
     def claimAllInterest(self, poolTokenSymbol, nftId, gas=700000, gasPrice=25, nonce=0):
         validateToken(poolTokenSymbol)
+        poolTokenDecimal = self.__getTokenDecimal(poolTokenSymbol)
         pool = self.__getPool(poolTokenSymbol)
         tx = pool.functions.claimAllInterest(nftId).buildTransaction(
             {
@@ -255,37 +279,47 @@ class FwxWeb3:
         txHash = self.w3.eth.send_raw_transaction(signedTx.rawTransaction)
         txRecipt = self.w3.eth.wait_for_transaction_receipt(txHash)
         result = {
-            FwxWeb3.PRINCIPLE: 0,
-            FwxWeb3.TOKEN_INTEREST: 0,
-            FwxWeb3.FORW_INTEREST: 0,
-            FwxWeb3.P_TOKEN_BURN: 0,
-            FwxWeb3.ATP_TOKEN_BURN: 0,
-            FwxWeb3.LOSS_BURN: 0,
-            FwxWeb3.ITP_TOKEN_BURN: 0,
-            FwxWeb3.IFP_TOKEN_BURN: 0,
-            FwxWeb3.TOKEN_INTEREST_BONUS: 0,
-            FwxWeb3.FORW_INTEREST_BONUS: 0
+            FwxWeb3.PRINCIPLE: 0.0,
+            FwxWeb3.TOKEN_INTEREST: 0.0,
+            FwxWeb3.FORW_INTEREST: 0.0,
+            FwxWeb3.P_TOKEN_BURN: 0.0,
+            FwxWeb3.ATP_TOKEN_BURN: 0.0,
+            FwxWeb3.LOSS_BURN: 0.0,
+            FwxWeb3.ITP_TOKEN_BURN: 0.0,
+            FwxWeb3.IFP_TOKEN_BURN: 0.0,
+            FwxWeb3.TOKEN_INTEREST_BONUS: 0.0,
+            FwxWeb3.FORW_INTEREST_BONUS: 0.0
         }
 
         for log in txRecipt["logs"]:
             if log["topics"][0].hex() == "0x25dd09722d1e76ffb961a71292eafb472dcb7453dd24aafe730779e6d6cf7190":
                 data = log["data"][2:]
-                result[FwxWeb3.PRINCIPLE] += int(data[0:32], 16)
-                result[FwxWeb3.P_TOKEN_BURN] += int(data[32:64], 16)
-                result[FwxWeb3.ATP_TOKEN_BURN] += int(data[64:96], 16)
-                result[FwxWeb3.LOSS_BURN] += int(data[96:128], 16)
-                result[FwxWeb3.ITP_TOKEN_BURN] += int(data[128:160], 16)
-                result[FwxWeb3.IFP_TOKEN_BURN] += int(data[160:192], 16)
+                result[FwxWeb3.PRINCIPLE] += int(data[0:32], 16) / \
+                    10**poolTokenDecimal
+                result[FwxWeb3.P_TOKEN_BURN] += int(
+                    data[32:64], 16) / 10**poolTokenDecimal
+                result[FwxWeb3.ATP_TOKEN_BURN] += int(
+                    data[64:96], 16) / 10**poolTokenDecimal
+                result[FwxWeb3.LOSS_BURN] += int(data[96:128],
+                                                 16) / 10**poolTokenDecimal
+                result[FwxWeb3.ITP_TOKEN_BURN] += int(
+                    data[128:160], 16) / 10**poolTokenDecimal
+                result[FwxWeb3.IFP_TOKEN_BURN] += int(
+                    data[160:192], 16) / 10**18
             elif log["topics"][0].hex() == "0x199a7a8ae450da3700d2c3bd80f41a0f29b853dbde55f79199d8956ec3267dd6":
                 data = log["data"][2:]
-                result[FwxWeb3.TOKEN_INTEREST] += int(data[0:32], 16)
-                result[FwxWeb3.TOKEN_INTEREST_BONUS] += int(data[32:64], 16)
-                result[FwxWeb3.ITP_TOKEN_BURN] += int(data[64:96], 16)
+                result[FwxWeb3.TOKEN_INTEREST] += int(
+                    data[0:32], 16) / 10**poolTokenDecimal
+                result[FwxWeb3.TOKEN_INTEREST_BONUS] += int(
+                    data[32:64], 16) / 10**poolTokenDecimal
+                result[FwxWeb3.ITP_TOKEN_BURN] += int(
+                    data[64:96], 16) / 10**poolTokenDecimal
             elif log["topics"][0].hex() == "0x7306e65aafc988ed7e1a7a3546c7a79dace207c76c10db147dc0e3a1a218e0af":
                 data = log["data"][2:]
-                result[FwxWeb3.FORW_INTEREST] += int(data[0:32], 16)
-                result[FwxWeb3.FORW_INTEREST_BONUS] += int(data[32:64], 16)
-                result[FwxWeb3.IFP_TOKEN_BURN] += int(data[64:96], 16)
+                result[FwxWeb3.FORW_INTEREST] += int(data[0:32], 16) / 10**18
+                result[FwxWeb3.FORW_INTEREST_BONUS] += int(
+                    data[32:64], 16) / 10**18
+                result[FwxWeb3.IFP_TOKEN_BURN] += int(data[64:96], 16) / 10**18
         return (txHash, result)
 
     # getLendingInfo
@@ -301,16 +335,26 @@ class FwxWeb3:
     #     - rankInfo: StakePool.RankInfo (struct from solidity)
     def getLendingInfo(self, poolTokenSymbol, nftId):
         helper = self.__getHelperPool()
+        poolTokenDecimal = self.__getTokenDecimal(poolTokenSymbol)
         info = helper.functions.getLendingInfo(
             defi_sdk_py.ADDRESSES["AVAX"]["POOL"][poolTokenSymbol], nftId).call()
         abi = next(filter(lambda abis: FwxWeb3.filterFunctionABI(
             abis, FwxWeb3.GET_LENDING_INFO), helper.abi))
         result = FwxWeb3.tupleOutputDecode(info, abi)[FwxWeb3.GET_LENDING_INFO]
 
-        result[FwxWeb3.INTEREST_OBTAINED] = result[FwxWeb3.INTEREST_TOKEN_GAINED]
-        result[FwxWeb3.INTEREST_FWX_OBTAINED] = result[FwxWeb3.INTEREST_FORW_GAINED]
+        result[FwxWeb3.INTEREST_OBTAINED] = result[FwxWeb3.INTEREST_TOKEN_GAINED] / \
+            10**poolTokenDecimal
+        result[FwxWeb3.INTEREST_FWX_OBTAINED] = result[FwxWeb3.INTEREST_FORW_GAINED] / 10**18
         result.pop(FwxWeb3.INTEREST_TOKEN_GAINED)
         result.pop(FwxWeb3.INTEREST_FORW_GAINED)
+
+        result[FwxWeb3.LENDING_BALANCE] /= 10**poolTokenDecimal
+        result[FwxWeb3.RANK_INFO][FwxWeb3.INTEREST_BONUS_LENDING] /= 10**20
+        result[FwxWeb3.RANK_INFO][FwxWeb3.FORWARD_BONUS_LENDING] /= 10**20
+        result[FwxWeb3.RANK_INFO][FwxWeb3.MINIMUM_STAKE_AMOUNT] /= 10**18
+        result[FwxWeb3.RANK_INFO][FwxWeb3.MAX_LTV_BONUS] /= 10**20
+        result[FwxWeb3.RANK_INFO][FwxWeb3.TRADING_FEE] /= 10**20
+        result[FwxWeb3.RANK_INFO][FwxWeb3.TRADING_BONUS] /= 10**20
         return result
 
     # getLendingInfoPlatform
@@ -329,6 +373,7 @@ class FwxWeb3:
     def getLendingInfoPlatform(self, poolTokenSymbol, forwPriceRate=15000000000000000000, forwPricePrecision=10000000000000000000):
         validateToken(poolTokenSymbol)
         helper = self.__getHelperPool()
+        poolTokenDecimal = self.__getTokenDecimal(poolTokenSymbol)
         pool = self.__getPool(poolTokenSymbol)
         aptPrice = pool.functions.getActualTokenPrice().call()
         itpPrice = pool.functions.getInterestTokenPrice().call()
@@ -342,14 +387,14 @@ class FwxWeb3:
             defi_sdk_py.ADDRESSES["AVAX"]["POOL"][poolTokenSymbol], 0, forwPriceRate, forwPricePrecision).call()
 
         result = {
-            FwxWeb3.ATP_PRICE: aptPrice,
-            FwxWeb3.ITP_PRICE: itpPrice,
-            FwxWeb3.IFP_PRICE: ifpPrice,
-            FwxWeb3.TOTAL_SUPPLY: totalSupply,
-            FwxWeb3.AVAILABLE_SUPPLY: availableSupply,
-            FwxWeb3.UTILIZATION_RATE: utilizationRate,
-            FwxWeb3.INTEREST_RATE: interestRate,
-            FwxWeb3.INTEREST_FWX_RATE: interestFwxRate,
+            FwxWeb3.ATP_PRICE: aptPrice / 10**poolTokenDecimal,
+            FwxWeb3.ITP_PRICE: itpPrice / 10**poolTokenDecimal,
+            FwxWeb3.IFP_PRICE: ifpPrice / 10**18,
+            FwxWeb3.TOTAL_SUPPLY: totalSupply / 10**poolTokenDecimal,
+            FwxWeb3.AVAILABLE_SUPPLY: availableSupply / 10**poolTokenDecimal,
+            FwxWeb3.UTILIZATION_RATE: utilizationRate / 10**18,
+            FwxWeb3.INTEREST_RATE: interestRate / 10**18,
+            FwxWeb3.INTEREST_FWX_RATE: interestFwxRate / 10**18,
         }
         return result
 
@@ -366,7 +411,7 @@ class FwxWeb3:
         poolTokenDecimal = self.__getTokenDecimal(poolTokenSymbol)
         depositAmount = int(depositAmount * 10**poolTokenDecimal)
         return helper.functions.getNextLendingInterest(
-            defi_sdk_py.ADDRESSES["AVAX"]["POOL"][poolTokenSymbol], depositAmount).call()
+            defi_sdk_py.ADDRESSES["AVAX"]["POOL"][poolTokenSymbol], depositAmount).call() / 10**18
 
     # getFwxInterestRate
     # - **Instance**: APHPool
@@ -381,7 +426,7 @@ class FwxWeb3:
         poolTokenDecimal = self.__getTokenDecimal(poolTokenSymbol)
         depositAmount = int(depositAmount * 10**poolTokenDecimal)
         return helper.functions.getNextLendingForwInterest(
-            defi_sdk_py.ADDRESSES["AVAX"]["POOL"][poolTokenSymbol], 0, forwPriceRate, forwPricePrecision).call()
+            defi_sdk_py.ADDRESSES["AVAX"]["POOL"][poolTokenSymbol], 0, forwPriceRate, forwPricePrecision).call() / 10**18
 
     # Borrowing
 
