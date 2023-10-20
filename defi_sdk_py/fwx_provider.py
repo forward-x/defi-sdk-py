@@ -75,7 +75,7 @@ class FwxWeb3:
     ACTIVE_LOAN = "activeLoan"
     ACTIVE_LOAN_INFO = "activeLoanInfo"
 
-    LOAN = "loans"
+    LOANS = "loans"
     INTEREST_PAID = "interestPaid"
     BORROW_TOKEN_ADDRESS = "borrowTokenAddress"
     ROLLOVER_TIMESTAMP = "rolloverTimestamp"
@@ -86,6 +86,13 @@ class FwxWeb3:
     OWED_PER_DAY = "owedPerDay"
     MIN_INTEREST = "minInterest"
     INTEREST_OWED = "interestOwed"
+
+    BORROW_PAID = "borrowPaid"
+
+    LOAN_EXTS = "loanExts"
+
+    DELAY_INTEREST = "delayInterest"
+    BOUNTY_REWARD = "bountyReward"
 
     FREE_BALANCE = "freeBalance"
     USED_BALANCE = "usedBalance"
@@ -166,10 +173,10 @@ class FwxWeb3:
 
         # Send tx
         txHash = self.w3.eth.send_raw_transaction(signedTx.rawTransaction)
-        txRecipt = self.w3.eth.wait_for_transaction_receipt(txHash)
+        txReceipt = self.w3.eth.wait_for_transaction_receipt(txHash)
 
         result = {}
-        for log in txRecipt["logs"]:
+        for log in txReceipt["logs"]:
             if log["topics"][0].hex() == "0x55e1b84deec6eefe49c2c96afe1d5b43ca37768907f7388696c6009e7bbe3b54":
                 data = log["data"][2:]
                 result[FwxWeb3.MINTED_P] = int(
@@ -208,7 +215,7 @@ class FwxWeb3:
 
         # Send tx
         txHash = self.w3.eth.send_raw_transaction(signedTx.rawTransaction)
-        txRecipt = self.w3.eth.wait_for_transaction_receipt(txHash)
+        txReceipt = self.w3.eth.wait_for_transaction_receipt(txHash)
         result = {
             FwxWeb3.PRINCIPLE: 0.0,
             FwxWeb3.TOKEN_INTEREST: 0.0,
@@ -222,7 +229,7 @@ class FwxWeb3:
             FwxWeb3.FORW_INTEREST_BONUS: 0.0
         }
 
-        for log in txRecipt["logs"]:
+        for log in txReceipt["logs"]:
             if log["topics"][0].hex() == "0x25dd09722d1e76ffb961a71292eafb472dcb7453dd24aafe730779e6d6cf7190":
                 data = log["data"][2:]
                 result[FwxWeb3.PRINCIPLE] += int(data[0:32], 16) / \
@@ -277,7 +284,7 @@ class FwxWeb3:
 
         # Send tx
         txHash = self.w3.eth.send_raw_transaction(signedTx.rawTransaction)
-        txRecipt = self.w3.eth.wait_for_transaction_receipt(txHash)
+        txReceipt = self.w3.eth.wait_for_transaction_receipt(txHash)
         result = {
             FwxWeb3.PRINCIPLE: 0.0,
             FwxWeb3.TOKEN_INTEREST: 0.0,
@@ -291,7 +298,7 @@ class FwxWeb3:
             FwxWeb3.FORW_INTEREST_BONUS: 0.0
         }
 
-        for log in txRecipt["logs"]:
+        for log in txReceipt["logs"]:
             if log["topics"][0].hex() == "0x25dd09722d1e76ffb961a71292eafb472dcb7453dd24aafe730779e6d6cf7190":
                 data = log["data"][2:]
                 result[FwxWeb3.PRINCIPLE] += int(data[0:32], 16) / \
@@ -468,9 +475,278 @@ class FwxWeb3:
 
         # Send tx
         txHash = self.w3.eth.send_raw_transaction(signedTx.rawTransaction)
-        self.w3.eth.wait_for_transaction_receipt(txHash)
+        txReceipt = self.w3.eth.wait_for_transaction_receipt(txHash)
+        result = {}
+        for log in txReceipt["logs"]:
+            if log["topics"][0].hex() == "0xdc7693ea123824cbf513f8d942f777f8ae0b41e557aa4317e938c087b5483ef7":
+                loanId = int(log["topics"][3].hex(), 16)
 
-        return (txHash, self.__getActiveLoan(nftId)[-1][FwxWeb3.ACTIVE_LOAN])
+                loanInfo = self.getLoanInfo(nftId, loanId)
+                loanInfo.pop(FwxWeb3.ACTIVE)
+                loanInfo.pop(FwxWeb3.START_TIMESTAMP)
+                result = loanInfo
+        return (txHash, result)
+
+    # repay
+    # - **Instance**: APHCore
+    # - **Parameters**
+    #     - nftId: BigNumberish
+    #     - loanId: BigNumberish
+    #     - repayAmount: BigNumberish
+    # - **Output**
+    #     - borrowPaid: BigNumberish
+    #     - interestPaid: BigNumberish
+    def repay(self, nftId, loanId, repayAmount, gas=800000, gasPrice=25, nonce=0):
+        return self.__repay(nftId, loanId, repayAmount, False, gas, gasPrice, nonce)
+
+    # repayInterest
+    # - **Instance**: APHCore
+    # - **Parameters**
+    #     - nftId: BigNumberish
+    #     - loanId: BigNumberish
+    #     - repayAmount: BigNumberish
+    # - **Output**
+    #     - interestPaid: BigNumberish
+    def repayInterest(self, nftId, loanId, repayAmount, gas=800000, gasPrice=25, nonce=0):
+        repayResult = self.__repay(
+            nftId, loanId, repayAmount, True, gas, gasPrice, nonce)
+        repayResult[1].pop(FwxWeb3.BORROW_PAID)
+        return repayResult
+
+    def __repay(self, nftId, loanId, repayAmount, isOnlyInterest, gas, gasPrice, nonce):
+        loanInfo = self.__getLoanInfo(nftId, loanId)
+        txHash = None
+        result = {
+            FwxWeb3.BORROW_PAID: 0,
+            FwxWeb3.INTEREST_PAID: 0,
+        }
+        if loanInfo[FwxWeb3.ACTIVE]:
+            borrowTokenDecimal = self.__getTokenDecimalFromAddress(
+                loanInfo[FwxWeb3.BORROW_TOKEN_ADDRESS])
+            repayAmount = int(repayAmount * 10 ** borrowTokenDecimal)
+            core = self.__getCore()
+            tx = core.functions.repay(
+                loanId,
+                nftId,
+                repayAmount,
+                isOnlyInterest,
+            ).buildTransaction(
+                {
+                    'from': self.signer.address,
+                    'nonce': nonce if nonce else self.w3.eth.get_transaction_count(self.signer.address),
+                    'gas': gas,
+                    'gasPrice': self.w3.toWei(gasPrice, 'gwei'),
+                    'value': repayAmount if self.__isTokenAddressNative(loanInfo[FwxWeb3.BORROW_TOKEN_ADDRESS]) else 0
+                }
+            )
+            # Sign tx
+            signedTx = self.w3.eth.account.sign_transaction(
+                tx, self.signer.key)
+
+            # Send tx
+            txHash = self.w3.eth.send_raw_transaction(signedTx.rawTransaction)
+            txReceipt = self.w3.eth.wait_for_transaction_receipt(txHash)
+
+            for log in txReceipt["logs"]:
+                if log["topics"][0].hex() == "0x4cabfc094acff5e29e506e4b4123342242cb3c366bc94779f4cc5459a3a2ab2f":
+                    data = log["data"][2:]
+                    result[FwxWeb3.BORROW_PAID] = int(
+                        data[41:73], 16) / 10 ** borrowTokenDecimal
+                    result[FwxWeb3.INTEREST_PAID] = int(
+                        data[73:105], 16) / 10 ** borrowTokenDecimal
+
+        return (txHash, result)
+
+    # addCollateral
+    # - **Instance**: APHCore
+    # - **Parameters**
+    #     - nftId: BigNumberish
+    #     - loanId: BigNumberish
+    #     - collateralAmount: BigNumberish
+    # - **Output**
+    #     - result: CoreBase.Loan (struct from solidity)
+    def addCollateral(self, nftId, loanId, collateralAmount, gas=800000, gasPrice=25, nonce=0):
+        return self.__adjustCollateral(nftId, loanId, collateralAmount, True, gas, gasPrice, nonce)
+
+    # removeCollateral
+    # - **Instance**: APHCore
+    # - **Parameters**
+    #     - nftId: BigNumberish
+    #     - loanId: BigNumberish
+    #     - collateralAmount: BigNumberish
+    # - **Output**
+    #     - result: CoreBase.Loan (struct from solidity)
+    def removeCollateral(self, nftId, loanId, collateralAmount, gas=800000, gasPrice=25, nonce=0):
+        return self.__adjustCollateral(nftId, loanId, collateralAmount, False, gas, gasPrice, nonce)
+
+    def __adjustCollateral(self, nftId, loanId, collateralAmount, isAdd, gas, gasPrice, nonce):
+        loanInfo = self.__getLoanInfo(nftId, loanId)
+        txHash = None
+        if loanInfo[FwxWeb3.ACTIVE]:
+            collateralTokenDecimal = self.__getTokenDecimalFromAddress(
+                loanInfo[FwxWeb3.COLLATERAL_TOKEN_ADDRESS])
+            collateralAmount = collateralAmount * 10 ** collateralTokenDecimal
+            core = self.__getCore()
+            tx = core.functions.adjustCollateral(
+                loanId,
+                nftId,
+                collateralAmount,
+                isAdd,
+            ).buildTransaction(
+                {
+                    'from': self.signer.address,
+                    'nonce': nonce if nonce else self.w3.eth.get_transaction_count(self.signer.address),
+                    'gas': gas,
+                    'gasPrice': self.w3.toWei(gasPrice, 'gwei'),
+                    'value': collateralAmount if self.__isTokenAddressNative(loanInfo[FwxWeb3.COLLATERAL_TOKEN_ADDRESS]) else 0
+                }
+            )
+            # Sign tx
+            signedTx = self.w3.eth.account.sign_transaction(
+                tx, self.signer.key)
+
+            # Send tx
+            txHash = self.w3.eth.send_raw_transaction(signedTx.rawTransaction)
+            self.w3.eth.wait_for_transaction_receipt(txHash)
+
+        result = self.getLoanInfo(nftId, loanId)
+        result.pop(FwxWeb3.ACTIVE)
+        result.pop(FwxWeb3.START_TIMESTAMP)
+        return (txHash, result)
+
+    # rollover
+    # - **Instance**: APHCore
+    # - **Parameters**
+    #     - nftId: BigNumberish
+    #     - loanId: BigNumberish
+    # - **Output**
+    #     - delayInterest: BigNumberish
+    #     - bountyReward: BigNumberish
+    def rollover(self, nftId, loanId, gas=800000, gasPrice=25, nonce=0):
+        loanInfo = self.__getLoanInfo(nftId, loanId)
+        txHash = None
+        result = {
+            FwxWeb3.DELAY_INTEREST: 0.0,
+            FwxWeb3.BOUNTY_REWARD: 0.0
+        }
+        if loanInfo[FwxWeb3.ACTIVE]:
+            borrowTokenDecimal = self.__getTokenDecimalFromAddress(
+                loanInfo[FwxWeb3.BORROW_TOKEN_ADDRESS])
+            collateralTokenDecimal = self.__getTokenDecimalFromAddress(
+                loanInfo[FwxWeb3.COLLATERAL_TOKEN_ADDRESS])
+            core = self.__getCore()
+            tx = core.functions.rollover(
+                loanId,
+                nftId
+            ).buildTransaction(
+                {
+                    'from': self.signer.address,
+                    'nonce': nonce if nonce else self.w3.eth.get_transaction_count(self.signer.address),
+                    'gas': gas,
+                    'gasPrice': self.w3.toWei(gasPrice, 'gwei'),
+                }
+            )
+            # Sign tx
+            signedTx = self.w3.eth.account.sign_transaction(
+                tx, self.signer.key)
+
+            # Send tx
+            txHash = self.w3.eth.send_raw_transaction(signedTx.rawTransaction)
+            txReceipt = self.w3.eth.wait_for_transaction_receipt(txHash)
+            for log in txReceipt["logs"]:
+                if log["topics"][0].hex() == "0xa0ae618c42c745519d96383f66c106adaa07218816e5d7cdeb6fa33ecfaeac38":
+                    data = log["data"][2:]
+                    result[FwxWeb3.DELAY_INTEREST] = int(
+                        data[40:72], 16) / 10**borrowTokenDecimal
+                    result[FwxWeb3.BOUNTY_REWARD] = int(
+                        data[72:104], 16) / 10**collateralTokenDecimal
+        return (txHash, result)
+
+    # getLoanInfo
+    # - **Instance**: APHCore
+    # - **Parameters**
+    #     - nftId: BigNumberish
+    #     - loanId: BigNumberish
+    # - **Output**
+    #     - active: bool
+    #     - startTimestamp: BigNumberish
+    #     - borrowToken: address -> borrowTokenAddress
+    #     - collateralToken: address -> collateralTokenAddress
+    #     - lastSettleTimestamp: BigNumberish
+    #     - rolloverTimestamp: BigNumberish
+    #     - borrowAmount: BigNumberish
+    #     - collateralAmount: BigNumberish
+    #     - owedPerDay: BigNumberish
+    #     - minInterest: BigNumberish
+    #     - interestOwed: BigNumberish
+    #     - interestPaid: BigNumberish
+    def getLoanInfo(self, nftId, loanId):
+        loanInfo = self.__getLoanInfo(nftId, loanId)
+        borrowTokenDecimal = self.__getTokenDecimalFromAddress(
+            loanInfo[FwxWeb3.BORROW_TOKEN_ADDRESS])
+        collateralTokenDecimal = self.__getTokenDecimalFromAddress(
+            loanInfo[FwxWeb3.COLLATERAL_TOKEN_ADDRESS])
+        loanInfo[FwxWeb3.BORROW_AMOUNT] = loanInfo[FwxWeb3.BORROW_AMOUNT] / \
+            10 ** borrowTokenDecimal
+        loanInfo[FwxWeb3.COLLATERAL_AMOUNT] = loanInfo[FwxWeb3.COLLATERAL_AMOUNT] / \
+            10 ** collateralTokenDecimal
+        loanInfo[FwxWeb3.OWED_PER_DAY] = loanInfo[FwxWeb3.OWED_PER_DAY] / \
+            10 ** borrowTokenDecimal
+        loanInfo[FwxWeb3.MIN_INTEREST] = loanInfo[FwxWeb3.MIN_INTEREST] / \
+            10 ** borrowTokenDecimal
+        loanInfo[FwxWeb3.INTEREST_OWED] = loanInfo[FwxWeb3.INTEREST_OWED] / \
+            10 ** borrowTokenDecimal
+        loanInfo[FwxWeb3.INTEREST_PAID] = loanInfo[FwxWeb3.INTEREST_PAID] / \
+            10 ** borrowTokenDecimal
+        return loanInfo
+
+    def __getLoanInfo(self, nftId, loanId):
+        core = self.__getCore()
+        abi = next(filter(lambda abis: FwxWeb3.filterFunctionABI(
+            abis, FwxWeb3.LOANS), core.abi))
+        loan = core.functions.loans(nftId, loanId).call()
+        loan = FwxWeb3.tupleOutputDecode(loan, abi)[FwxWeb3.LOANS]
+
+        abi = next(filter(lambda abis: FwxWeb3.filterFunctionABI(
+            abis, FwxWeb3.LOAN_EXTS), core.abi))
+        loanExt = core.functions.loanExts(nftId, loanId).call()
+        loanExt = FwxWeb3.tupleOutputDecode(loanExt, abi)[FwxWeb3.LOAN_EXTS]
+        result = {
+            FwxWeb3.ACTIVE: loanExt[FwxWeb3.ACTIVE],
+            FwxWeb3.START_TIMESTAMP: loanExt[FwxWeb3.START_TIMESTAMP],
+            FwxWeb3.BORROW_TOKEN_ADDRESS: loan[FwxWeb3.BORROW_TOKEN_ADDRESS],
+            FwxWeb3.COLLATERAL_TOKEN_ADDRESS: loan[FwxWeb3.COLLATERAL_TOKEN_ADDRESS],
+            FwxWeb3.LAST_SETTLE_TIMESTAMP: loan[FwxWeb3.LAST_SETTLE_TIMESTAMP],
+            FwxWeb3.ROLLOVER_TIMESTAMP: loan[FwxWeb3.ROLLOVER_TIMESTAMP],
+            FwxWeb3.BORROW_AMOUNT: loan[FwxWeb3.BORROW_AMOUNT],
+            FwxWeb3.COLLATERAL_AMOUNT: loan[FwxWeb3.COLLATERAL_AMOUNT],
+            FwxWeb3.OWED_PER_DAY: loan[FwxWeb3.OWED_PER_DAY],
+            FwxWeb3.MIN_INTEREST: loan[FwxWeb3.MIN_INTEREST],
+            FwxWeb3.INTEREST_OWED: loan[FwxWeb3.INTEREST_OWED],
+            FwxWeb3.INTEREST_PAID: loan[FwxWeb3.INTEREST_PAID],
+        }
+        return result
+
+    # getBorrowingInterestRate
+    # - **Instance**: APHPool
+    # - **Parameters**
+    #     - pool: TokenSymbols
+    #     - borrowAmount?: BigNumberish
+    # - **Output**
+    #     - interestRate: BigNumberish
+    #     - interestOwedPerDay: BigNumberish
+    def getBorrowingInterestRate(self, poolTokenSymbol, borrowAmount):
+        validateToken(poolTokenSymbol)
+        pool = self.__getPool(poolTokenSymbol)
+        borrowTokenDecimal = self.__getTokenDecimal(poolTokenSymbol)
+        borrowAmount = int(borrowAmount * 10**borrowTokenDecimal)
+
+        interestInfo = pool.functions.calculateInterest(borrowAmount).call()
+        result = {
+            FwxWeb3.INTEREST_RATE: interestInfo[0] / 10**borrowTokenDecimal,
+            FwxWeb3.INTEREST_OWED_PER_DAY: interestInfo[1] / 10**borrowTokenDecimal,
+        }
+        return result
 
     def __getActiveLoan(self, nftId):
         helperCore = self.__getHelperCore()
@@ -480,7 +756,7 @@ class FwxWeb3:
         resultPerPage = 10
         results = []
         abi = next(filter(lambda abis: FwxWeb3.filterFunctionABI(
-            abis, FwxWeb3.LOAN), core.abi))
+            abis, FwxWeb3.LOANS), core.abi))
 
         while newCursor <= currentLoanIndex:
             helperReturn = helperCore.functions.getActiveLoans(
@@ -492,7 +768,7 @@ class FwxWeb3:
                             [FwxWeb3.ACTIVE_LOAN, FwxWeb3.ACTIVE_LOAN_INFO,
                              FwxWeb3.INTEREST_OWE_PER_DAY],
                             [FwxWeb3.tupleOutputDecode(
-                                lst[0], abi)[FwxWeb3.LOAN], lst[1], lst[2]]
+                                lst[0], abi)[FwxWeb3.LOANS], lst[1], lst[2]]
                         )
                     ),
                     [[helperReturn[0][i], helperReturn[1][i], helperReturn[2][i]]
@@ -918,8 +1194,14 @@ class FwxWeb3:
 
         # Send tx
         txHash = self.w3.eth.send_raw_transaction(signedTx.rawTransaction)
-        self.w3.eth.wait_for_transaction_receipt(txHash)
-        return True
+        txReceipt = self.w3.eth.wait_for_transaction_receipt(txHash)
+
+        result = 0
+        for log in txReceipt["logs"]:
+            if log["topics"][0].hex() == "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925":
+                result = int(log["data"][2:], 16)
+
+        return (txHash, result)
 
     def getTokenDecimal(self, tokenSymbol):
         return self.__getTokenDecimal(tokenSymbol)
@@ -979,6 +1261,9 @@ class FwxWeb3:
 
     def __isTokenSymbolNative(self, tokenSymbol):
         return True if tokenSymbol in ["WAVAX"] else False
+
+    def __isTokenAddressNative(self, tokenAddress):
+        return tokenAddress in [defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"][symbol] for symbol in ["WAVAX"]]
 
     def getW3(self):
         return self.w3

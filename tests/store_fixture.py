@@ -57,8 +57,13 @@ def fwx_lending_borrowing_client():
     client = TestClient(__fwx_client())
 
     # mint nft
-    nftId = client.mint(0, nonce=client.getAndAddNonce())[1]
-    client.setNftId(nftId)
+    nftId = None
+    while nftId is None:
+        try:
+            nftId = client.mint(0, nonce=client.getAndAddNonce())[1]
+            client.setNftId(nftId)
+        except ValueError:
+            pass
 
     # borrow USDC
     result = None

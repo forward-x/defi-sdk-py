@@ -1,12 +1,6 @@
 from defi_sdk_py.fwx_provider import FwxWeb3
 from store_fixture import fwx_lending_borrowing_client
 
-# def withdraw(self, poolTokenSymbol, nftId, withdrawAmount, gas=220000, gasPrice=25, nonce=0):
-# def claimAllInterest(self, poolTokenSymbol, nftId, gas=220000, gasPrice=25, nonce=0):
-# def getLendingInfoPlatform(self, poolTokenSymbol):
-# def getInterestRate(self, poolTokenSymbol, depositAmount):
-# def getFwxInterestRate(self, poolTokenSymbol, depositAmount):
-
 
 def test_deposit(fwx_lending_borrowing_client):
     client = fwx_lending_borrowing_client
