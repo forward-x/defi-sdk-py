@@ -60,15 +60,6 @@ def fwx_lending_borrowing_client():
     nftId = client.mint(0, nonce=client.getAndAddNonce())[1]
     client.setNftId(nftId)
 
-    # approve pool
-    result = None
-    while result is None:
-        try:
-            result = client.approveToken(
-                defi_sdk_py.ADDRESSES["AVAX"]["POOL"]["WAVAX"], "USDC", nonce=client.getAndAddNonce())
-        except ValueError:
-            pass
-
     # borrow USDC
     result = None
     while result is None:
@@ -97,13 +88,6 @@ def fwx_trading_client():
     nftId = client.mint(0, nonce=client.getAndAddNonce())[1]
     client.setNftId(nftId)
 
-    result = None
-    while result is None:
-        try:
-            result = client.approveToken(
-                defi_sdk_py.ADDRESSES["AVAX"]["POOL"]["WAVAX"], "USDC", nonce=client.getAndAddNonce())
-        except ValueError:
-            pass
     result = None
     # borrow USDC
     while result is None:
