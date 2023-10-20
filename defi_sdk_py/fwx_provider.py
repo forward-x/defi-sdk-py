@@ -4,6 +4,10 @@ import defi_sdk_py
 
 
 class FwxWeb3:
+    GET_STAKE_INFO = "getStakeInfo"
+    GET_RANK_INFO_LIST = "getRankInfoList"
+    RANK_INFOS = "rankInfos"
+    STAKE_INFO = "stakeInfo"
 
     POSITIONS = "positions"
     ID = "id"
@@ -434,6 +438,56 @@ class FwxWeb3:
         depositAmount = int(depositAmount * 10**poolTokenDecimal)
         return helper.functions.getNextLendingForwInterest(
             defi_sdk_py.ADDRESSES["AVAX"]["POOL"][poolTokenSymbol], 0, forwPriceRate, forwPricePrecision).call() / 10**18
+
+    # StakePool
+
+    # getNextSettleTimestamp
+    # - **Instance**: StakePool
+    # - **Parameters: none**
+    # - **Output**:
+    #     - nextSettleTimestamp: BigNumberish
+    def getNextSettleTimestamp(self):
+        helper = self.__getHelperMembershipAndStakePool()
+        return helper.functions.getStakePoolNextSettleTimeStamp(defi_sdk_py.ADDRESSES["AVAX"]["STAKEPOOL"]).call()
+
+    # getNftList
+    # - **Instance**: Membership
+    # - **Parameters**:
+    #     - owner: address
+    # - **Output**:
+    #    - nftIds: BigNumberish[]
+    def getNftList(self, ownerAddress):
+        helper = self.__getHelperMembershipAndStakePool()
+        return helper.functions.getNFTList(ownerAddress).call()[1]
+
+    # getRankInfos
+    # - **Instance**: StakePool
+    # - **Parameters**: none
+    # - **Output**:
+    #     - info: StakePoolBase.RankInfo[] (struct from solidity)
+    def getRankInfos(self):
+        helper = self.__getHelperMembershipAndStakePool()
+        abi = next(filter(lambda abis: FwxWeb3.filterFunctionABI(
+            abis, FwxWeb3.GET_RANK_INFO_LIST), helper.abi))
+        info = helper.functions.getRankInfoList().call()
+        result = FwxWeb3.tupleOutputDecode(
+            info, abi)[FwxWeb3.GET_RANK_INFO_LIST][FwxWeb3.RANK_INFOS]
+        return result
+
+    # getStakeInfo
+    # - **Instance**: StakePool
+    # - **Parameters**:
+    #     - nftId: BigNumberish
+    # - **Output**:
+    # - info: StakePoolBase.RankInfo[] (struct from solidity)
+    def getStakeInfo(self, nftId):
+        helper = self.__getHelperMembershipAndStakePool()
+        abi = next(filter(lambda abis: FwxWeb3.filterFunctionABI(
+            abis, FwxWeb3.GET_STAKE_INFO), helper.abi))
+        info = helper.functions.getStakeInfo(nftId).call()
+        result = FwxWeb3.tupleOutputDecode(
+            info, abi)[FwxWeb3.GET_STAKE_INFO][FwxWeb3.STAKE_INFO]
+        return result
 
     # Borrowing
 
@@ -1320,9 +1374,19 @@ class FwxWeb3:
             for index, abiOutputs in enumerate(abi.get("outputs", abi)):
                 # complex value
                 inner = {}
-                if 'components' in abiOutputs:
-                    for x, y in zip(value if type(value[index]) != list and type(value[index]) != tuple else value[index], abiOutputs["components"]):
-                        inner.update(FwxWeb3.tupleOutputDecode(x, y))
+                if "components" in abiOutputs:
+                    if abiOutputs["type"] == "tuple[]":
+                        inner = []
+                        for subValue in value:
+                            subInner = {}
+                            for x, y in zip(subValue, abiOutputs["components"]):
+                                subInner.update(
+                                    FwxWeb3.tupleOutputDecode(x, y))
+                            inner.append(subInner)
+
+                    else:
+                        for x, y in zip(value if type(value[index]) != list and type(value[index]) != tuple else value[index], abiOutputs["components"]):
+                            inner.update(FwxWeb3.tupleOutputDecode(x, y))
                     if abiOutputs["name"] == "":
                         output.update(inner)
                     else:
