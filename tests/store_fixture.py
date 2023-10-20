@@ -35,9 +35,9 @@ class TestClient(fwx_provider.FwxWeb3):
         self.signer = client.getSigner()
         self.nonce = 0
 
-    def getAndAddNonce(self):
+    def getAndAddNonce(self, increaseVaule=1):
         nonce = self.nonce
-        self.nonce += 1
+        self.nonce += increaseVaule
         return nonce
 
     def setNftId(self, nftId):
@@ -53,6 +53,39 @@ def fwx_client():
 
 
 @pytest.fixture
+def fwx_lending_borrowing_client():
+    client = TestClient(__fwx_client())
+
+    # mint nft
+    nftId = None
+    while nftId is None:
+        try:
+            nftId = client.mint(0, nonce=client.getAndAddNonce())[1]
+            client.setNftId(nftId)
+        except ValueError:
+            pass
+
+    # borrow USDC
+    result = None
+    while result is None:
+        try:
+            result = client.borrow(
+                "USDC", nftId, 0, 1000, 200, "WAVAX", nonce=client.getAndAddNonce())
+        except ValueError:
+            pass
+
+    # approve pool
+    result = None
+    while result is None:
+        try:
+            result = client.approveToken(
+                defi_sdk_py.ADDRESSES["AVAX"]["POOL"]["USDC"], "USDC", nonce=client.getAndAddNonce())
+        except ValueError:
+            pass
+    return client
+
+
+@pytest.fixture
 def fwx_trading_client():
     client = TestClient(__fwx_client())
 
@@ -60,13 +93,6 @@ def fwx_trading_client():
     nftId = client.mint(0, nonce=client.getAndAddNonce())[1]
     client.setNftId(nftId)
 
-    result = None
-    while result is None:
-        try:
-            result = client.approveToken(
-                defi_sdk_py.ADDRESSES["AVAX"]["POOL"]["WAVAX"], "USDC", nonce=client.getAndAddNonce())
-        except ValueError:
-            pass
     result = None
     # borrow USDC
     while result is None:
