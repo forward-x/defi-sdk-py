@@ -564,6 +564,46 @@ class FwxWeb3:
         pair = core.functions.pairs(pairByte).call()
         return {FwxWeb3.COLLATERAL_ADDRESS: pair[0], FwxWeb3.UNDERLYING_ADDRESS: pair[1]}
 
+    def approve(self, tokenSymbol, spenderSymbol, amount, gas=1300000, gasPrice=25, nonce=0):
+        spenderAddress = ""
+        if spenderSymbol == "CORE":
+            spenderAddress = defi_sdk_py.ADDRESSES["AVAX"][spenderSymbol]
+        else:
+            validateToken(spenderSymbol)
+            spenderAddress = defi_sdk_py.ADDRESSES["AVAX"]["POOL"][spenderSymbol]
+
+        token = self.__getToken(tokenSymbol)
+        tokenDecimal = self.__getTokenDecimal(tokenSymbol)
+        amount = amount * 10**tokenDecimal
+
+        tx = token.functions.approve(spenderAddress, amount).buildTransaction(
+            {
+                'from': self.signer.address,
+                'nonce': nonce if nonce else self.w3.eth.get_transaction_count(self.signer.address),
+                'gas': gas,
+                'gasPrice': self.w3.toWei(gasPrice, 'gwei'),
+            }
+        )
+
+        # Sign tx
+        signedTx = self.w3.eth.account.sign_transaction(tx, self.signer.key)
+
+        # Send tx
+        txHash = self.w3.eth.send_raw_transaction(signedTx.rawTransaction)
+        self.w3.eth.wait_for_transaction_receipt(txHash)
+        return True
+
+    def getProtocolAllowance(self, tokenSymbol, spenderSymbol, amount):
+        spenderAddress = ""
+        if spenderSymbol == "CORE":
+            spenderAddress = defi_sdk_py.ADDRESSES["AVAX"][spenderSymbol]
+        else:
+            validateToken(spenderSymbol)
+            spenderAddress = defi_sdk_py.ADDRESSES["AVAX"]["POOL"][spenderSymbol]
+        token = self.__getToken(tokenSymbol)
+        tokenDecimal = self.__getTokenDecimal(tokenSymbol)
+        return token.functions.allowance(self.signer.address, spenderAddress).call() / 10**tokenDecimal
+
     def approveToken(self, spenderAddress, tokenSymbol, gas=1300000, gasPrice=25, nonce=0):
         token = self.__getToken(tokenSymbol)
 
@@ -674,6 +714,10 @@ class FwxWeb3:
 
 def getClient(url):
     return FwxWeb3(url)
+
+
+def validateToken(token):
+    assert token in defi_sdk_py.ADDRESSES["AVAX"]["TOKEN"], "token not allowed"
 
 
 def validatePair(collateral, underlying):
