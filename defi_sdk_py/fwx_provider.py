@@ -488,6 +488,46 @@ class FwxWeb3:
         result = FwxWeb3.tupleOutputDecode(
             info, abi)[FwxWeb3.GET_STAKE_INFO][FwxWeb3.STAKE_INFO]
         return result
+    # getRank
+    # - **Instance**: Membership
+    # - **Note**: If `pool` exist we’ll get a rank from that pool, otherwise get from a current pool
+    # - **Parameters**
+    #     - tokenId: BigNumberish
+    #     - pool?: string (address of StakePool)
+    # - **Output**:
+    #     - rank: BigNumberish
+
+    def getRank(self, tokenId, stakePoolAddress=""):
+        membership = self.__getMembership()
+        result = None
+        if stakePoolAddress == "":
+            result = membership.functions.getRank(tokenId).call()
+        else:
+            result = membership.functions.getRank(
+                stakePoolAddress, tokenId).call()
+        return result
+
+    # ownerOf
+    # - **Instance**: Membership
+    # - **Parameters**
+    #     - target: address
+    # - **Output**:
+    #     - owner: address
+    def ownerOf(self, tokenId):
+        membership = self.__getMembership()
+        return membership.functions.ownerOf(tokenId).call()
+
+    # usableToken
+    # - **Instance**: Membership
+    # - **Note**: We can use `callstatic` to prevent revert from chain and handle error for the users
+    # - **Parameters**
+    #     - owner: address
+    #     - tokenId: BigNumberish
+    # - **Output**:
+    #     - useableTokenId: BigNumberish
+    def usableToken(self, ownerAddress, tokenId):
+        membership = self.__getMembership()
+        return membership.functions.usableTokenId(ownerAddress, tokenId).call({"from": ownerAddress})
 
     # Borrowing
 
