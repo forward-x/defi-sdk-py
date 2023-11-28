@@ -34,6 +34,25 @@ client.setSigner(PRIVATE_KEY)
 client.withdrawCollateral("USDC", "ETH", client.getNftId(), 10)
 ```
 
+# Development
+
+## Prerequire
+
+- poetry
+- ganache-cli
+
+```bash
+npm i -g ganache-cli
+```
+
+- set node env
+
+## Install
+
+```bash
+poetry update
+```
+
 # Test
 
 ```bash
