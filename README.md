@@ -12,7 +12,7 @@ pip install git+https://github.com/forward-x/defi-sdk-py
 
 ```python
 import web3
-import defi_sdk_py
+from defi_sdk_py import *
 
 client = fwx_provider.getClient(web3.provider.endpoint_uri)
 client.setSigner(PRIVATE_KEY)
@@ -26,7 +26,7 @@ client.depositCollateral("USDC", "ETH", client.getNftId(), 100)
 
 ```python
 import web3
-import defi_sdk_py
+from defi_sdk_py import *
 
 client = fwx_provider.getClient(web3.provider.endpoint_uri)
 client.setSigner(PRIVATE_KEY)
