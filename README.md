@@ -8,30 +8,56 @@ pip install git+https://github.com/forward-x/defi-sdk-py
 
 # Usage
 
-## Deposit Collateral
+## Mint NFT ID
 
 ```python
 import web3
 from defi_sdk_py import *
 
-client = fwx_provider.getClient(web3.provider.endpoint_uri)
+client = fwx_provider.getClient(NODE_URL)
 client.setSigner(PRIVATE_KEY)
 
-client.approveToken(defi_sdk_py.ADDRESSES["AVAX"]["CORE"], "USDC", nonce=client.getAndAddNonce())
-
-client.depositCollateral("USDC", "ETH", client.getNftId(), 100)
+membership = client.getMembership()
+supply = membership.functions.totalSupply().call()
+nft_id = client.mint(0)[1]
 ```
 
-## Withdraw Collateral
+## Mint and Deposit Collateral
 
 ```python
 import web3
 from defi_sdk_py import *
 
-client = fwx_provider.getClient(web3.provider.endpoint_uri)
+client = fwx_provider.getClient(NODE_URL)
 client.setSigner(PRIVATE_KEY)
 
-client.withdrawCollateral("USDC", "ETH", client.getNftId(), 10)
+membership = client.getMembership()
+supply = membership.functions.totalSupply().call()
+nft_id = client.mint(0)[1]
+
+client.approveToken(ADDRESSES["AVAX"]["CORE"], "USDC")
+
+client.depositCollateral("USDC", "ETH", nft_id, 100)
+```
+
+## Mint, Deposit and Withdraw Collateral
+
+```python
+import web3
+from defi_sdk_py import *
+
+client = fwx_provider.getClient(NODE_URL)
+client.setSigner(PRIVATE_KEY)
+
+membership = client.getMembership()
+supply = membership.functions.totalSupply().call()
+nft_id = client.mint(0)[1]
+
+client.approveToken(ADDRESSES["AVAX"]["CORE"], "USDC")
+
+client.depositCollateral("USDC", "ETH", nft_id, 100)
+
+client.withdrawCollateral("USDC", "ETH", nft_id, 10)
 ```
 
 # Development
