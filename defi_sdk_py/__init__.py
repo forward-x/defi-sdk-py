@@ -1,2 +1,1 @@
-from defi_sdk_py.address_const import AddressConst
-import defi_sdk_py.fwx_provider
+from .address_const import AddressConst

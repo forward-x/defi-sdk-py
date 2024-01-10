@@ -2,13 +2,12 @@ import json
 import os
 import sys
 
-# project_dir = os.path.abspath("defi_sdk_py")
-# sys.path.append(project_dir)
+project_dir = os.path.abspath("")
+sys.path.append(project_dir)
 
-# with open(project_dir+"/address/fwx_address.json", 'r') as file:
-#     json_data = json.load(file)
-# print(json_data)
+from defi_sdk_py import AddressConst
 
-# a = defi_sdk_py.AddressConst(json_data)
+with open(project_dir+"/defi_sdk_py/address/fwx_address.json", 'r') as file:
+    json_data = json.load(file)
 
-# print(a)
+a = AddressConst(json_data)
