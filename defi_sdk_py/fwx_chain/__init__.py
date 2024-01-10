@@ -1,3 +1,3 @@
-from .address import AddressConst
+from .address import ADDRESS
 # from .token import *
 

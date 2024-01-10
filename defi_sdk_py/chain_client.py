@@ -1,14 +1,15 @@
 from web3 import Web3, HTTPProvider
-from .address_const import AddressConst
-
+from .address import AddressConst
 
 class ChainClient:
+
     def __init__(self, rpc_url: str, private_key: str, address_const: AddressConst):
         print("init chain client")
         self.rpc_url = rpc_url
         self.private_key = private_key
         self.web3 = self.connect_to_web3()
-        self.address = address_const
+        self.address:AddressConst = address_const
+        self.create_token()
 
     def connect_to_web3(self):
         print("try connecting to chain")
@@ -23,3 +24,7 @@ class ChainClient:
         else:
             raise ConnectionError(f"Failed to connect to {self.rpc_url}")
         return web3
+
+    def create_token(self):
+        print(self.address.get_tokens_address())
+        pass
