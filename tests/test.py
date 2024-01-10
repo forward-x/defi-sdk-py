@@ -19,5 +19,5 @@ clientFWX = FWXChainClient(
     address_const=FWX_ADDRESS
 )
 print(clientFWX.TOKEN.BTC.balanceOf("0xC63dD209434079005E51D34e2b22118d75D1cA0C"))
-
-
+event_filter = clientFWX.TOKEN.BTC.eventTransfer(6283602,6283612)
+print(event_filter)
