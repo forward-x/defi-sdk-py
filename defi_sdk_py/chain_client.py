@@ -13,11 +13,8 @@ class ChainClient:
 
     def connect_to_web3(self):
         print("try connecting to chain")
-        # Connect to Web3 using HTTPProvider
         web3: Web3 = Web3(HTTPProvider(self.rpc_url))
-
-        # Set the default account using the provided private key
-        web3.eth.default_account = web3.eth.account.from_key(self.private_key)
+        web3.eth.default_account = web3.eth.account.from_key(self.private_key).address
         self.client = web3.eth.default_account
         if web3.is_connected():
             print(f"Connected to {self.rpc_url}")
@@ -26,5 +23,10 @@ class ChainClient:
         return web3
 
     def create_token(self):
-        print(self.address.get_tokens_address())
+        # tokens = self.address.get_tokens_address()
+        # for token_name in tokens:
+            # token_address = tokens[token_name]
+            # token_object = IERC20Metadata(token_address, self.web3)
+            # setattr(self, "TOKEN_"+token_name.upper(), token_object)
+            # self["TOKEN_"+token_name.upper()]:IERC20Metadata = toke
         pass

@@ -5,10 +5,19 @@ project_dir = os.path.abspath("")
 sys.path.append(project_dir)
 from defi_sdk_py import ChainClient
 from defi_sdk_py.fwx_chain import ADDRESS as FWX_ADDRESS
+from defi_sdk_py.fwx_chain import FWXChainClient
 
 
-FWXChain = ChainClient(
-    rpc_url="http://65.109.93.162:9650/ext/bc/C/rpc",
+# FWXChain = ChainClient(
+#     rpc_url="https://node.forwardx.space/",
+#     private_key="0x7e7077fb5c507cfe1d0b1743430e5370fa1caca11f0eb39db203f4c0903601eb",
+#     address_const=FWX_ADDRESS
+# )
+clientFWX = FWXChainClient(
+    rpc_url="https://node.forwardx.space/",
     private_key="0x7e7077fb5c507cfe1d0b1743430e5370fa1caca11f0eb39db203f4c0903601eb",
     address_const=FWX_ADDRESS
 )
+print(clientFWX.TOKEN.BTC.balanceOf("0xC63dD209434079005E51D34e2b22118d75D1cA0C"))
+
+
