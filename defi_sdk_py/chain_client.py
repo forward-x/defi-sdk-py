@@ -1,7 +1,10 @@
 from web3 import Web3, HTTPProvider
 from .address import AddressConst
+from .core import Core
+from .library import Library
 
-class ChainClient:
+
+class ChainClient(Library,Core):
 
     def __init__(self, rpc_url: str, private_key: str, address_const: AddressConst):
         print("init chain client")
@@ -9,6 +12,11 @@ class ChainClient:
         self.private_key = private_key
         self.web3 = self.connect_to_web3()
         self.address_const:AddressConst = address_const
+        super().__init__(address_const, self.web3)
+        # self.core = Core(self.address_const.get_core_address(), self.web3)
+
+
+        # self.library = Library(self.address_const.get_library_address(), self.web3)
 
     def connect_to_web3(self):
         print("try connecting to chain")

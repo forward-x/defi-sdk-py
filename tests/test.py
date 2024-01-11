@@ -20,8 +20,11 @@ clientFWX = FWXChainClient(
 )
 print("address : ", clientFWX.address)
 print("native balance : ",clientFWX.getBalance())
-print(clientFWX.TOKEN.BTC.address)
-print(clientFWX.TOKEN.BTC)
+
+# clientFWX.core.check_staking_amount_sufficient(1, 1000, clientFWX.TOKEN.USDT)
+
+print(clientFWX.hashPair(clientFWX.TOKEN.USDT, clientFWX.TOKEN.WBNB))
+
 # print(clientFWX.TOKEN.BTC.balanceOf("0xC63dD209434079005E51D34e2b22118d75D1cA0C"))
 # event_filter = clientFWX.TOKEN.BTC.eventTransfer(0,0)
 # print(event_filter)
