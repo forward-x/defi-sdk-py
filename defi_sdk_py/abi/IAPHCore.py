@@ -19,103 +19,103 @@ class IAPHCore:
     # Generated functions
     
     def adjustCollateral(self, loanId: int, nftId: int, collateralAdjustAmount: int, isAdd: str):
-        return self.contract.functions.adjustCollateral(loanId, nftId, collateralAdjustAmount, isAdd).call()
+        return self.contract.functions.adjustCollateral(loanId, nftId, collateralAdjustAmount, isAdd)
 
     def advancedInterestDuration(self, ):
-        return self.contract.functions.advancedInterestDuration().call()
+        return self.contract.functions.advancedInterestDuration()
 
     def borrow(self, loanId: int, nftId: int, borrowAmount: int, borrowTokenAddress: str, collateralSentAmount: int, collateralTokenAddress: str, newOwedPerDay: int, interestRate: int):
-        return self.contract.functions.borrow(loanId, nftId, borrowAmount, borrowTokenAddress, collateralSentAmount, collateralTokenAddress, newOwedPerDay, interestRate).call()
+        return self.contract.functions.borrow(loanId, nftId, borrowAmount, borrowTokenAddress, collateralSentAmount, collateralTokenAddress, newOwedPerDay, interestRate)
 
     def checkStakingAmountSufficient(self, nftId: int, newAmount: int, tokenAddress: str):
-        return self.contract.functions.checkStakingAmountSufficient(nftId, newAmount, tokenAddress).call()
+        return self.contract.functions.checkStakingAmountSufficient(nftId, newAmount, tokenAddress)
 
     def closePosition(self, nftId: int, posId: int, _closingSize: int):
-        return self.contract.functions.closePosition(nftId, posId, _closingSize).call()
+        return self.contract.functions.closePosition(nftId, posId, _closingSize)
 
     def currentLoanIndex(self, nftId: int):
-        return self.contract.functions.currentLoanIndex(nftId).call()
+        return self.contract.functions.currentLoanIndex(nftId)
 
     def currentPositionIndex(self, nftId: int):
-        return self.contract.functions.currentPositionIndex(nftId).call()
+        return self.contract.functions.currentPositionIndex(nftId)
 
     def depositCollateral(self, nftId: int, collateralTokenAddress: str, underlyingTokenAddress: str, amount: int):
-        return self.contract.functions.depositCollateral(nftId, collateralTokenAddress, underlyingTokenAddress, amount).call()
+        return self.contract.functions.depositCollateral(nftId, collateralTokenAddress, underlyingTokenAddress, amount)
 
     def feeSpread(self, ):
-        return self.contract.functions.feeSpread().call()
+        return self.contract.functions.feeSpread()
 
     def getAmounts(self, isExactOutput: str, extractSwapFee: str, routerIndex: int, amountInput: int, src: str, dst: str):
-        return self.contract.functions.getAmounts(isExactOutput, extractSwapFee, routerIndex, amountInput, src, dst).call()
+        return self.contract.functions.getAmounts(isExactOutput, extractSwapFee, routerIndex, amountInput, src, dst)
 
     def getAmountsWithRouterSelection(self, isExactOutput: str, pairByte: str, amountInput: int, src: str, dst: str, expectedRate: int, slippage: int):
-        return self.contract.functions.getAmountsWithRouterSelection(isExactOutput, pairByte, amountInput, src, dst, expectedRate, slippage).call()
+        return self.contract.functions.getAmountsWithRouterSelection(isExactOutput, pairByte, amountInput, src, dst, expectedRate, slippage)
 
     def getLoanCurrentLTV(self, loanId: int, nftId: int):
-        return self.contract.functions.getLoanCurrentLTV(loanId, nftId).call()
+        return self.contract.functions.getLoanCurrentLTV(loanId, nftId)
 
     def getPoolList(self, ):
-        return self.contract.functions.getPoolList().call()
+        return self.contract.functions.getPoolList()
 
     def getPositionMargin(self, nftId: int, pairByte: str, isLiquidate: str):
-        return self.contract.functions.getPositionMargin(nftId, pairByte, isLiquidate).call()
+        return self.contract.functions.getPositionMargin(nftId, pairByte, isLiquidate)
 
     def isPool(self, poolAddress: str):
-        return self.contract.functions.isPool(poolAddress).call()
+        return self.contract.functions.isPool(poolAddress)
 
     def liquidate(self, loanId: int, nftId: int):
-        return self.contract.functions.liquidate(loanId, nftId).call()
+        return self.contract.functions.liquidate(loanId, nftId)
 
     def liquidatePosition(self, nftId: int, pairByte: str):
-        return self.contract.functions.liquidatePosition(nftId, pairByte).call()
+        return self.contract.functions.liquidatePosition(nftId, pairByte)
 
     def liquidationFee(self, ):
-        return self.contract.functions.liquidationFee().call()
+        return self.contract.functions.liquidationFee()
 
     def loanDuration(self, ):
-        return self.contract.functions.loanDuration().call()
+        return self.contract.functions.loanDuration()
 
     def loanExts(self, nftId: int, loanId: int):
-        return self.contract.functions.loanExts(nftId, loanId).call()
+        return self.contract.functions.loanExts(nftId, loanId)
 
     def loans(self, nftId: int, loanId: int):
-        return self.contract.functions.loans(nftId, loanId).call()
+        return self.contract.functions.loans(nftId, loanId)
 
     def maximumLeverage(self, ):
-        return self.contract.functions.maximumLeverage().call()
+        return self.contract.functions.maximumLeverage()
 
     def membershipAddress(self, ):
-        return self.contract.functions.membershipAddress().call()
+        return self.contract.functions.membershipAddress()
 
     def openPosition(self, params: str, addressParams: str):
-        return self.contract.functions.openPosition(params, addressParams).call()
+        return self.contract.functions.openPosition(params, addressParams)
 
     def pairs(self, pairByte: str):
-        return self.contract.functions.pairs(pairByte).call()
+        return self.contract.functions.pairs(pairByte)
 
     def positionStates(self, nftId: int, posId: int):
-        return self.contract.functions.positionStates(nftId, posId).call()
+        return self.contract.functions.positionStates(nftId, posId)
 
     def positions(self, nftId: int, pairByte: str):
-        return self.contract.functions.positions(nftId, pairByte).call()
+        return self.contract.functions.positions(nftId, pairByte)
 
     def repay(self, loanId: int, nftId: int, repayAmount: int, isOnlyInterest: str):
-        return self.contract.functions.repay(loanId, nftId, repayAmount, isOnlyInterest).call()
+        return self.contract.functions.repay(loanId, nftId, repayAmount, isOnlyInterest)
 
     def rollover(self, loanId: int, nftId: int):
-        return self.contract.functions.rollover(loanId, nftId).call()
+        return self.contract.functions.rollover(loanId, nftId)
 
     def settleBorrowInterest(self, loanId: int, nftId: int):
-        return self.contract.functions.settleBorrowInterest(loanId, nftId).call()
+        return self.contract.functions.settleBorrowInterest(loanId, nftId)
 
     def swapFeeRates(self, routerAddress: str):
-        return self.contract.functions.swapFeeRates(routerAddress).call()
+        return self.contract.functions.swapFeeRates(routerAddress)
 
     def tokenPrecisionUnit(self, tokenAddress: str):
-        return self.contract.functions.tokenPrecisionUnit(tokenAddress).call()
+        return self.contract.functions.tokenPrecisionUnit(tokenAddress)
 
     def wallets(self, nftId: int, pairByte: str):
-        return self.contract.functions.wallets(nftId, pairByte).call()
+        return self.contract.functions.wallets(nftId, pairByte)
 
     def withdrawCollateral(self, nftId: int, collateralTokenAddress: str, underlyingTokenAddress: str, amount: int):
-        return self.contract.functions.withdrawCollateral(nftId, collateralTokenAddress, underlyingTokenAddress, amount).call()
+        return self.contract.functions.withdrawCollateral(nftId, collateralTokenAddress, underlyingTokenAddress, amount)
