@@ -13,6 +13,9 @@ class IERC20:
         self.web3:Web3 = web3
         self.address = contract_address
 
+    def __str__(self):
+        return self.address
+
     # Generated functions
     
     def eventApproval(self, fromBlock:int=0, toBlock:int=0):
