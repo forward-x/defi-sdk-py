@@ -2,10 +2,11 @@ from web3 import Web3, HTTPProvider, types
 from web3.middleware import geth_poa_middleware
 from .address import AddressConst
 from .core import Core
+from .pool import Pool
 from .library import Library
 from .utils import TransactionReceipt
 from typing import Union
-class ChainClient(Library, Core):
+class ChainClient(Library, Core, Pool):
 
     def __init__(
         self,

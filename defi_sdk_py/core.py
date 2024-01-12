@@ -16,7 +16,7 @@ class Core:
     # GETTER
     def check_staking_amount_sufficient(self, nft_id: int, new_amount: int, token: IERC20Metadata)->int:
         tokenAddress = token.__str__()
-        new_amount = parseEther(self.web3, new_amount, token.decimals())
+        new_amount = parseEther(self.web3, new_amount, token.decimals().call())
         return self.core.checkStakingAmountSufficient(nft_id, new_amount, tokenAddress).call()
 
     def wallets(self, nft_id:int, pair_byte:str):
@@ -53,7 +53,8 @@ class Core:
         collateral_token_address = collateral_token_address.__str__()
         underlying_token_address = underlying_token_address.__str__()
         contract_func = self.core.depositCollateral(nft_id, collateral_token_address, underlying_token_address, amount)
-        return self.send_transaction(contract_func, is_estimate=is_estimate)
+        is_native = self.native.address == collateral_token_address
+        return self.send_transaction(contract_func, value=amount if is_native else 0, is_estimate=is_estimate)
 
     def withdraw_collateral(self, nft_id: int, collateral_token_address: IERC20Metadata, underlying_token_address: IERC20Metadata, amount: int, is_estimate=False)->Union[TransactionReceipt, int]:
         amount = parseEther(self.web3, amount, collateral_token_address.decimals().call())
@@ -68,7 +69,7 @@ class Core:
         is_native = self.native.address == loan.collateralTokenAddress
         amount = parseEther(self.web3, collateral_adjust_amount, collateral_token.decimals().call())
         contract_func = self.core.adjustCollateral(loan_id, nft_id, amount, is_add)
-        return self.send_transaction(contract_func, amount, is_estimate=is_estimate) if is_native else self.send_transaction(contract_func, is_estimate=is_estimate)
+        return self.send_transaction(contract_func, value=amount if is_native else 0, is_estimate=is_estimate)
     
     def rollver(self, nft_id:int, loan_id:int, is_estimate=False)->Union[TransactionReceipt, int]:
         contract_func = self.core.rollover(loan_id, nft_id)
@@ -80,7 +81,7 @@ class Core:
         is_native = self.native.address == loan.borrowTokenAddress
         repay_amount = parseEther(self.web3, repay_amount, borrow_token.decimals().call())
         contract_func = self.core.repay(loan_id, nft_id, repay_amount, is_only_interest)
-        return self.send_transaction(contract_func, repay_amount, is_estimate=is_estimate) if is_native else self.send_transaction(contract_func, is_estimate=is_estimate)
+        return self.send_transaction(contract_func, value=repay_amount if is_native else 0, is_estimate=is_estimate)
     
     def close_position(self, nft_id:int, pos_id:int, closing_size:int, is_estimate=False)->Union[TransactionReceipt, int]:
         pos_state = self.positions_states(nft_id, pos_id)
