@@ -43,7 +43,7 @@ loanExts = clientFWX.loanExts(nft_id, current_loan_index)
 # rollover = clientFWX.repay(nft_id, current_loan_index, 1, False)
 # close_position = clientFWX.close_position(nft_id, positions.id, 0.5)
 # liquidate_loan = clientFWX.liquidate(nft_id, current_loan_index)
-liquidate_position = clientFWX.liquidate_position(nft_id, positions_state.pairByte)
+# liquidate_position = clientFWX.liquidate_position(nft_id, positions_state.pairByte)
 
 
 # print(clientFWX.TOKEN.BTC.balanceOf("0xC63dD209434079005E51D34e2b22118d75D1cA0C"))

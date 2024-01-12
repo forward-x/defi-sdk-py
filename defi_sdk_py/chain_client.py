@@ -4,7 +4,7 @@ from .address import AddressConst
 from .core import Core
 from .library import Library
 from .utils import TransactionReceipt
-
+from typing import Union
 class ChainClient(Library, Core):
 
     def __init__(
@@ -39,15 +39,17 @@ class ChainClient(Library, Core):
     def get_balance(self):
         return self.web3.eth.get_balance(self.address)
 
-    def send_transaction(self, abi_func, value:int=0)->TransactionReceipt:
+    def send_transaction(self, abi_func, value:int=0, is_estimate=False)->Union[TransactionReceipt, int]:
         try:
             built_tx = abi_func.build_transaction(
                 {
                     'gasPrice' : self.web3.eth.gas_price,
-                    'value' : value
+                    'value' : 0 if is_estimate else value
                 }
             )
             built_tx['nonce'] = self.web3.eth.get_transaction_count(self.address)
+            if is_estimate:
+                return self.web3.eth.estimate_gas(built_tx)
             signed_tx = self.web3.eth.account.sign_transaction(built_tx, self.private_key)
             tx_hash = self.web3.eth.send_raw_transaction(signed_tx.rawTransaction)
             tx_receipt:types.TxReceipt = self.web3.eth.wait_for_transaction_receipt(tx_hash)
