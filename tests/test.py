@@ -7,16 +7,9 @@ from defi_sdk_py import ChainClient
 from defi_sdk_py.fwx_chain import ADDRESS as FWX_ADDRESS
 from defi_sdk_py.fwx_chain import FWXChainClient
 
-
-# FWXChain = ChainClient(
-#     rpc_url="https://node.forwardx.space/",
-#     private_key="0x7e7077fb5c507cfe1d0b1743430e5370fa1caca11f0eb39db203f4c0903601eb",
-#     address_const=FWX_ADDRESS
-# )
 clientFWX = FWXChainClient(
     rpc_url="https://node.forwardx.space/",
-    # private_key="0x7e7077fb5c507cfe1d0b1743430e5370fa1caca11f0eb39db203f4c0903601eb",
-    private_key="0xe90c257fd5f0761fdf915e7b4edfbf1b8724dd3455368f1a8d10939abaf0bc39",
+    private_key="0x58acc8bcee8f34690b50880c17c5ea10b2b4c094f6e4f3f44756a817d986e509",
     address_const=FWX_ADDRESS,
     maxFeePerGas=3000000,
     maxPriorityFeePerGas=2000000,
@@ -26,7 +19,7 @@ print("native balance : ",clientFWX.get_balance())
 
 # clientFWX.core.check_staking_amount_sufficient(1, 1000, clientFWX.TOKEN.USDT)
 
-nft_id = 13
+nft_id = 324
 pair_USDT_WBNB = clientFWX.hash_pair(clientFWX.TOKEN.USDT, clientFWX.TOKEN.WBNB)
 wallets = clientFWX.wallets(nft_id, pair_USDT_WBNB)
 trading_collateral_whitelist = clientFWX.trading_collateral_whitelist(clientFWX.TOKEN.USDT)
@@ -60,18 +53,19 @@ get_next_borrowing_interest = clientFWX.get_next_borrowing_interest(clientFWX.PO
 # claim_token_interest = clientFWX.claim_token_interest(clientFWX.POOLS.USDT, nft_id, 100)
 # claim_forw_interest = clientFWX.claim_forw_interest(clientFWX.POOLS.USDT, nft_id, 100)
 # borrow = clientFWX.borrow(clientFWX.POOLS.USDT, nft_id, 0, 1000, 10, clientFWX.TOKEN.WBNB)
-open_position = clientFWX.open_position(
-    nft_id=nft_id,
-    is_long=True,
-    collateral_token=clientFWX.TOKEN.USDT,
-    underlying_token=clientFWX.TOKEN.WBNB,
-    entry_price=308,
-    size=5,
-    leverage=5,
-    slip_page=10,
-    is_estimate=True
-)
-print(open_position)
+# open_position = clientFWX.open_position(
+#     nft_id=nft_id,
+#     is_long=True,
+#     collateral_token=clientFWX.TOKEN.USDT,
+#     underlying_token=clientFWX.TOKEN.WBNB,
+#     entry_price=308,
+#     size=5,
+#     leverage=5,
+#     slip_page=10,
+# )
+
+a = clientFWX.approve(clientFWX.TOKEN.BTC, "0xC63dD209434079005E51D34e2b22118d75D1cA0C", 1000)
+print(a)
 
 # print(clientFWX.TOKEN.BTC.balanceOf("0xC63dD209434079005E51D34e2b22118d75D1cA0C"))
 # event_filter = clientFWX.TOKEN.BTC.eventTransfer(0,0)

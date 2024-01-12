@@ -4,7 +4,8 @@ from .address import AddressConst
 from .core import Core
 from .pool import Pool
 from .library import Library
-from .utils import TransactionReceipt
+from .utils import TransactionReceipt,parseEther
+from .abi.IERC20Metadata import IERC20Metadata
 from typing import Union
 class ChainClient(Library, Core, Pool):
 
@@ -39,6 +40,11 @@ class ChainClient(Library, Core, Pool):
     
     def get_balance(self):
         return self.web3.eth.get_balance(self.address)
+
+    def approve(self, token:IERC20Metadata, spender:str, amount:int)->TransactionReceipt:
+        amount = parseEther(self.web3, amount, token.decimals().call())
+        contract_func = token.approve(spender, amount)
+        return self.send_transaction(contract_func)
 
     def send_transaction(self, abi_func, value:int=0, is_estimate=False)->Union[TransactionReceipt, int]:
         try:

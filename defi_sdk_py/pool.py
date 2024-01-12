@@ -92,8 +92,6 @@ class Pool:
             slippage=slip_page
         )
         return self.send_transaction(contract_func, is_estimate=is_estimate)
-
-    
     
 
 
