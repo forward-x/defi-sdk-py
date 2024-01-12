@@ -19,7 +19,17 @@ print("native balance : ",clientFWX.get_balance())
 
 # clientFWX.core.check_staking_amount_sufficient(1, 1000, clientFWX.TOKEN.USDT)
 
-nft_id = 324
+current_pool = clientFWX.current_pool();
+nft_id = clientFWX.get_default_membership(clientFWX.address);
+get_pool_list = clientFWX.get_pool_lists();
+get_previous_pool = clientFWX.get_previous_pool();
+get_rank_pool = clientFWX.get_rank_pool(clientFWX.POOLS.USDT, nft_id);
+get_rank = clientFWX.get_rank(nft_id=nft_id);
+get_refferrer = clientFWX.get_refferrer(nft_id=nft_id);
+# mint = clientFWX.mint(nft_id)
+# set_default_membership = clientFWX.set_default_membership(nft_id)
+
+
 pair_USDT_WBNB = clientFWX.hash_pair(clientFWX.TOKEN.USDT, clientFWX.TOKEN.WBNB)
 wallets = clientFWX.wallets(nft_id, pair_USDT_WBNB)
 trading_collateral_whitelist = clientFWX.trading_collateral_whitelist(clientFWX.TOKEN.USDT)
@@ -63,9 +73,8 @@ get_next_borrowing_interest = clientFWX.get_next_borrowing_interest(clientFWX.PO
 #     leverage=5,
 #     slip_page=10,
 # )
+# approve_token = clientFWX.approve(clientFWX.TOKEN.BTC, "0xC63dD209434079005E51D34e2b22118d75D1cA0C", 1000)
 
-a = clientFWX.approve(clientFWX.TOKEN.BTC, "0xC63dD209434079005E51D34e2b22118d75D1cA0C", 1000)
-print(a)
 
 # print(clientFWX.TOKEN.BTC.balanceOf("0xC63dD209434079005E51D34e2b22118d75D1cA0C"))
 # event_filter = clientFWX.TOKEN.BTC.eventTransfer(0,0)

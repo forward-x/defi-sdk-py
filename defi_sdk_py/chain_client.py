@@ -3,11 +3,12 @@ from web3.middleware import geth_poa_middleware
 from .address import AddressConst
 from .core import Core
 from .pool import Pool
+from .membership import Membership
 from .library import Library
 from .utils import TransactionReceipt,parseEther
 from .abi.IERC20Metadata import IERC20Metadata
 from typing import Union
-class ChainClient(Library, Core, Pool):
+class ChainClient(Library, Core, Pool, Membership):
 
     def __init__(
         self,
@@ -41,10 +42,10 @@ class ChainClient(Library, Core, Pool):
     def get_balance(self):
         return self.web3.eth.get_balance(self.address)
 
-    def approve(self, token:IERC20Metadata, spender:str, amount:int)->TransactionReceipt:
+    def approve(self, token:IERC20Metadata, spender:str, amount:int, is_estimate=False)->TransactionReceipt:
         amount = parseEther(self.web3, amount, token.decimals().call())
         contract_func = token.approve(spender, amount)
-        return self.send_transaction(contract_func)
+        return self.send_transaction(contract_func, is_estimate)
 
     def send_transaction(self, abi_func, value:int=0, is_estimate=False)->Union[TransactionReceipt, int]:
         try:

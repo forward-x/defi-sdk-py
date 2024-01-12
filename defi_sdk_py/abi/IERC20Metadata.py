@@ -45,7 +45,7 @@ class IERC20Metadata:
     def balanceOf(self, account: str):
         return self.contract.functions.balanceOf(account)
 
-    def decimals(self):
+    def decimals(self, ):
         return self.contract.functions.decimals()
 
     def name(self, ):
