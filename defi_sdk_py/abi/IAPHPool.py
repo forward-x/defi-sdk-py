@@ -1,4 +1,88 @@
 
+from web3 import Web3
+from typing import Tuple, Dict, List
+#Generate a Python class representing the Ethereum contract.
+#:param abi: The ABI (Application Binary Interface) of the contract.
+#:type abi: list
+#:param contract_name: The name of the contract class default is MyContract.
+#:type contract_name: str
+#:return: The generated Python class code.
+#:rtype: str
+
+class Loan:
+    def __init__(self, interestPaid: int, borrowTokenAddress: str, rolloverTimestamp: int, lastSettleTimestamp: int, collateralTokenAddress: str, borrowAmount: int, collateralAmount: int, owedPerDay: int, minInterest: int, interestOwed: int):
+        self.interestPaid = interestPaid
+        self.borrowTokenAddress = borrowTokenAddress
+        self.rolloverTimestamp = rolloverTimestamp
+        self.lastSettleTimestamp = lastSettleTimestamp
+        self.collateralTokenAddress = collateralTokenAddress
+        self.borrowAmount = borrowAmount
+        self.collateralAmount = collateralAmount
+        self.owedPerDay = owedPerDay
+        self.minInterest = minInterest
+        self.interestOwed = interestOwed
+
+    def __str__(self):
+        return str({
+            'interestPaid': self.interestPaid,
+            'borrowTokenAddress': self.borrowTokenAddress,
+            'rolloverTimestamp': self.rolloverTimestamp,
+            'lastSettleTimestamp': self.lastSettleTimestamp,
+            'collateralTokenAddress': self.collateralTokenAddress,
+            'borrowAmount': self.borrowAmount,
+            'collateralAmount': self.collateralAmount,
+            'owedPerDay': self.owedPerDay,
+            'minInterest': self.minInterest,
+            'interestOwed': self.interestOwed,
+        })
+
+
+class WithdrawResult:
+    def __init__(self, principle: int, tokenInterest: int, forwInterest: int, pTokenBurn: int, atpTokenBurn: int, lossBurn: int, itpTokenBurn: int, ifpTokenBurn: int, tokenInterestBonus: int, forwInterestBonus: int):
+        self.principle = principle
+        self.tokenInterest = tokenInterest
+        self.forwInterest = forwInterest
+        self.pTokenBurn = pTokenBurn
+        self.atpTokenBurn = atpTokenBurn
+        self.lossBurn = lossBurn
+        self.itpTokenBurn = itpTokenBurn
+        self.ifpTokenBurn = ifpTokenBurn
+        self.tokenInterestBonus = tokenInterestBonus
+        self.forwInterestBonus = forwInterestBonus
+
+    def __str__(self):
+        return str({
+            'principle': self.principle,
+            'tokenInterest': self.tokenInterest,
+            'forwInterest': self.forwInterest,
+            'pTokenBurn': self.pTokenBurn,
+            'atpTokenBurn': self.atpTokenBurn,
+            'lossBurn': self.lossBurn,
+            'itpTokenBurn': self.itpTokenBurn,
+            'ifpTokenBurn': self.ifpTokenBurn,
+            'tokenInterestBonus': self.tokenInterestBonus,
+            'forwInterestBonus': self.forwInterestBonus,
+        })
+
+
+class PoolTokens:
+    def __init__(self, pToken: int, atpToken: int, itpToken: int, ifpToken: int):
+        self.pToken = pToken
+        self.atpToken = atpToken
+        self.itpToken = itpToken
+        self.ifpToken = ifpToken
+
+    def __str__(self):
+        return str({
+            'pToken': self.pToken,
+            'atpToken': self.atpToken,
+            'itpToken': self.itpToken,
+            'ifpToken': self.ifpToken,
+        })
+
+
+
+
 class IAPHPool:
     def __init__(self, contract_address, web3):
         """
@@ -37,94 +121,94 @@ class IAPHPool:
         return self.contract.events.Withdraw().get_logs(fromBlock=self.web3.eth.block_number if fromBlock == 0 else fromBlock, toBlock=self.web3.eth.block_number if toBlock == 0 else toBlock)
 
     def activateRank(self, nftId: int):
-        return self.contract.functions.activateRank(nftId).call()
+        return self.contract.functions.activateRank(nftId)
 
     def addLoss(self, amount: int):
-        return self.contract.functions.addLoss(amount).call()
+        return self.contract.functions.addLoss(amount)
 
     def atpTokenTotalSupply(self, ):
-        return self.contract.functions.atpTokenTotalSupply().call()
+        return self.contract.functions.atpTokenTotalSupply()
 
     def balanceAtpTokenOf(self, nftId: int):
-        return self.contract.functions.balanceAtpTokenOf(nftId).call()
+        return self.contract.functions.balanceAtpTokenOf(nftId)
 
     def balanceIfpTokenOf(self, nftId: int):
-        return self.contract.functions.balanceIfpTokenOf(nftId).call()
+        return self.contract.functions.balanceIfpTokenOf(nftId)
 
     def balanceItpTokenOf(self, nftId: int):
-        return self.contract.functions.balanceItpTokenOf(nftId).call()
+        return self.contract.functions.balanceItpTokenOf(nftId)
 
     def balancePTokenOf(self, nftId: int):
-        return self.contract.functions.balancePTokenOf(nftId).call()
+        return self.contract.functions.balancePTokenOf(nftId)
 
     def borrow(self, loanId: int, nftId: int, borrowAmount: int, collateralSentAmount: int, collateralTokenAddress: str):
-        return self.contract.functions.borrow(loanId, nftId, borrowAmount, collateralSentAmount, collateralTokenAddress).call()
+        return self.contract.functions.borrow(loanId, nftId, borrowAmount, collateralSentAmount, collateralTokenAddress)
 
     def calculateInterest(self, borrowAmount: int):
-        return self.contract.functions.calculateInterest(borrowAmount).call()
+        return self.contract.functions.calculateInterest(borrowAmount)
 
     def claimAllInterest(self, nftId: int):
-        return self.contract.functions.claimAllInterest(nftId).call()
+        return self.contract.functions.claimAllInterest(nftId)
 
     def claimForwInterest(self, nftId: int, claimAmount: int):
-        return self.contract.functions.claimForwInterest(nftId, claimAmount).call()
+        return self.contract.functions.claimForwInterest(nftId, claimAmount)
 
     def claimTokenInterest(self, nftId: int, claimAmount: int):
-        return self.contract.functions.claimTokenInterest(nftId, claimAmount).call()
+        return self.contract.functions.claimTokenInterest(nftId, claimAmount)
 
     def coreAddress(self, ):
-        return self.contract.functions.coreAddress().call()
+        return self.contract.functions.coreAddress()
 
     def currentSupply(self, ):
-        return self.contract.functions.currentSupply().call()
+        return self.contract.functions.currentSupply()
 
     def deposit(self, nftId: int, depositAmount: int):
-        return self.contract.functions.deposit(nftId, depositAmount).call()
+        return self.contract.functions.deposit(nftId, depositAmount)
 
     def getActualTokenPrice(self, ):
-        return self.contract.functions.getActualTokenPrice().call()
+        return self.contract.functions.getActualTokenPrice()
 
     def getInterestForwPrice(self, ):
-        return self.contract.functions.getInterestForwPrice().call()
+        return self.contract.functions.getInterestForwPrice()
 
     def getInterestTokenPrice(self, ):
-        return self.contract.functions.getInterestTokenPrice().call()
+        return self.contract.functions.getInterestTokenPrice()
 
     def getNextBorrowingInterest(self, borrowAmount: int):
-        return self.contract.functions.getNextBorrowingInterest(borrowAmount).call()
+        return self.contract.functions.getNextBorrowingInterest(borrowAmount)
 
     def getRates(self, ):
-        return self.contract.functions.getRates().call()
+        return self.contract.functions.getRates()
 
     def getUtils(self, ):
-        return self.contract.functions.getUtils().call()
+        return self.contract.functions.getUtils()
 
     def ifpTokenTotalSupply(self, ):
-        return self.contract.functions.ifpTokenTotalSupply().call()
+        return self.contract.functions.ifpTokenTotalSupply()
 
     def itpTokenTotalSupply(self, ):
-        return self.contract.functions.itpTokenTotalSupply().call()
+        return self.contract.functions.itpTokenTotalSupply()
 
     def lenders(self, NFTId: int):
-        return self.contract.functions.lenders(NFTId).call()
+        return self.contract.functions.lenders(NFTId)
 
     def membershipAddress(self, ):
-        return self.contract.functions.membershipAddress().call()
+        return self.contract.functions.membershipAddress()
 
     def openPosition(self, nftId: int, collateralTokenAddress: str, swapTokenAddress: str, entryPrice: int, contractSize: int, leverage: int, slippage: int):
-        return self.contract.functions.openPosition(nftId, collateralTokenAddress, swapTokenAddress, entryPrice, contractSize, leverage, slippage).call()
+        return self.contract.functions.openPosition(nftId, collateralTokenAddress, swapTokenAddress, entryPrice, contractSize, leverage, slippage)
 
     def pTokenTotalSupply(self, ):
-        return self.contract.functions.pTokenTotalSupply().call()
+        return self.contract.functions.pTokenTotalSupply()
 
     def tokenAddress(self, ):
-        return self.contract.functions.tokenAddress().call()
+        return self.contract.functions.tokenAddress()
 
     def tokenHolders(self, nftId: int):
-        return self.contract.functions.tokenHolders(nftId).call()
+        return self.contract.functions.tokenHolders(nftId)
 
     def utilizationRate(self, ):
-        return self.contract.functions.utilizationRate().call()
+        return self.contract.functions.utilizationRate()
 
     def withdraw(self, nftId: int, withdrawAmount: int):
-        return self.contract.functions.withdraw(nftId, withdrawAmount).call()
+        return self.contract.functions.withdraw(nftId, withdrawAmount)

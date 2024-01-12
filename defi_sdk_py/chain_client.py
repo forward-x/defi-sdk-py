@@ -39,11 +39,12 @@ class ChainClient(Library, Core):
     def get_balance(self):
         return self.web3.eth.get_balance(self.address)
 
-    def send_transaction(self, abi_func)->types.TxReceipt:
+    def send_transaction(self, abi_func, value:int=0)->types.TxReceipt:
         try:
             built_tx = abi_func.build_transaction(
                 {
-                    'gasPrice' : self.web3.eth.gas_price
+                    'gasPrice' : self.web3.eth.gas_price,
+                    'value' : value
                 }
             )
             built_tx['nonce'] = self.web3.eth.get_transaction_count(self.address)

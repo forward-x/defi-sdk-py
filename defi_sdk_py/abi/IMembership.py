@@ -1,4 +1,16 @@
 
+from web3 import Web3
+from typing import Tuple, Dict, List
+#Generate a Python class representing the Ethereum contract.
+#:param abi: The ABI (Application Binary Interface) of the contract.
+#:type abi: list
+#:param contract_name: The name of the contract class default is MyContract.
+#:type contract_name: str
+#:return: The generated Python class code.
+#:rtype: str
+
+
+
 class IMembership:
     def __init__(self, contract_address, web3):
         """
@@ -37,70 +49,70 @@ class IMembership:
         return self.contract.events.UpdateRank().get_logs(fromBlock=self.web3.eth.block_number if fromBlock == 0 else fromBlock, toBlock=self.web3.eth.block_number if toBlock == 0 else toBlock)
 
     def approve(self, to: str, tokenId: int):
-        return self.contract.functions.approve(to, tokenId).call()
+        return self.contract.functions.approve(to, tokenId)
 
     def balanceOf(self, owner: str):
-        return self.contract.functions.balanceOf(owner).call()
+        return self.contract.functions.balanceOf(owner)
 
     def currentPool(self, ):
-        return self.contract.functions.currentPool().call()
+        return self.contract.functions.currentPool()
 
     def getApproved(self, tokenId: int):
-        return self.contract.functions.getApproved(tokenId).call()
+        return self.contract.functions.getApproved(tokenId)
 
     def getDefaultMembership(self, owner: str):
-        return self.contract.functions.getDefaultMembership(owner).call()
+        return self.contract.functions.getDefaultMembership(owner)
 
     def getPoolLists(self, ):
-        return self.contract.functions.getPoolLists().call()
+        return self.contract.functions.getPoolLists()
 
     def getPreviousPool(self, ):
-        return self.contract.functions.getPreviousPool().call()
+        return self.contract.functions.getPreviousPool()
 
     def getRank(self, tokenId: int):
-        return self.contract.functions.getRank(tokenId).call()
+        return self.contract.functions.getRank(tokenId)
 
     def getRank(self, pool: str, tokenId: int):
-        return self.contract.functions.getRank(pool, tokenId).call()
+        return self.contract.functions.getRank(pool, tokenId)
 
     def getReferrer(self, tokenId: int):
-        return self.contract.functions.getReferrer(tokenId).call()
+        return self.contract.functions.getReferrer(tokenId)
 
     def isApprovedForAll(self, owner: str, operator: str):
-        return self.contract.functions.isApprovedForAll(owner, operator).call()
+        return self.contract.functions.isApprovedForAll(owner, operator)
 
     def mint(self, referalId: int):
-        return self.contract.functions.mint(referalId).call()
+        return self.contract.functions.mint(referalId)
 
     def ownerOf(self, nftId: int):
-        return self.contract.functions.ownerOf(nftId).call()
+        return self.contract.functions.ownerOf(nftId)
 
     def safeTransferFrom(self, _from: str, to: str, tokenId: int):
-        return self.contract.functions.safeTransferFrom(_from, to, tokenId).call()
+        return self.contract.functions.safeTransferFrom(_from, to, tokenId)
 
-    def safeTransferFrom(self, _from: str, to: str, tokenId: int, data: str):
-        return self.contract.functions.safeTransferFrom(_from, to, tokenId, data).call()
+    def safeTransferFrom(self, _from: str, to: str, tokenId: int, data: bytes):
+        return self.contract.functions.safeTransferFrom(_from, to, tokenId, data)
 
-    def setApprovalForAll(self, operator: str, _approved: str):
-        return self.contract.functions.setApprovalForAll(operator, _approved).call()
+    def setApprovalForAll(self, operator: str, _approved: bool):
+        return self.contract.functions.setApprovalForAll(operator, _approved)
 
-    def supportsInterface(self, interfaceId: str):
-        return self.contract.functions.supportsInterface(interfaceId).call()
+    def supportsInterface(self, interfaceId: bytes):
+        return self.contract.functions.supportsInterface(interfaceId)
 
     def tokenByIndex(self, index: int):
-        return self.contract.functions.tokenByIndex(index).call()
+        return self.contract.functions.tokenByIndex(index)
 
     def tokenOfOwnerByIndex(self, owner: str, index: int):
-        return self.contract.functions.tokenOfOwnerByIndex(owner, index).call()
+        return self.contract.functions.tokenOfOwnerByIndex(owner, index)
 
     def totalSupply(self, ):
-        return self.contract.functions.totalSupply().call()
+        return self.contract.functions.totalSupply()
 
     def transferFrom(self, _from: str, to: str, tokenId: int):
-        return self.contract.functions.transferFrom(_from, to, tokenId).call()
+        return self.contract.functions.transferFrom(_from, to, tokenId)
 
     def updateRank(self, tokenId: int, newRank: int):
-        return self.contract.functions.updateRank(tokenId, newRank).call()
+        return self.contract.functions.updateRank(tokenId, newRank)
 
     def usableTokenId(self, owner: str, tokenId: int):
-        return self.contract.functions.usableTokenId(owner, tokenId).call()
+        return self.contract.functions.usableTokenId(owner, tokenId)

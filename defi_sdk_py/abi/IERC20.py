@@ -1,4 +1,16 @@
 
+from web3 import Web3
+from typing import Tuple, Dict, List
+#Generate a Python class representing the Ethereum contract.
+#:param abi: The ABI (Application Binary Interface) of the contract.
+#:type abi: list
+#:param contract_name: The name of the contract class default is MyContract.
+#:type contract_name: str
+#:return: The generated Python class code.
+#:rtype: str
+
+
+
 class IERC20:
     def __init__(self, contract_address, web3):
         """
@@ -25,19 +37,19 @@ class IERC20:
         return self.contract.events.Transfer().get_logs(fromBlock=self.web3.eth.block_number if fromBlock == 0 else fromBlock, toBlock=self.web3.eth.block_number if toBlock == 0 else toBlock)
 
     def allowance(self, owner: str, spender: str):
-        return self.contract.functions.allowance(owner, spender).call()
+        return self.contract.functions.allowance(owner, spender)
 
     def approve(self, spender: str, amount: int):
-        return self.contract.functions.approve(spender, amount).call()
+        return self.contract.functions.approve(spender, amount)
 
     def balanceOf(self, account: str):
-        return self.contract.functions.balanceOf(account).call()
+        return self.contract.functions.balanceOf(account)
 
     def totalSupply(self, ):
-        return self.contract.functions.totalSupply().call()
+        return self.contract.functions.totalSupply()
 
     def transfer(self, to: str, amount: int):
-        return self.contract.functions.transfer(to, amount).call()
+        return self.contract.functions.transfer(to, amount)
 
     def transferFrom(self, _from: str, to: str, amount: int):
-        return self.contract.functions.transferFrom(_from, to, amount).call()
+        return self.contract.functions.transferFrom(_from, to, amount)

@@ -1,4 +1,16 @@
 
+from web3 import Web3
+from typing import Tuple, Dict, List
+#Generate a Python class representing the Ethereum contract.
+#:param abi: The ABI (Application Binary Interface) of the contract.
+#:type abi: list
+#:param contract_name: The name of the contract class default is MyContract.
+#:type contract_name: str
+#:return: The generated Python class code.
+#:rtype: str
+
+
+
 class APHLibrary:
     def __init__(self, contract_address, web3):
         """
@@ -18,14 +30,14 @@ class APHLibrary:
 
     # Generated functions
     
-    def addIntToUint(self, a: int, b: str):
-        return self.contract.functions.addIntToUint(a, b).call()
+    def addIntToUint(self, a: int, b: int):
+        return self.contract.functions.addIntToUint(a, b)
 
-    def calculateMargin(self, wallet: int, swappedCollateral: int, interestOwed: int, PNL: str, positionSize: int, feeAmount: int):
-        return self.contract.functions.calculateMargin(wallet, swappedCollateral, interestOwed, PNL, positionSize, feeAmount).call()
+    def calculateMargin(self, wallet: int, swappedCollateral: int, interestOwed: int, PNL: int, positionSize: int, feeAmount: int):
+        return self.contract.functions.calculateMargin(wallet, swappedCollateral, interestOwed, PNL, positionSize, feeAmount)
 
     def calculatePNL(self, firstValue: int, secondValue: int, multiplier: int, divisor: int):
-        return self.contract.functions.calculatePNL(firstValue, secondValue, multiplier, divisor).call()
+        return self.contract.functions.calculatePNL(firstValue, secondValue, multiplier, divisor)
 
     def hashPair(self, collateralTokenAddress: str, underlyingTokenAddress: str):
-        return self.contract.functions.hashPair(collateralTokenAddress, underlyingTokenAddress).call()
+        return self.contract.functions.hashPair(collateralTokenAddress, underlyingTokenAddress)

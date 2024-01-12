@@ -26,8 +26,20 @@ print("native balance : ",clientFWX.get_balance())
 
 # clientFWX.core.check_staking_amount_sufficient(1, 1000, clientFWX.TOKEN.USDT)
 
+nft_id = 13
 pair_USDT_WBNB = clientFWX.hashPair(clientFWX.TOKEN.USDT, clientFWX.TOKEN.WBNB)
-clientFWX.wallets(13, pair_USDT_WBNB)
+wallets = clientFWX.wallets(nft_id, pair_USDT_WBNB)
+trading_collateral_whitelist = clientFWX.trading_collateral_whitelist(clientFWX.TOKEN.USDT)
+positions = clientFWX.positions(nft_id, pair_USDT_WBNB)
+positions_state = clientFWX.positions_states(nft_id, positions.id)
+current_loan_index = clientFWX.current_loan_index(nft_id)
+loans = clientFWX.loans(nft_id, current_loan_index)
+loanExts = clientFWX.loanExts(nft_id, current_loan_index)
+# adjust_collateral_to_loan = clientFWX.adjust_collateral(nft_id, current_loan_index, 1, True)
+# deposit_collateral = clientFWX.deposit_collateral(nft_id, clientFWX.TOKEN.USDT, 100)
+# deposit_collateral = clientFWX.deposit_collateral(nft_id, clientFWX.TOKEN.USDT, 100)
+# rollover = clientFWX.rollver(nft_id, current_loan_index)
+
 
 # print(clientFWX.TOKEN.BTC.balanceOf("0xC63dD209434079005E51D34e2b22118d75D1cA0C"))
 # event_filter = clientFWX.TOKEN.BTC.eventTransfer(0,0)
