@@ -1,7 +1,7 @@
 from web3 import Web3, types
 from .abi.IAPHCore import *
 from .abi.IERC20Metadata import IERC20Metadata
-from .utils import parseEther
+from .utils import parseEther, TransactionReceipt
 from .address import AddressConst
 from typing import Union
 
@@ -43,23 +43,26 @@ class Core:
 
     def current_position_index(self, nft_id:int)->int:
         return self.core.currentPositionIndex(nft_id).call()
+        
+    def pairs(self, collateral_token:IERC20Metadata, underlying_token:IERC20Metadata)->Pair:
+        return Pair(self.core.pairs(collateral_token.__str__(), underlying_token.__str__()).call())
 
     # ACTION
-    def deposit_collateral(self, nft_id: int, collateral_token_address: IERC20Metadata, underlying_token_address: IERC20Metadata, amount: int)->types.TxReceipt:
+    def deposit_collateral(self, nft_id: int, collateral_token_address: IERC20Metadata, underlying_token_address: IERC20Metadata, amount: int)->TransactionReceipt:
         amount = parseEther(self.web3, amount, collateral_token_address.decimals().call())
         collateral_token_address = collateral_token_address.__str__()
         underlying_token_address = underlying_token_address.__str__()
         contract_func = self.core.depositCollateral(nft_id, collateral_token_address, underlying_token_address, amount)
         return self.send_transaction(contract_func)
 
-    def withdraw_collateral(self, nft_id: int, collateral_token_address: IERC20Metadata, underlying_token_address: IERC20Metadata, amount: int)->types.TxReceipt:
+    def withdraw_collateral(self, nft_id: int, collateral_token_address: IERC20Metadata, underlying_token_address: IERC20Metadata, amount: int)->TransactionReceipt:
         amount = parseEther(self.web3, amount, collateral_token_address.decimals().call())
         collateral_token_address = collateral_token_address.__str__()
         underlying_token_address = underlying_token_address.__str__()
         contract_func = self.core.withdrawCollateral(nft_id, collateral_token_address, underlying_token_address, amount)
         return self.send_transaction(contract_func)
      
-    def adjust_collateral(self, nft_id:int, loan_id:int, collateral_adjust_amount:int, is_add:bool):
+    def adjust_collateral(self, nft_id:int, loan_id:int, collateral_adjust_amount:int, is_add:bool)->TransactionReceipt:
         loan = self.loans(nft_id, loan_id)
         collateral_token:IERC20Metadata = IERC20Metadata(loan.collateralTokenAddress, self.web3)
         is_native = self.native.address == loan.collateralTokenAddress
@@ -67,9 +70,34 @@ class Core:
         contract_func = self.core.adjustCollateral(loan_id, nft_id, amount, is_add)
         return self.send_transaction(contract_func, amount) if is_native else self.send_transaction(contract_func)
     
-    def rollver(self, nft_id:int, loan_id:int):
+    def rollver(self, nft_id:int, loan_id:int)->TransactionReceipt:
         contract_func = self.core.rollover(loan_id, nft_id)
         return self.send_transaction(contract_func)
-        
 
+    def repay(self, nft_id:int, loan_id:int, repay_amount:int, is_only_interest:bool)->TransactionReceipt:
+        loan = self.loans(nft_id, loan_id)
+        borrow_token:IERC20Metadata = IERC20Metadata(loan.borrowTokenAddress, self.web3)
+        is_native = self.native.address == loan.borrowTokenAddress
+        repay_amount = parseEther(self.web3, repay_amount, borrow_token.decimals().call())
+        contract_func = self.core.repay(loan_id, nft_id, repay_amount, is_only_interest)
+        return self.send_transaction(contract_func, repay_amount) if is_native else self.send_transaction(contract_func)
+    
+    def close_position(self, nft_id:int, pos_id:int, closing_size:int)->TransactionReceipt:
+        pos_state = self.positions_states(nft_id, pos_id)
+        if pos_state.active:
+            pair = Pair(*self.core.pairs(pos_state.pairByte).call())
+            underlying_token:IERC20Metadata = IERC20Metadata(pair.pair1, self.web3)
+            closing_size = parseEther(self.web3, closing_size, underlying_token.decimals().call())
+            contract_func = self.core.closePosition(nft_id, pos_id, closing_size)
+            return self.send_transaction(contract_func)
+        else:
+            raise Exception("position-not-active")
+
+    def liquidate(self, nft_id:int ,loan_id:int)->TransactionReceipt:
+        contract_func = self.core.liquidate(loan_id, nft_id)
+        return self.send_transaction(contract_func)
+
+    def liquidate_position(self, nft_id:int ,pair_byte:str)->TransactionReceipt:
+        contract_func = self.core.liquidatePosition(nft_id, pair_byte)
+        return self.send_transaction(contract_func)
 

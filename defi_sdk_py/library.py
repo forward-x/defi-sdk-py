@@ -10,7 +10,7 @@ class Library:
     def __str__(self)->str:
         return self.library.address
     
-    def hashPair(self, collateral_token_address:IERC20Metadata, underlying_token_address:IERC20Metadata)->str:
+    def hash_pair(self, collateral_token_address:IERC20Metadata, underlying_token_address:IERC20Metadata)->str:
         collateral_token_address = collateral_token_address.__str__()
         underlying_token_address = underlying_token_address.__str__()
         return "0x"+self.library.hashPair(collateral_token_address, underlying_token_address).call().hex()

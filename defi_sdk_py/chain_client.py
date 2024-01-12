@@ -3,7 +3,7 @@ from web3.middleware import geth_poa_middleware
 from .address import AddressConst
 from .core import Core
 from .library import Library
-
+from .utils import TransactionReceipt
 
 class ChainClient(Library, Core):
 
@@ -39,7 +39,7 @@ class ChainClient(Library, Core):
     def get_balance(self):
         return self.web3.eth.get_balance(self.address)
 
-    def send_transaction(self, abi_func, value:int=0)->types.TxReceipt:
+    def send_transaction(self, abi_func, value:int=0)->TransactionReceipt:
         try:
             built_tx = abi_func.build_transaction(
                 {
@@ -51,6 +51,20 @@ class ChainClient(Library, Core):
             signed_tx = self.web3.eth.account.sign_transaction(built_tx, self.private_key)
             tx_hash = self.web3.eth.send_raw_transaction(signed_tx.rawTransaction)
             tx_receipt:types.TxReceipt = self.web3.eth.wait_for_transaction_receipt(tx_hash)
+            tx_receipt:TransactionReceipt = TransactionReceipt(
+                transactionHash=tx_receipt.transactionHash.hex(),
+                transactionIndex=tx_receipt.transactionIndex,
+                blockHash=tx_receipt.blockHash.hex(),
+                blockNumber=tx_receipt.blockNumber,
+                fromAddress=tx_receipt["from"],
+                toAddress=tx_receipt.to,
+                cumulativeGasUsed=tx_receipt.cumulativeGasUsed,
+                gasUsed=tx_receipt.gasUsed,
+                contractAddress=tx_receipt.contractAddress,
+                logs=tx_receipt.logs,  # This might need to be processed further if logs are complex objects
+                status=tx_receipt.status,
+                logsBloom=tx_receipt.logsBloom.hex()
+            )
             return tx_receipt
         except Exception as err:
             raise err
