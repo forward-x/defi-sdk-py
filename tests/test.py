@@ -1,15 +1,19 @@
 import sys
 import os
 import json
+from dotenv import load_dotenv
+load_dotenv()
 project_dir = os.path.abspath("")
 sys.path.append(project_dir)
 from defi_sdk_py import ChainClient
 from defi_sdk_py.fwx_chain import ADDRESS as FWX_ADDRESS
 from defi_sdk_py.fwx_chain import FWXChainClient
 
+PK = os.environ.get("PK")
+FWX_RPC_URL = os.environ.get("FWX_RPC_URL")
 clientFWX = FWXChainClient(
-    rpc_url="https://node.forwardx.space/",
-    private_key="0x58acc8bcee8f34690b50880c17c5ea10b2b4c094f6e4f3f44756a817d986e509",
+    rpc_url=FWX_RPC_URL,
+    private_key=PK,
     address_const=FWX_ADDRESS,
     maxFeePerGas=3000000,
     maxPriorityFeePerGas=2000000,
