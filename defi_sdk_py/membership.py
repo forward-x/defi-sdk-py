@@ -41,3 +41,6 @@ class Membership:
         contract_func = self.membership.setDefaultMembership(nft_id)
         return self.send_transaction(contract_func, is_estimate=is_estimate)
     
+    def owner_of(self, nft_id:int)->str:
+        return self.membership.ownerOf(nft_id).call()
+    

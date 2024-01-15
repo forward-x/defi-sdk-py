@@ -1,15 +1,18 @@
 from web3 import Web3, HTTPProvider, types
 from web3.middleware import geth_poa_middleware
 from .address import AddressConst
+
 from .core import Core
 from .pool import Pool
 from .membership import Membership
 from .stake_pool import StakePool
 from .library import Library
+from .helper_core import HelperCore
+
 from .utils import TransactionReceipt,parseEther
 from .abi.IERC20Metadata import IERC20Metadata
 from typing import Union
-class ChainClient(Library, Core, Pool, Membership, StakePool):
+class ChainClient(Library, Core, Pool, Membership, StakePool, HelperCore):
 
     def __init__(
         self,

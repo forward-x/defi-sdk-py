@@ -9,6 +9,54 @@ from typing import Tuple, Dict, List
 #:return: The generated Python class code.
 #:rtype: str
 
+class Loan:
+    def __init__(self, interestPaid: int, borrowTokenAddress: str, rolloverTimestamp: int, lastSettleTimestamp: int, collateralTokenAddress: str, borrowAmount: int, collateralAmount: int, owedPerDay: int, minInterest: int, interestOwed: int):
+        self.interestPaid = interestPaid
+        self.borrowTokenAddress = borrowTokenAddress
+        self.rolloverTimestamp = rolloverTimestamp
+        self.lastSettleTimestamp = lastSettleTimestamp
+        self.collateralTokenAddress = collateralTokenAddress
+        self.borrowAmount = borrowAmount
+        self.collateralAmount = collateralAmount
+        self.owedPerDay = owedPerDay
+        self.minInterest = minInterest
+        self.interestOwed = interestOwed
+
+    def __str__(self):
+        return str({
+            'interestPaid': self.interestPaid,
+            'borrowTokenAddress': self.borrowTokenAddress,
+            'rolloverTimestamp': self.rolloverTimestamp,
+            'lastSettleTimestamp': self.lastSettleTimestamp,
+            'collateralTokenAddress': self.collateralTokenAddress,
+            'borrowAmount': self.borrowAmount,
+            'collateralAmount': self.collateralAmount,
+            'owedPerDay': self.owedPerDay,
+            'minInterest': self.minInterest,
+            'interestOwed': self.interestOwed,
+        })
+
+
+class ActiveLoanInfo:
+    def __init__(self, id: int, currentLTV: int, liquidationLTV: int, apr: int, minInterestOwed: int, actualInterestOwed: int):
+        self.id = id
+        self.currentLTV = currentLTV
+        self.liquidationLTV = liquidationLTV
+        self.apr = apr
+        self.minInterestOwed = minInterestOwed
+        self.actualInterestOwed = actualInterestOwed
+
+    def __str__(self):
+        return str({
+            'id': self.id,
+            'currentLTV': self.currentLTV,
+            'liquidationLTV': self.liquidationLTV,
+            'apr': self.apr,
+            'minInterestOwed': self.minInterestOwed,
+            'actualInterestOwed': self.actualInterestOwed,
+        })
+
+
 
 
 class IHelperCore:

@@ -80,7 +80,7 @@ get_next_borrowing_interest = clientFWX.get_next_borrowing_interest(clientFWX.PO
 # approve_token = clientFWX.approve(clientFWX.TOKEN.FWX, clientFWX.stakepool.address, clientFWX.web3.to_wei(1000000000, 'ether'))
 
 # stake = clientFWX.stake(nft_id, 250000)
-# unstake = clientFWX.unstake(nft_id, 250000)
+unstake = clientFWX.unstake(nft_id, 250000)
 rank_infos = clientFWX.rank_infos(0)
 rank_infos = clientFWX.rank_infos(1)
 rank_len = clientFWX.rank_len()
@@ -90,7 +90,9 @@ settle_period = clientFWX.settle_period()
 get_stake_info = clientFWX.get_stake_info(17)
 get_max_ltv = clientFWX.get_max_ltv(17)
 
-
+get_active_loans = clientFWX.get_active_loans(17, 1, 10)
+get_loan_borrow_amount = clientFWX.get_loan_borrow_amount(17,3)
+get_loan_collateral_info = clientFWX.get_loan_collateral_info(17,3)
 
 # print(clientFWX.TOKEN.BTC.balanceOf("0xC63dD209434079005E51D34e2b22118d75D1cA0C"))
 # event_filter = clientFWX.TOKEN.BTC.eventTransfer(0,0)

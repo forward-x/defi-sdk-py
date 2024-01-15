@@ -42,35 +42,3 @@ class StakePool:
     
     def get_max_ltv(self, nft_id:int)->int:
         return self.stakepool.getMaxLTVBonus(nft_id).call()
-
-
-
-    # def current_pool(self)->str:
-    #     return self.membership.currentPool().call()
-
-    # def get_default_membership(self, address:str)->int:
-    #     return self.membership.getDefaultMembership(address).call()
-    
-    # def get_pool_lists(self)->List[str]:
-    #     return self.membership.getPoolLists().call()
-    
-    # def get_previous_pool(self)->str:
-    #     return self.membership.getPreviousPool().call()
-    
-    # def get_rank(self, nft_id:int)->int:
-    #     return self.membership.getRank(pool=self.current_pool(), tokenId=nft_id).call()
-
-    # def get_rank_pool(self, pool:IAPHPool, nft_id:int)->int:
-    #     return self.membership.getRank(pool.__str__(), nft_id).call()
-
-    # def get_refferrer(self, nft_id:int)->int:
-    #     return self.membership.getReferrer(nft_id).call()
-
-    # def mint(self, referal_id:int=0,is_estimate=False)->Union[TransactionReceipt, int]:
-    #     contract_func = self.membership.mint(referal_id)
-    #     return self.send_transaction(contract_func, is_estimate=is_estimate)
-
-    # def set_default_membership(self, nft_id:int,is_estimate=False)->Union[TransactionReceipt, int]:
-    #     contract_func = self.membership.setDefaultMembership(nft_id)
-    #     return self.send_transaction(contract_func, is_estimate=is_estimate)
-    
