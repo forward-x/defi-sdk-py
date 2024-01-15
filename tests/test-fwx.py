@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 load_dotenv()
 project_dir = os.path.abspath("")
 sys.path.append(project_dir)
-from defi_sdk_py import ChainClient
 from defi_sdk_py.fwx_chain import ADDRESS as FWX_ADDRESS
 from defi_sdk_py.fwx_chain import FWXChainClient
 
