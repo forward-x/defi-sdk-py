@@ -46,7 +46,7 @@ class ChainClient(Library, Core, Pool, Membership, StakePool, HelperCore):
     def get_balance(self):
         return self.web3.eth.get_balance(self.address)
 
-    def approve(self, token:IERC20Metadata, spender:str, amount:int, is_estimate=False)->TransactionReceipt:
+    def approve(self, token:IERC20Metadata, spender:str, amount:int, is_estimate=False, gas:int=0, gas_price:int=0, nonce:int=0)->TransactionReceipt:
         amount = parseEther(self.web3, amount, token.decimals().call())
         contract_func = token.approve(spender, amount)
         return self.send_transaction(contract_func, 0, is_estimate)

@@ -1,5 +1,6 @@
 
 from web3 import Web3
+from web3.logs import STRICT, IGNORE, DISCARD, WARN
 from typing import Tuple, Dict, List
 import json
 #Generate a Python class representing the Ethereum contract.
@@ -196,7 +197,7 @@ class IAPHPool:
 
     def event_activaterank_by_tx(self, tx_hash:str):
         receipt = self.web3.eth.get_transaction_receipt(tx_hash)
-        events = self.contract.events.ActivateRank().process_receipt(receipt)
+        events = self.contract.events.ActivateRank().process_receipt(receipt, errors=DISCARD)
         if len(events) > 0:
             return events[0].args
         else:
@@ -208,7 +209,7 @@ class IAPHPool:
 
     def event_borrow_by_tx(self, tx_hash:str):
         receipt = self.web3.eth.get_transaction_receipt(tx_hash)
-        events = self.contract.events.Borrow().process_receipt(receipt)
+        events = self.contract.events.Borrow().process_receipt(receipt, errors=DISCARD)
         if len(events) > 0:
             return events[0].args
         else:
@@ -220,7 +221,7 @@ class IAPHPool:
 
     def event_claimforwinterest_by_tx(self, tx_hash:str):
         receipt = self.web3.eth.get_transaction_receipt(tx_hash)
-        events = self.contract.events.ClaimForwInterest().process_receipt(receipt)
+        events = self.contract.events.ClaimForwInterest().process_receipt(receipt, errors=DISCARD)
         if len(events) > 0:
             return events[0].args
         else:
@@ -232,7 +233,7 @@ class IAPHPool:
 
     def event_claimtokeninterest_by_tx(self, tx_hash:str):
         receipt = self.web3.eth.get_transaction_receipt(tx_hash)
-        events = self.contract.events.ClaimTokenInterest().process_receipt(receipt)
+        events = self.contract.events.ClaimTokenInterest().process_receipt(receipt, errors=DISCARD)
         if len(events) > 0:
             return events[0].args
         else:
@@ -244,7 +245,7 @@ class IAPHPool:
 
     def event_deposit_by_tx(self, tx_hash:str):
         receipt = self.web3.eth.get_transaction_receipt(tx_hash)
-        events = self.contract.events.Deposit().process_receipt(receipt)
+        events = self.contract.events.Deposit().process_receipt(receipt, errors=DISCARD)
         if len(events) > 0:
             return events[0].args
         else:
@@ -256,7 +257,7 @@ class IAPHPool:
 
     def event_withdraw_by_tx(self, tx_hash:str):
         receipt = self.web3.eth.get_transaction_receipt(tx_hash)
-        events = self.contract.events.Withdraw().process_receipt(receipt)
+        events = self.contract.events.Withdraw().process_receipt(receipt, errors=DISCARD)
         if len(events) > 0:
             return events[0].args
         else:

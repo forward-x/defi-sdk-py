@@ -33,13 +33,13 @@ class Membership:
     def get_refferrer(self, nft_id:int)->int:
         return self.membership.getReferrer(nft_id).call()
 
-    def mint(self, referal_id:int=0,is_estimate=False)->Union[TransactionReceipt, int]:
+    def mint(self, referal_id:int=0,is_estimate=False, gas:int=0, gas_price:int=0, nonce:int=0)->Union[TransactionReceipt, int]:
         contract_func = self.membership.mint(referal_id)
-        return self.send_transaction(contract_func, is_estimate=is_estimate)
+        return self.send_transaction(contract_func, is_estimate=is_estimate, gas=gas, gas_price=gas_price, nonce=nonce)
 
-    def set_default_membership(self, nft_id:int,is_estimate=False)->Union[TransactionReceipt, int]:
+    def set_default_membership(self, nft_id:int,is_estimate=False, gas:int=0, gas_price:int=0, nonce:int=0)->Union[TransactionReceipt, int]:
         contract_func = self.membership.setDefaultMembership(nft_id)
-        return self.send_transaction(contract_func, is_estimate=is_estimate)
+        return self.send_transaction(contract_func, is_estimate=is_estimate, gas=gas, gas_price=gas_price, nonce=nonce)
     
     def owner_of(self, nft_id:int)->str:
         return self.membership.ownerOf(nft_id).call()

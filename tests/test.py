@@ -58,24 +58,11 @@ token_holders = clientFWX.token_holders(clientFWX.POOLS.USDT, nft_id)
 current_supply = clientFWX.current_supply(clientFWX.POOLS.USDT)
 get_next_borrowing_interest = clientFWX.get_next_borrowing_interest(clientFWX.POOLS.USDT, 10000)
 
-deposit = clientFWX.deposit(clientFWX.POOLS.WBNB, nft_id, 1, nonce=1)
-print(deposit.transactionHash)
-# deposit_event = clientFWX.POOLS.WBNB.eventDeposit(deposit.blockNumber, deposit.blockNumber)
-# print(" -"*10)
-# print(deposit)
-# print(" -"*10)
-# print(deposit_event[0].args)
-# for e in deposit_event[0].args:
-#     print(e, " : ", deposit_event[0].args[e])
-
-    # def eventDeposit(self, tx_hash:str):
-    #     receipt = self.web3.eth.get_transaction_receipt(tx_hash)
-    #     return self.contract.events.Deposit().process_receipt(receipt)
-
+# deposit = clientFWX.deposit(clientFWX.POOLS.WBNB, nft_id, 1,)
 
 tx_hash = "0x62461c427c4dcffca2a4881c3de6ac88b19c32522214f622a3a1605b52d2bb4c"
-# deposit_event = clientFWX.POOLS.WBNB.event_deposit_by_tx(tx_hash)
-# print(deposit_event)
+deposit_event = clientFWX.deposit_event(clientFWX.POOLS.WBNB, tx_hash)
+
 
 # deposit = clientFWX.deposit(clientFWX.POOLS.USDT, nft_id, 10)
 # withdraw = clientFWX.withdraw(clientFWX.POOLS.USDT, nft_id, 10)

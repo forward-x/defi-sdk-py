@@ -48,57 +48,57 @@ class Core:
         return Pair(self.core.pairs(collateral_token.__str__(), underlying_token.__str__()).call())
 
     # ACTION
-    def deposit_collateral(self, nft_id: int, collateral_token_address: IERC20Metadata, underlying_token_address: IERC20Metadata, amount: int, is_estimate=False)->Union[TransactionReceipt, int]:
+    def deposit_collateral(self, nft_id: int, collateral_token_address: IERC20Metadata, underlying_token_address: IERC20Metadata, amount: int, is_estimate=False, gas:int=0, gas_price:int=0, nonce:int=0)->Union[TransactionReceipt, int]:
         amount = parseEther(self.web3, amount, collateral_token_address.decimals().call())
         collateral_token_address = collateral_token_address.__str__()
         underlying_token_address = underlying_token_address.__str__()
         contract_func = self.core.depositCollateral(nft_id, collateral_token_address, underlying_token_address, amount)
         is_native = self.native.address == collateral_token_address
-        return self.send_transaction(contract_func, value=amount if is_native else 0, is_estimate=is_estimate)
+        return self.send_transaction(contract_func, value=amount if is_native else 0, is_estimate=is_estimate, gas=gas, gas_price=gas_price, nonce=nonce)
 
-    def withdraw_collateral(self, nft_id: int, collateral_token_address: IERC20Metadata, underlying_token_address: IERC20Metadata, amount: int, is_estimate=False)->Union[TransactionReceipt, int]:
+    def withdraw_collateral(self, nft_id: int, collateral_token_address: IERC20Metadata, underlying_token_address: IERC20Metadata, amount: int, is_estimate=False, gas:int=0, gas_price:int=0, nonce:int=0)->Union[TransactionReceipt, int]:
         amount = parseEther(self.web3, amount, collateral_token_address.decimals().call())
         collateral_token_address = collateral_token_address.__str__()
         underlying_token_address = underlying_token_address.__str__()
         contract_func = self.core.withdrawCollateral(nft_id, collateral_token_address, underlying_token_address, amount)
-        return self.send_transaction(contract_func, is_estimate=is_estimate)
+        return self.send_transaction(contract_func, is_estimate=is_estimate, gas=gas, gas_price=gas_price, nonce=nonce)
      
-    def adjust_collateral(self, nft_id:int, loan_id:int, collateral_adjust_amount:int, is_add:bool, is_estimate=False)->Union[TransactionReceipt, int]:
+    def adjust_collateral(self, nft_id:int, loan_id:int, collateral_adjust_amount:int, is_add:bool, is_estimate=False, gas:int=0, gas_price:int=0, nonce:int=0)->Union[TransactionReceipt, int]:
         loan = self.loans(nft_id, loan_id)
         collateral_token:IERC20Metadata = IERC20Metadata(loan.collateralTokenAddress, self.web3)
         is_native = self.native.address == loan.collateralTokenAddress
         amount = parseEther(self.web3, collateral_adjust_amount, collateral_token.decimals().call())
         contract_func = self.core.adjustCollateral(loan_id, nft_id, amount, is_add)
-        return self.send_transaction(contract_func, value=amount if is_native else 0, is_estimate=is_estimate)
+        return self.send_transaction(contract_func, value=amount if is_native else 0, is_estimate=is_estimate, gas=gas, gas_price=gas_price, nonce=nonce)
     
-    def rollver(self, nft_id:int, loan_id:int, is_estimate=False)->Union[TransactionReceipt, int]:
+    def rollver(self, nft_id:int, loan_id:int, is_estimate=False, gas:int=0, gas_price:int=0, nonce:int=0)->Union[TransactionReceipt, int]:
         contract_func = self.core.rollover(loan_id, nft_id)
-        return self.send_transaction(contract_func, is_estimate=is_estimate)
+        return self.send_transaction(contract_func, is_estimate=is_estimate, gas=gas, gas_price=gas_price, nonce=nonce)
 
-    def repay(self, nft_id:int, loan_id:int, repay_amount:int, is_only_interest:bool, is_estimate=False)->Union[TransactionReceipt, int]:
+    def repay(self, nft_id:int, loan_id:int, repay_amount:int, is_only_interest:bool, is_estimate=False, gas:int=0, gas_price:int=0, nonce:int=0)->Union[TransactionReceipt, int]:
         loan = self.loans(nft_id, loan_id)
         borrow_token:IERC20Metadata = IERC20Metadata(loan.borrowTokenAddress, self.web3)
         is_native = self.native.address == loan.borrowTokenAddress
         repay_amount = parseEther(self.web3, repay_amount, borrow_token.decimals().call())
         contract_func = self.core.repay(loan_id, nft_id, repay_amount, is_only_interest)
-        return self.send_transaction(contract_func, value=repay_amount if is_native else 0, is_estimate=is_estimate)
+        return self.send_transaction(contract_func, value=repay_amount if is_native else 0, is_estimate=is_estimate, gas=gas, gas_price=gas_price, nonce=nonce)
     
-    def close_position(self, nft_id:int, pos_id:int, closing_size:int, is_estimate=False)->Union[TransactionReceipt, int]:
+    def close_position(self, nft_id:int, pos_id:int, closing_size:int, is_estimate=False, gas:int=0, gas_price:int=0, nonce:int=0)->Union[TransactionReceipt, int]:
         pos_state = self.positions_states(nft_id, pos_id)
         if pos_state.active:
             pair = Pair(*self.core.pairs(pos_state.pairByte).call())
             underlying_token:IERC20Metadata = IERC20Metadata(pair.pair1, self.web3)
             closing_size = parseEther(self.web3, closing_size, underlying_token.decimals().call())
             contract_func = self.core.closePosition(nft_id, pos_id, closing_size)
-            return self.send_transaction(contract_func, is_estimate=is_estimate)
+            return self.send_transaction(contract_func, is_estimate=is_estimate, gas=gas, gas_price=gas_price, nonce=nonce)
         else:
             raise Exception("position-not-active")
 
-    def liquidate(self, nft_id:int ,loan_id:int, is_estimate=False)->Union[TransactionReceipt, int]:
+    def liquidate(self, nft_id:int ,loan_id:int, is_estimate=False, gas:int=0, gas_price:int=0, nonce:int=0)->Union[TransactionReceipt, int]:
         contract_func = self.core.liquidate(loan_id, nft_id)
-        return self.send_transaction(contract_func, is_estimate=is_estimate)
+        return self.send_transaction(contract_func, is_estimate=is_estimate, gas=gas, gas_price=gas_price, nonce=nonce)
 
-    def liquidate_position(self, nft_id:int ,pair_byte:str, is_estimate=False)->Union[TransactionReceipt, int]:
+    def liquidate_position(self, nft_id:int ,pair_byte:str, is_estimate=False, gas:int=0, gas_price:int=0, nonce:int=0)->Union[TransactionReceipt, int]:
         contract_func = self.core.liquidatePosition(nft_id, pair_byte)
-        return self.send_transaction(contract_func, is_estimate=is_estimate)
+        return self.send_transaction(contract_func, is_estimate=is_estimate, gas=gas, gas_price=gas_price, nonce=nonce)
 
