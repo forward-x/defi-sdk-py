@@ -1,15 +1,15 @@
 import sys
 import os
-import json
 from dotenv import load_dotenv
 load_dotenv()
+
 project_dir = os.path.abspath("")
 sys.path.append(project_dir)
 from defi_sdk_py.fwx_chain import ADDRESS as FWX_ADDRESS
 from defi_sdk_py.fwx_chain import FWXChainClient
-
 PK = os.environ.get("PK")
 FWX_RPC_URL = os.environ.get("FWX_RPC_URL")
+
 clientFWX = FWXChainClient(
     rpc_url=FWX_RPC_URL,
     private_key=PK,
