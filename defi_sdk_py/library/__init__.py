@@ -1,7 +1,7 @@
 from web3 import Web3
-from .abi.APHLibrary import APHLibrary
-from .abi.IERC20Metadata import IERC20Metadata
-from .address_const import AddressConst
+from ..abi.APHLibrary import APHLibrary
+from ..abi.IERC20Metadata import IERC20Metadata
+from ..address_const import AddressConst
 class Library:
     def __init__(self):
         super(Library, self).__init__()

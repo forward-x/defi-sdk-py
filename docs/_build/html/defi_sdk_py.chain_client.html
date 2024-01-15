@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>defi_sdk_py.chain_client package &mdash; fwx-defi-python-sdk 1.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=0b546569"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            fwx-defi-python-sdk
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">defi_sdk_py.chain_client package</a><ul>
+<li><a class="reference internal" href="#module-defi_sdk_py.chain_client">Module contents</a><ul>
+<li><a class="reference internal" href="#defi_sdk_py.chain_client.ChainClient"><code class="docutils literal notranslate"><span class="pre">ChainClient</span></code></a><ul>
+<li><a class="reference internal" href="#defi_sdk_py.chain_client.ChainClient.approve"><code class="docutils literal notranslate"><span class="pre">ChainClient.approve()</span></code></a></li>
+<li><a class="reference internal" href="#defi_sdk_py.chain_client.ChainClient.connect_to_web3"><code class="docutils literal notranslate"><span class="pre">ChainClient.connect_to_web3()</span></code></a></li>
+<li><a class="reference internal" href="#defi_sdk_py.chain_client.ChainClient.get_balance"><code class="docutils literal notranslate"><span class="pre">ChainClient.get_balance()</span></code></a></li>
+<li><a class="reference internal" href="#defi_sdk_py.chain_client.ChainClient.send_transaction"><code class="docutils literal notranslate"><span class="pre">ChainClient.send_transaction()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fwx-defi-python-sdk</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">defi_sdk_py.chain_client package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/defi_sdk_py.chain_client.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="defi-sdk-py-chain-client-package">
+<h1>defi_sdk_py.chain_client package<a class="headerlink" href="#defi-sdk-py-chain-client-package" title="Permalink to this heading"></a></h1>
+<section id="module-defi_sdk_py.chain_client">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-defi_sdk_py.chain_client" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="defi_sdk_py.chain_client.ChainClient">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">defi_sdk_py.chain_client.</span></span><span class="sig-name descname"><span class="pre">ChainClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rpc_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">private_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">address_const</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="defi_sdk_py.address_const.html#defi_sdk_py.address_const.AddressConst" title="defi_sdk_py.address_const.AddressConst"><span class="pre">AddressConst</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxFeePerGas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxPriorityFeePerGas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/defi_sdk_py/chain_client.html#ChainClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.chain_client.ChainClient" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="defi_sdk_py.library.html#defi_sdk_py.library.Library" title="defi_sdk_py.library.Library"><code class="xref py py-class docutils literal notranslate"><span class="pre">Library</span></code></a>, <a class="reference internal" href="defi_sdk_py.core.html#defi_sdk_py.core.Core" title="defi_sdk_py.core.Core"><code class="xref py py-class docutils literal notranslate"><span class="pre">Core</span></code></a>, <a class="reference internal" href="defi_sdk_py.pool.html#defi_sdk_py.pool.Pool" title="defi_sdk_py.pool.Pool"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pool</span></code></a>, <a class="reference internal" href="defi_sdk_py.membership.html#defi_sdk_py.membership.Membership" title="defi_sdk_py.membership.Membership"><code class="xref py py-class docutils literal notranslate"><span class="pre">Membership</span></code></a>, <a class="reference internal" href="defi_sdk_py.stake_pool.html#defi_sdk_py.stake_pool.StakePool" title="defi_sdk_py.stake_pool.StakePool"><code class="xref py py-class docutils literal notranslate"><span class="pre">StakePool</span></code></a>, <a class="reference internal" href="defi_sdk_py.helper_core.html#defi_sdk_py.helper_core.HelperCore" title="defi_sdk_py.helper_core.HelperCore"><code class="xref py py-class docutils literal notranslate"><span class="pre">HelperCore</span></code></a></p>
+<p>Client for interacting with a blockchain via the Web3.py library.</p>
+<p>This client provides methods to connect to a blockchain node, send transactions, and query balances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rpc_url</strong> – URL of the blockchain node RPC interface</p></li>
+<li><p><strong>private_key</strong> – Private key for signing transactions</p></li>
+<li><p><strong>address_const</strong> – Constants for blockchain addresses (more details in address constants module)</p></li>
+<li><p><strong>maxFeePerGas</strong> – Maximum fee per gas willing to pay in wei</p></li>
+<li><p><strong>maxPriorityFeePerGas</strong> – Priority fee per gas to incentivize miners</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.chain_client.ChainClient.approve">
+<span class="sig-name descname"><span class="pre">approve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">IERC20Metadata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spender</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_estimate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas_price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonce</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="defi_sdk_py.utils.html#defi_sdk_py.utils.TransactionReceipt" title="defi_sdk_py.utils.TransactionReceipt"><span class="pre">TransactionReceipt</span></a></span></span><a class="reference internal" href="_modules/defi_sdk_py/chain_client.html#ChainClient.approve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.chain_client.ChainClient.approve" title="Permalink to this definition"></a></dt>
+<dd><p>Approves a spender to withdraw tokens from the default account.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>token</strong> – The token contract interface (can use with built-in ChainClient.TOKEN.&lt;TOKEN_SYMBOL&gt;)</p></li>
+<li><p><strong>spender</strong> – The address of the spender</p></li>
+<li><p><strong>amount</strong> – The amount of tokens to approve</p></li>
+<li><p><strong>is_estimate</strong> – Whether to estimate the gas for the transaction</p></li>
+<li><p><strong>gas</strong> – The gas limit for the transaction</p></li>
+<li><p><strong>gas_price</strong> – The gas price for the transaction</p></li>
+<li><p><strong>nonce</strong> – The nonce for the transaction</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transaction receipt if not estimating gas, otherwise the estimated gas</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.chain_client.ChainClient.connect_to_web3">
+<span class="sig-name descname"><span class="pre">connect_to_web3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/defi_sdk_py/chain_client.html#ChainClient.connect_to_web3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.chain_client.ChainClient.connect_to_web3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.chain_client.ChainClient.get_balance">
+<span class="sig-name descname"><span class="pre">get_balance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/defi_sdk_py/chain_client.html#ChainClient.get_balance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.chain_client.ChainClient.get_balance" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the balance of the default account.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The balance of the account in wei</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.chain_client.ChainClient.send_transaction">
+<span class="sig-name descname"><span class="pre">send_transaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abi_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_estimate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas_price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonce</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="defi_sdk_py.utils.html#defi_sdk_py.utils.TransactionReceipt" title="defi_sdk_py.utils.TransactionReceipt"><span class="pre">TransactionReceipt</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/chain_client.html#ChainClient.send_transaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.chain_client.ChainClient.send_transaction" title="Permalink to this definition"></a></dt>
+<dd><p>Sends a transaction to the blockchain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>abi_func</strong> – The contract function to call (ChainClient built-in)</p></li>
+<li><p><strong>value</strong> – The value in wei to send with the transaction</p></li>
+<li><p><strong>is_estimate</strong> – Whether to estimate the gas for the transaction</p></li>
+<li><p><strong>gas</strong> – The gas limit for the transaction</p></li>
+<li><p><strong>gas_price</strong> – The gas price for the transaction</p></li>
+<li><p><strong>nonce</strong> – The nonce for the transaction</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transaction receipt if not estimating gas</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, fwx/akio777.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
