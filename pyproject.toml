@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "defi_sdk_py"
+version = "1.0.0"
+
+description = ""
+authors = ["akio777 <chanutpong.promsin@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "defi_sdk_py" }]
+
+[tool.poetry.dependencies]
+python = ">=3.7.2,<3.10"
+web3 = "6.13.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

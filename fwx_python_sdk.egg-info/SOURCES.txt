@@ -1,4 +1,5 @@
 README.md
+pyproject.toml
 setup.py
 ./defi_sdk_py/__init__.py
 ./defi_sdk_py/address.py
