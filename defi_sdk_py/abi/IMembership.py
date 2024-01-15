@@ -1,6 +1,7 @@
 
 from web3 import Web3
 from typing import Tuple, Dict, List
+import json
 #Generate a Python class representing the Ethereum contract.
 #:param abi: The ABI (Application Binary Interface) of the contract.
 #:type abi: list
@@ -8,6 +9,65 @@ from typing import Tuple, Dict, List
 #:type contract_name: str
 #:return: The generated Python class code.
 #:rtype: str
+
+class ApprovalEvent:
+    def __init__(self, event_data):
+        self.owner: str = event_data.get('owner')
+        self.approved: str = event_data.get('approved')
+        self.tokenId: int = event_data.get('tokenId')
+
+    def __str__(self):
+        return json.dumps(self.__dict__, indent=4)
+
+
+class ApprovalForAllEvent:
+    def __init__(self, event_data):
+        self.owner: str = event_data.get('owner')
+        self.operator: str = event_data.get('operator')
+        self.approved: bool = event_data.get('approved')
+
+    def __str__(self):
+        return json.dumps(self.__dict__, indent=4)
+
+
+class SetDefaultMembershipEvent:
+    def __init__(self, event_data):
+        self.sender: str = event_data.get('sender')
+        self.tokenId: int = event_data.get('tokenId')
+
+    def __str__(self):
+        return json.dumps(self.__dict__, indent=4)
+
+
+class SetReferrerEvent:
+    def __init__(self, event_data):
+        self.sender: str = event_data.get('sender')
+        self.referrer: int = event_data.get('referrer')
+        self.referee: int = event_data.get('referee')
+
+    def __str__(self):
+        return json.dumps(self.__dict__, indent=4)
+
+
+class TransferEvent:
+    def __init__(self, event_data):
+        self._from: str = event_data.get('_from')
+        self.to: str = event_data.get('to')
+        self.tokenId: int = event_data.get('tokenId')
+
+    def __str__(self):
+        return json.dumps(self.__dict__, indent=4)
+
+
+class UpdateRankEvent:
+    def __init__(self, event_data):
+        self.sender: str = event_data.get('sender')
+        self.tokenId: int = event_data.get('tokenId')
+        self.newRank: int = event_data.get('newRank')
+
+    def __str__(self):
+        return json.dumps(self.__dict__, indent=4)
+
 
 
 
@@ -30,23 +90,77 @@ class IMembership:
 
     # Generated functions
     
-    def eventApproval(self, fromBlock:int=0, toBlock:int=0):
+    def event_approval_by_block(self, fromBlock:int=0, toBlock:int=0):
         return self.contract.events.Approval().get_logs(fromBlock=self.web3.eth.block_number if fromBlock == 0 else fromBlock, toBlock=self.web3.eth.block_number if toBlock == 0 else toBlock)
 
-    def eventApprovalForAll(self, fromBlock:int=0, toBlock:int=0):
+    def event_approval_by_tx(self, tx_hash:str):
+        receipt = self.web3.eth.get_transaction_receipt(tx_hash)
+        events = self.contract.events.Approval().process_receipt(receipt)
+        if len(events) > 0:
+            return events[0].args
+        else:
+            raise Exception('Event not found in transaction')
+
+
+    def event_approvalforall_by_block(self, fromBlock:int=0, toBlock:int=0):
         return self.contract.events.ApprovalForAll().get_logs(fromBlock=self.web3.eth.block_number if fromBlock == 0 else fromBlock, toBlock=self.web3.eth.block_number if toBlock == 0 else toBlock)
 
-    def eventSetDefaultMembership(self, fromBlock:int=0, toBlock:int=0):
+    def event_approvalforall_by_tx(self, tx_hash:str):
+        receipt = self.web3.eth.get_transaction_receipt(tx_hash)
+        events = self.contract.events.ApprovalForAll().process_receipt(receipt)
+        if len(events) > 0:
+            return events[0].args
+        else:
+            raise Exception('Event not found in transaction')
+
+
+    def event_setdefaultmembership_by_block(self, fromBlock:int=0, toBlock:int=0):
         return self.contract.events.SetDefaultMembership().get_logs(fromBlock=self.web3.eth.block_number if fromBlock == 0 else fromBlock, toBlock=self.web3.eth.block_number if toBlock == 0 else toBlock)
 
-    def eventSetReferrer(self, fromBlock:int=0, toBlock:int=0):
+    def event_setdefaultmembership_by_tx(self, tx_hash:str):
+        receipt = self.web3.eth.get_transaction_receipt(tx_hash)
+        events = self.contract.events.SetDefaultMembership().process_receipt(receipt)
+        if len(events) > 0:
+            return events[0].args
+        else:
+            raise Exception('Event not found in transaction')
+
+
+    def event_setreferrer_by_block(self, fromBlock:int=0, toBlock:int=0):
         return self.contract.events.SetReferrer().get_logs(fromBlock=self.web3.eth.block_number if fromBlock == 0 else fromBlock, toBlock=self.web3.eth.block_number if toBlock == 0 else toBlock)
 
-    def eventTransfer(self, fromBlock:int=0, toBlock:int=0):
+    def event_setreferrer_by_tx(self, tx_hash:str):
+        receipt = self.web3.eth.get_transaction_receipt(tx_hash)
+        events = self.contract.events.SetReferrer().process_receipt(receipt)
+        if len(events) > 0:
+            return events[0].args
+        else:
+            raise Exception('Event not found in transaction')
+
+
+    def event_transfer_by_block(self, fromBlock:int=0, toBlock:int=0):
         return self.contract.events.Transfer().get_logs(fromBlock=self.web3.eth.block_number if fromBlock == 0 else fromBlock, toBlock=self.web3.eth.block_number if toBlock == 0 else toBlock)
 
-    def eventUpdateRank(self, fromBlock:int=0, toBlock:int=0):
+    def event_transfer_by_tx(self, tx_hash:str):
+        receipt = self.web3.eth.get_transaction_receipt(tx_hash)
+        events = self.contract.events.Transfer().process_receipt(receipt)
+        if len(events) > 0:
+            return events[0].args
+        else:
+            raise Exception('Event not found in transaction')
+
+
+    def event_updaterank_by_block(self, fromBlock:int=0, toBlock:int=0):
         return self.contract.events.UpdateRank().get_logs(fromBlock=self.web3.eth.block_number if fromBlock == 0 else fromBlock, toBlock=self.web3.eth.block_number if toBlock == 0 else toBlock)
+
+    def event_updaterank_by_tx(self, tx_hash:str):
+        receipt = self.web3.eth.get_transaction_receipt(tx_hash)
+        events = self.contract.events.UpdateRank().process_receipt(receipt)
+        if len(events) > 0:
+            return events[0].args
+        else:
+            raise Exception('Event not found in transaction')
+
 
     def approve(self, to: str, tokenId: int):
         return self.contract.functions.approve(to, tokenId)

@@ -28,12 +28,21 @@ class Pool:
         return pool.getNextBorrowingInterest(borrow_amount).call()
 
     # ACTION
-    def deposit(self, pool:IAPHPool, nft_id: int, amount: int, is_estimate=False)->Union[TransactionReceipt, int]:
+    def deposit(self, pool:IAPHPool, nft_id: int, amount: int, is_estimate=False, gas:int=0, gas_price:int=0, nonce:int=0)->Union[TransactionReceipt, int]:
         token:IERC20Metadata = IERC20Metadata(pool.tokenAddress().call(), self.web3)
         amount = parseEther(self.web3, amount, token.decimals().call())
         is_native = self.native.address == token.address
         contract_func = pool.deposit(nft_id, amount)
-        return self.send_transaction(contract_func, value=amount if is_native else 0, is_estimate=is_estimate)
+        return self.send_transaction(contract_func, value=amount if is_native else 0, is_estimate=is_estimate, gas=gas, gas_price=gas_price, nonce=nonce)
+
+
+    def deposit_event(self, tx_hash:str)->DepositEvent:
+        receipt = self.web3.eth.get_transaction_receipt(tx_hash)
+        events = self.web3.contract.events["Deposit"]().process_receipt(receipt)
+        if len(events) > 0:
+            return events[0].args
+        else:
+            raise Exception('Event not found in transaction')
 
     def withdraw(self, pool:IAPHPool, nft_id: int, amount: int, is_estimate=False)->Union[TransactionReceipt, int]:
         token:IERC20Metadata = IERC20Metadata(pool.tokenAddress().call(), self.web3)

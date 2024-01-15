@@ -8,7 +8,7 @@ from typing import Union, List
 import json
 
 class ActiveLoans:
-    
+
     def __init__(self, active_loans:list, active_loan_infos:list, interest_owed_per_day:list, new_cursor:int):
         self.active_loans:list(Loan) = active_loans
         self.active_loan_infos:list(ActiveLoanInfo) = active_loan_infos

@@ -1,6 +1,7 @@
 
 from web3 import Web3
 from typing import Tuple, Dict, List
+import json
 #Generate a Python class representing the Ethereum contract.
 #:param abi: The ABI (Application Binary Interface) of the contract.
 #:type abi: list

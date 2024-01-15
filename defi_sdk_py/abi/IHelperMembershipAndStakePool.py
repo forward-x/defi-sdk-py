@@ -1,6 +1,7 @@
 
 from web3 import Web3
 from typing import Tuple, Dict, List
+import json
 #Generate a Python class representing the Ethereum contract.
 #:param abi: The ABI (Application Binary Interface) of the contract.
 #:type abi: list
@@ -8,6 +9,26 @@ from typing import Tuple, Dict, List
 #:type contract_name: str
 #:return: The generated Python class code.
 #:rtype: str
+
+class RankInfo:
+    def __init__(self, interestBonusLending: int, forwardBonusLending: int, minimumStakeAmount: int, maxLTVBonus: int, tradingFee: int, tradingBonus: int):
+        self.interestBonusLending = interestBonusLending
+        self.forwardBonusLending = forwardBonusLending
+        self.minimumStakeAmount = minimumStakeAmount
+        self.maxLTVBonus = maxLTVBonus
+        self.tradingFee = tradingFee
+        self.tradingBonus = tradingBonus
+
+    def __str__(self):
+        return str({
+            'interestBonusLending': self.interestBonusLending,
+            'forwardBonusLending': self.forwardBonusLending,
+            'minimumStakeAmount': self.minimumStakeAmount,
+            'maxLTVBonus': self.maxLTVBonus,
+            'tradingFee': self.tradingFee,
+            'tradingBonus': self.tradingBonus,
+        })
+
 
 class StakeInfo:
     def __init__(self, stakeBalance: int, claimableAmount: int, startTimestamp: int, endTimestamp: int, lastSettleTimestamp: int, payPattern: int):

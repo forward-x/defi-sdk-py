@@ -51,15 +51,16 @@ class ChainClient(Library, Core, Pool, Membership, StakePool, HelperCore):
         contract_func = token.approve(spender, amount)
         return self.send_transaction(contract_func, 0, is_estimate)
 
-    def send_transaction(self, abi_func, value:int=0, is_estimate=False)->Union[TransactionReceipt, int]:
+    def send_transaction(self, abi_func, value:int=0, is_estimate=False, gas:int=0, gas_price:int=0, nonce:int=0)->Union[TransactionReceipt, int]:
         try:
             built_tx = abi_func.build_transaction(
                 {
-                    'gasPrice' : self.web3.eth.gas_price,
-                    'value' : 0 if is_estimate else value
+                    'gasPrice' : self.web3.eth.gas_price if gas_price == 0 else gas_price,
+                    'value' : 0 if is_estimate else value,
                 }
             )
-            built_tx['nonce'] = self.web3.eth.get_transaction_count(self.address)
+            built_tx['nonce'] = self.web3.eth.get_transaction_count(self.address) if nonce == 0 else nonce
+            built_tx['gas'] = built_tx['gas'] if gas == 0 else gas
             if is_estimate:
                 return self.web3.eth.estimate_gas(built_tx)
             signed_tx = self.web3.eth.account.sign_transaction(built_tx, self.private_key)

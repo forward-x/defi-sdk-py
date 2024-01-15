@@ -1,6 +1,7 @@
 
 from web3 import Web3
 from typing import Tuple, Dict, List
+import json
 #Generate a Python class representing the Ethereum contract.
 #:param abi: The ABI (Application Binary Interface) of the contract.
 #:type abi: list
@@ -8,6 +9,52 @@ from typing import Tuple, Dict, List
 #:type contract_name: str
 #:return: The generated Python class code.
 #:rtype: str
+
+class PositionData:
+    def __init__(self, position: Tuple, PNL: int, ROE: int, margin: int, rate: int, liqPrice: int):
+        self.position = position
+        self.PNL = PNL
+        self.ROE = ROE
+        self.margin = margin
+        self.rate = rate
+        self.liqPrice = liqPrice
+
+    def __str__(self):
+        return str({
+            'position': self.position,
+            'PNL': self.PNL,
+            'ROE': self.ROE,
+            'margin': self.margin,
+            'rate': self.rate,
+            'liqPrice': self.liqPrice,
+        })
+
+
+class PositionState:
+    def __init__(self, active: bool, isLong: bool, PNL: int, startTimestamp: int, pairByte: bytes, averageEntryPrice: int, interestPaid: int, totalTradingFee: int, totalSwapFee: int):
+        self.active = active
+        self.isLong = isLong
+        self.PNL = PNL
+        self.startTimestamp = startTimestamp
+        self.pairByte = pairByte
+        self.averageEntryPrice = averageEntryPrice
+        self.interestPaid = interestPaid
+        self.totalTradingFee = totalTradingFee
+        self.totalSwapFee = totalSwapFee
+
+    def __str__(self):
+        return str({
+            'active': self.active,
+            'isLong': self.isLong,
+            'PNL': self.PNL,
+            'startTimestamp': self.startTimestamp,
+            'pairByte': self.pairByte,
+            'averageEntryPrice': self.averageEntryPrice,
+            'interestPaid': self.interestPaid,
+            'totalTradingFee': self.totalTradingFee,
+            'totalSwapFee': self.totalSwapFee,
+        })
+
 
 
 

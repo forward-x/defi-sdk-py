@@ -1,6 +1,7 @@
 
 from web3 import Web3
 from typing import Tuple, Dict, List
+import json
 #Generate a Python class representing the Ethereum contract.
 #:param abi: The ABI (Application Binary Interface) of the contract.
 #:type abi: list
@@ -93,6 +94,82 @@ class PoolTokens:
         })
 
 
+class ActivateRankEvent:
+    def __init__(self, event_data):
+        self.owner: str = event_data.get('owner')
+        self.nftId: int = event_data.get('nftId')
+        self.oldRank: int = event_data.get('oldRank')
+        self.newRank: int = event_data.get('newRank')
+
+    def __str__(self):
+        return json.dumps(self.__dict__, indent=4)
+
+
+class BorrowEvent:
+    def __init__(self, event_data):
+        self.owner: str = event_data.get('owner')
+        self.nftId: int = event_data.get('nftId')
+        self.tokenAddress: str = event_data.get('tokenAddress')
+        self.isTrading: bool = event_data.get('isTrading')
+        self.amount: int = event_data.get('amount')
+
+    def __str__(self):
+        return json.dumps(self.__dict__, indent=4)
+
+
+class ClaimForwInterestEvent:
+    def __init__(self, event_data):
+        self.owner: str = event_data.get('owner')
+        self.nftId: int = event_data.get('nftId')
+        self.interestForwClaimed: int = event_data.get('interestForwClaimed')
+        self.interestForwBonus: int = event_data.get('interestForwBonus')
+        self.burnedIfp: int = event_data.get('burnedIfp')
+
+    def __str__(self):
+        return json.dumps(self.__dict__, indent=4)
+
+
+class ClaimTokenInterestEvent:
+    def __init__(self, event_data):
+        self.owner: str = event_data.get('owner')
+        self.nftId: int = event_data.get('nftId')
+        self.interestTokenClaimed: int = event_data.get('interestTokenClaimed')
+        self.interestTokenBonus: int = event_data.get('interestTokenBonus')
+        self.burnedItp: int = event_data.get('burnedItp')
+
+    def __str__(self):
+        return json.dumps(self.__dict__, indent=4)
+
+
+class DepositEvent:
+    def __init__(self, event_data):
+        self.owner: str = event_data.get('owner')
+        self.nftId: int = event_data.get('nftId')
+        self.depositAmount: int = event_data.get('depositAmount')
+        self.mintedP: int = event_data.get('mintedP')
+        self.mintedAtp: int = event_data.get('mintedAtp')
+        self.mintedItp: int = event_data.get('mintedItp')
+        self.mintedIfp: int = event_data.get('mintedIfp')
+
+    def __str__(self):
+        return json.dumps(self.__dict__, indent=4)
+
+
+class WithdrawEvent:
+    def __init__(self, event_data):
+        self.owner: str = event_data.get('owner')
+        self.nftId: int = event_data.get('nftId')
+        self.withdrawAmount: int = event_data.get('withdrawAmount')
+        self.burnedP: int = event_data.get('burnedP')
+        self.burnedAtp: int = event_data.get('burnedAtp')
+        self.burnedLoss: int = event_data.get('burnedLoss')
+        self.burnedItp: int = event_data.get('burnedItp')
+        self.burnedIfp: int = event_data.get('burnedIfp')
+
+    def __str__(self):
+        return json.dumps(self.__dict__, indent=4)
+
+
 
 
 class IAPHPool:
@@ -114,23 +191,77 @@ class IAPHPool:
 
     # Generated functions
     
-    def eventActivateRank(self, fromBlock:int=0, toBlock:int=0):
+    def event_activaterank_by_block(self, fromBlock:int=0, toBlock:int=0):
         return self.contract.events.ActivateRank().get_logs(fromBlock=self.web3.eth.block_number if fromBlock == 0 else fromBlock, toBlock=self.web3.eth.block_number if toBlock == 0 else toBlock)
 
-    def eventBorrow(self, fromBlock:int=0, toBlock:int=0):
+    def event_activaterank_by_tx(self, tx_hash:str):
+        receipt = self.web3.eth.get_transaction_receipt(tx_hash)
+        events = self.contract.events.ActivateRank().process_receipt(receipt)
+        if len(events) > 0:
+            return events[0].args
+        else:
+            raise Exception('Event not found in transaction')
+
+
+    def event_borrow_by_block(self, fromBlock:int=0, toBlock:int=0):
         return self.contract.events.Borrow().get_logs(fromBlock=self.web3.eth.block_number if fromBlock == 0 else fromBlock, toBlock=self.web3.eth.block_number if toBlock == 0 else toBlock)
 
-    def eventClaimForwInterest(self, fromBlock:int=0, toBlock:int=0):
+    def event_borrow_by_tx(self, tx_hash:str):
+        receipt = self.web3.eth.get_transaction_receipt(tx_hash)
+        events = self.contract.events.Borrow().process_receipt(receipt)
+        if len(events) > 0:
+            return events[0].args
+        else:
+            raise Exception('Event not found in transaction')
+
+
+    def event_claimforwinterest_by_block(self, fromBlock:int=0, toBlock:int=0):
         return self.contract.events.ClaimForwInterest().get_logs(fromBlock=self.web3.eth.block_number if fromBlock == 0 else fromBlock, toBlock=self.web3.eth.block_number if toBlock == 0 else toBlock)
 
-    def eventClaimTokenInterest(self, fromBlock:int=0, toBlock:int=0):
+    def event_claimforwinterest_by_tx(self, tx_hash:str):
+        receipt = self.web3.eth.get_transaction_receipt(tx_hash)
+        events = self.contract.events.ClaimForwInterest().process_receipt(receipt)
+        if len(events) > 0:
+            return events[0].args
+        else:
+            raise Exception('Event not found in transaction')
+
+
+    def event_claimtokeninterest_by_block(self, fromBlock:int=0, toBlock:int=0):
         return self.contract.events.ClaimTokenInterest().get_logs(fromBlock=self.web3.eth.block_number if fromBlock == 0 else fromBlock, toBlock=self.web3.eth.block_number if toBlock == 0 else toBlock)
 
-    def eventDeposit(self, fromBlock:int=0, toBlock:int=0):
+    def event_claimtokeninterest_by_tx(self, tx_hash:str):
+        receipt = self.web3.eth.get_transaction_receipt(tx_hash)
+        events = self.contract.events.ClaimTokenInterest().process_receipt(receipt)
+        if len(events) > 0:
+            return events[0].args
+        else:
+            raise Exception('Event not found in transaction')
+
+
+    def event_deposit_by_block(self, fromBlock:int=0, toBlock:int=0):
         return self.contract.events.Deposit().get_logs(fromBlock=self.web3.eth.block_number if fromBlock == 0 else fromBlock, toBlock=self.web3.eth.block_number if toBlock == 0 else toBlock)
 
-    def eventWithdraw(self, fromBlock:int=0, toBlock:int=0):
+    def event_deposit_by_tx(self, tx_hash:str):
+        receipt = self.web3.eth.get_transaction_receipt(tx_hash)
+        events = self.contract.events.Deposit().process_receipt(receipt)
+        if len(events) > 0:
+            return events[0].args
+        else:
+            raise Exception('Event not found in transaction')
+
+
+    def event_withdraw_by_block(self, fromBlock:int=0, toBlock:int=0):
         return self.contract.events.Withdraw().get_logs(fromBlock=self.web3.eth.block_number if fromBlock == 0 else fromBlock, toBlock=self.web3.eth.block_number if toBlock == 0 else toBlock)
+
+    def event_withdraw_by_tx(self, tx_hash:str):
+        receipt = self.web3.eth.get_transaction_receipt(tx_hash)
+        events = self.contract.events.Withdraw().process_receipt(receipt)
+        if len(events) > 0:
+            return events[0].args
+        else:
+            raise Exception('Event not found in transaction')
+
 
     def activateRank(self, nftId: int):
         return self.contract.functions.activateRank(nftId)

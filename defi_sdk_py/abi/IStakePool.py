@@ -1,6 +1,7 @@
 
 from web3 import Web3
 from typing import Tuple, Dict, List
+import json
 #Generate a Python class representing the Ethereum contract.
 #:param abi: The ABI (Application Binary Interface) of the contract.
 #:type abi: list
@@ -49,6 +50,26 @@ class RankInfo:
         })
 
 
+class StakeEvent:
+    def __init__(self, event_data):
+        self.sender: str = event_data.get('sender')
+        self.nftId: int = event_data.get('nftId')
+        self.amount: int = event_data.get('amount')
+
+    def __str__(self):
+        return json.dumps(self.__dict__, indent=4)
+
+
+class UnstakeEvent:
+    def __init__(self, event_data):
+        self.sender: str = event_data.get('sender')
+        self.nftId: int = event_data.get('nftId')
+        self.amount: int = event_data.get('amount')
+
+    def __str__(self):
+        return json.dumps(self.__dict__, indent=4)
+
+
 
 
 class IStakePool:
@@ -70,11 +91,29 @@ class IStakePool:
 
     # Generated functions
     
-    def eventStake(self, fromBlock:int=0, toBlock:int=0):
+    def event_stake_by_block(self, fromBlock:int=0, toBlock:int=0):
         return self.contract.events.Stake().get_logs(fromBlock=self.web3.eth.block_number if fromBlock == 0 else fromBlock, toBlock=self.web3.eth.block_number if toBlock == 0 else toBlock)
 
-    def eventUnstake(self, fromBlock:int=0, toBlock:int=0):
+    def event_stake_by_tx(self, tx_hash:str):
+        receipt = self.web3.eth.get_transaction_receipt(tx_hash)
+        events = self.contract.events.Stake().process_receipt(receipt)
+        if len(events) > 0:
+            return events[0].args
+        else:
+            raise Exception('Event not found in transaction')
+
+
+    def event_unstake_by_block(self, fromBlock:int=0, toBlock:int=0):
         return self.contract.events.Unstake().get_logs(fromBlock=self.web3.eth.block_number if fromBlock == 0 else fromBlock, toBlock=self.web3.eth.block_number if toBlock == 0 else toBlock)
+
+    def event_unstake_by_tx(self, tx_hash:str):
+        receipt = self.web3.eth.get_transaction_receipt(tx_hash)
+        events = self.contract.events.Unstake().process_receipt(receipt)
+        if len(events) > 0:
+            return events[0].args
+        else:
+            raise Exception('Event not found in transaction')
+
 
     def deprecateStakeInfo(self, nftId: int):
         return self.contract.functions.deprecateStakeInfo(nftId)
