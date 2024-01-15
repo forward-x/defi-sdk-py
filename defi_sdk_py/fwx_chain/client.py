@@ -1,5 +1,5 @@
 from ..chain_client import ChainClient
-from ..address import AddressConst
+from ..address_const import AddressConst
 from web3 import Web3
 from .tokens import Tokens
 from .pools import Pools

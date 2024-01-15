@@ -1,4 +1,4 @@
-from ..address import AddressConst
+from ..address_const import AddressConst
 ADDRESS = AddressConst(
     {
         "TOKEN": {

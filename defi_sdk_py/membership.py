@@ -3,7 +3,7 @@ from .abi.IMembership import *
 from .abi.IERC20Metadata import IERC20Metadata
 from .abi.IAPHPool import IAPHPool
 from .utils import parseEther, TransactionReceipt
-from .address import AddressConst
+from .address_const import AddressConst
 from typing import Union, List
 
 class Membership:

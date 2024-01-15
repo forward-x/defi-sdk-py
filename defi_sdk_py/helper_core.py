@@ -3,7 +3,7 @@ from .abi.IHelperCore import *
 from .abi.IERC20Metadata import IERC20Metadata
 from .abi.IHelperCore import IHelperCore
 from .utils import parseEther, TransactionReceipt
-from .address import AddressConst
+from .address_const import AddressConst
 from typing import Union, List
 import json
 

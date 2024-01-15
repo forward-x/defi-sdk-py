@@ -2,7 +2,7 @@ from web3 import Web3, types
 from .abi.IAPHCore import *
 from .abi.IERC20Metadata import IERC20Metadata
 from .utils import parseEther, TransactionReceipt
-from .address import AddressConst
+from .address_const import AddressConst
 from typing import Union
 
 class Core:

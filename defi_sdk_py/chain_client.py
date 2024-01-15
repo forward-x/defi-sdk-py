@@ -1,6 +1,6 @@
 from web3 import Web3, HTTPProvider, types
 from web3.middleware import geth_poa_middleware
-from .address import AddressConst
+from .address_const import AddressConst
 
 from .core import Core
 from .pool import Pool

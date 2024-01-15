@@ -1,5 +1,5 @@
 from ..chain_client import ChainClient
-from ..address import AddressConst
+from ..address_const import AddressConst
 from .tokens import Tokens
 from .pools import Pools
 class AVAXFUJIChainClient(ChainClient):
