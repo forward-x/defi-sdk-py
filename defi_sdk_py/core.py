@@ -13,6 +13,74 @@ class Core:
     def __str__(self)->str:
         return self.core.address
 
+    def adjust_collateral_event_tx(self, tx_hash:str)->AdjustCollateralEvent:
+        return self.core.event_adjustcollateral_by_tx(tx_hash)
+        
+    def adjust_collateral_event_block(self, from_block:int=0, to_block:int=0)->List[AdjustCollateralEvent]:
+        return [AdjustCollateralEvent(i) for i in self.core.event_adjustcollateral_by_block(from_block, to_block)]
+
+    def open_position_event_tx(self, tx_hash:str)->OpenPositionEvent:
+        return self.core.event_openposition_by_tx(tx_hash)
+        
+    def open_position_event_block(self, from_block:int=0, to_block:int=0)->List[OpenPositionEvent]:
+        return [OpenPositionEvent(i) for i in self.core.event_openposition_by_block(from_block, to_block)]
+
+    def close_position_event_tx(self, tx_hash:str)->ClosePositionEvent:
+        return self.core.event_closeposition_by_tx(tx_hash)
+        
+    def close_position_event_block(self, from_block:int=0, to_block:int=0)->List[ClosePositionEvent]:
+        return [ClosePositionEvent(i) for i in self.core.event_closeposition_by_block(from_block, to_block)]
+
+    def deposit_collateral_event_tx(self, tx_hash:str)->DepositCollateralEvent:
+        return self.core.depositcollateral_by_tx(tx_hash)
+        
+    def deposit_collateral_event_block(self, from_block:int=0, to_block:int=0)->List[DepositCollateralEvent]:
+        return [DepositCollateralEvent(i) for i in self.core.depositcollateral_by_block(from_block, to_block)]
+
+    def liquidate_loan_event_tx(self, tx_hash:str)->LiquidateLoanEvent:
+        return self.core.liquidateloan_by_tx(tx_hash)
+        
+    def liquidate_loan_event_block(self, from_block:int=0, to_block:int=0)->List[LiquidateLoanEvent]:
+        return [LiquidateLoanEvent(i) for i in self.core.liquidateloan_by_block(from_block, to_block)]
+
+    def liquidate_position_event_tx(self, tx_hash:str)->LiquidatePositionEvent:
+        return self.core.liquidateposition_by_tx(tx_hash)
+        
+    def liquidate_position_event_block(self, from_block:int=0, to_block:int=0)->List[LiquidatePositionEvent]:
+        return [LiquidatePositionEvent(i) for i in self.core.liquidateposition_by_block(from_block, to_block)]
+
+    def repay_event_tx(self, tx_hash:str)->RepayEvent:
+        return self.core.event_repay_by_tx(tx_hash)
+        
+    def repay_event_block(self, from_block:int=0, to_block:int=0)->List[RepayEvent]:
+        return [RepayEvent(i) for i in self.core.event_repay_by_block(from_block, to_block)]
+
+    def rollover_event_tx(self, tx_hash:str)->RolloverEvent:
+        return self.core.event_rollover_by_tx(tx_hash)
+        
+    def rollover_event_block(self, from_block:int=0, to_block:int=0)->List[RolloverEvent]:
+        return [RolloverEvent(i) for i in self.core.event_rollover_by_block(from_block, to_block)]
+
+    def update_wallet_event_tx(self, tx_hash:str)->UpdateWalletEvent:
+        return self.core.event_updatewallet_by_tx(tx_hash)
+        
+    def update_wallet_event_block(self, from_block:int=0, to_block:int=0)->List[UpdateWalletEvent]:
+        return [UpdateWalletEvent(i) for i in self.core.event_updatewallet_by_block(from_block, to_block)]
+
+    def update_loan_event_tx(self, tx_hash:str)->UpdateLoanEvent:
+        return self.core.event_updateloan_by_tx(tx_hash)
+        
+    def update_loan_event_block(self, from_block:int=0, to_block:int=0)->List[UpdateLoanEvent]:
+        return [UpdateLoanEvent(i) for i in self.core.event_updateloan_by_block(from_block, to_block)]
+
+    def withdraw_collateral_event_tx(self, tx_hash:str)->WithdrawCollateralEvent:
+        return self.core.event_withdrawcollateral_by_tx(tx_hash)
+        
+    def withdraw_collateral_event_block(self, from_block:int=0, to_block:int=0)->List[WithdrawCollateralEvent]:
+        return [WithdrawCollateralEvent(i) for i in self.core.event_withdrawcollateral_by_block(from_block, to_block)]
+
+
+
     # GETTER
     def check_staking_amount_sufficient(self, nft_id: int, new_amount: int, token: IERC20Metadata)->int:
         tokenAddress = token.__str__()
