@@ -1,5 +1,6 @@
 
 from web3 import Web3
+from web3.logs import STRICT, IGNORE, DISCARD, WARN
 from typing import Tuple, Dict, List
 import json
 #Generate a Python class representing the Ethereum contract.

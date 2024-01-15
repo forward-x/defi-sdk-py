@@ -1,5 +1,6 @@
 
 from web3 import Web3
+from web3.logs import STRICT, IGNORE, DISCARD, WARN
 from typing import Tuple, Dict, List
 import json
 #Generate a Python class representing the Ethereum contract.
@@ -56,7 +57,7 @@ class IERC20:
 
     def event_approval_by_tx(self, tx_hash:str):
         receipt = self.web3.eth.get_transaction_receipt(tx_hash)
-        events = self.contract.events.Approval().process_receipt(receipt)
+        events = self.contract.events.Approval().process_receipt(receipt, errors=DISCARD)
         if len(events) > 0:
             return events[0].args
         else:
@@ -68,7 +69,7 @@ class IERC20:
 
     def event_transfer_by_tx(self, tx_hash:str):
         receipt = self.web3.eth.get_transaction_receipt(tx_hash)
-        events = self.contract.events.Transfer().process_receipt(receipt)
+        events = self.contract.events.Transfer().process_receipt(receipt, errors=DISCARD)
         if len(events) > 0:
             return events[0].args
         else:

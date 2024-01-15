@@ -12,12 +12,12 @@ class StakePool:
         super(StakePool, self).__init__()
         self.stakepool:IStakePool = IStakePool(self.address_const.get_stakepool_address(), self.web3)
 
-    def stake(self, nft_id:int, amount:int, is_estimate:bool=False)->Union[TransactionReceipt, int]:
+    def stake(self, nft_id:int, amount:int, is_estimate:bool=False, gas:int=0, gas_price:int=0, nonce:int=0)->Union[TransactionReceipt, int]:
         amount = parseEther(self.web3, amount, self.TOKEN.FWX.decimals().call())
         contract_func = self.stakepool.stake(nft_id, amount)
         return self.send_transaction(contract_func,is_estimate=is_estimate, gas=gas, gas_price=gas_price, nonce=nonce)
 
-    def unstake(self, nft_id:int, amount:int, is_estimate:bool=False)->Union[TransactionReceipt, int]:
+    def unstake(self, nft_id:int, amount:int, is_estimate:bool=False, gas:int=0, gas_price:int=0, nonce:int=0)->Union[TransactionReceipt, int]:
         amount = parseEther(self.web3, amount, self.TOKEN.FWX.decimals().call())
         contract_func = self.stakepool.unstake(nft_id, amount)
         return self.send_transaction(contract_func,is_estimate=is_estimate, gas=gas, gas_price=gas_price, nonce=nonce)

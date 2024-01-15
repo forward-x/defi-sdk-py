@@ -1,5 +1,6 @@
 
 from web3 import Web3
+from web3.logs import STRICT, IGNORE, DISCARD, WARN
 from typing import Tuple, Dict, List
 import json
 #Generate a Python class representing the Ethereum contract.
@@ -95,7 +96,7 @@ class IMembership:
 
     def event_approval_by_tx(self, tx_hash:str):
         receipt = self.web3.eth.get_transaction_receipt(tx_hash)
-        events = self.contract.events.Approval().process_receipt(receipt)
+        events = self.contract.events.Approval().process_receipt(receipt, errors=DISCARD)
         if len(events) > 0:
             return events[0].args
         else:
@@ -107,7 +108,7 @@ class IMembership:
 
     def event_approvalforall_by_tx(self, tx_hash:str):
         receipt = self.web3.eth.get_transaction_receipt(tx_hash)
-        events = self.contract.events.ApprovalForAll().process_receipt(receipt)
+        events = self.contract.events.ApprovalForAll().process_receipt(receipt, errors=DISCARD)
         if len(events) > 0:
             return events[0].args
         else:
@@ -119,7 +120,7 @@ class IMembership:
 
     def event_setdefaultmembership_by_tx(self, tx_hash:str):
         receipt = self.web3.eth.get_transaction_receipt(tx_hash)
-        events = self.contract.events.SetDefaultMembership().process_receipt(receipt)
+        events = self.contract.events.SetDefaultMembership().process_receipt(receipt, errors=DISCARD)
         if len(events) > 0:
             return events[0].args
         else:
@@ -131,7 +132,7 @@ class IMembership:
 
     def event_setreferrer_by_tx(self, tx_hash:str):
         receipt = self.web3.eth.get_transaction_receipt(tx_hash)
-        events = self.contract.events.SetReferrer().process_receipt(receipt)
+        events = self.contract.events.SetReferrer().process_receipt(receipt, errors=DISCARD)
         if len(events) > 0:
             return events[0].args
         else:
@@ -143,7 +144,7 @@ class IMembership:
 
     def event_transfer_by_tx(self, tx_hash:str):
         receipt = self.web3.eth.get_transaction_receipt(tx_hash)
-        events = self.contract.events.Transfer().process_receipt(receipt)
+        events = self.contract.events.Transfer().process_receipt(receipt, errors=DISCARD)
         if len(events) > 0:
             return events[0].args
         else:
@@ -155,7 +156,7 @@ class IMembership:
 
     def event_updaterank_by_tx(self, tx_hash:str):
         receipt = self.web3.eth.get_transaction_receipt(tx_hash)
-        events = self.contract.events.UpdateRank().process_receipt(receipt)
+        events = self.contract.events.UpdateRank().process_receipt(receipt, errors=DISCARD)
         if len(events) > 0:
             return events[0].args
         else:

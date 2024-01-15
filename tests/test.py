@@ -60,8 +60,9 @@ get_next_borrowing_interest = clientFWX.get_next_borrowing_interest(clientFWX.PO
 
 # deposit = clientFWX.deposit(clientFWX.POOLS.WBNB, nft_id, 1,)
 
-tx_hash = "0x62461c427c4dcffca2a4881c3de6ac88b19c32522214f622a3a1605b52d2bb4c"
-deposit_event = clientFWX.deposit_event(clientFWX.POOLS.WBNB, tx_hash)
+# tx_hash = "0x62461c427c4dcffca2a4881c3de6ac88b19c32522214f622a3a1605b52d2bb4c"
+# deposit_event = clientFWX.deposit_event_tx(clientFWX.POOLS.WBNB, tx_hash)
+deposit_event = clientFWX.deposit_event_block(clientFWX.POOLS.WBNB, 6405763, 6405775)
 
 
 # deposit = clientFWX.deposit(clientFWX.POOLS.USDT, nft_id, 10)

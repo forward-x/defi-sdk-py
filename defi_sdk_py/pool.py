@@ -33,8 +33,41 @@ class Pool:
         return self.send_transaction(contract_func, value=amount if is_native else 0, is_estimate=is_estimate, gas=gas, gas_price=gas_price, nonce=nonce)
 
 
-    def deposit_event(self, pool:IAPHPool, tx_hash:str)->DepositEvent:
+    def deposit_event_tx(self, pool:IAPHPool, tx_hash:str)->DepositEvent:
         return pool.event_deposit_by_tx(tx_hash)
+        
+    def deposit_event_block(self, pool:IAPHPool, from_block:int=0, to_block:int=0)->List[DepositEvent]:
+        return [DepositEvent(i) for i in pool.event_deposit_by_block(from_block, to_block)]
+
+    def activate_rank_event_tx(self, pool:IAPHPool, tx_hash:str)->ActivateRankEvent:
+        return pool.event_activaterank_by_tx(tx_hash)
+        
+    def activate_rank_event_block(self, pool:IAPHPool, from_block:int=0, to_block:int=0)->List[ActivateRankEvent]:
+        return [ActivateRankEvent(i) for i in pool.event_activaterank_by_block(from_block, to_block)]
+
+    def borrow_event_tx(self, pool:IAPHPool, tx_hash:str)->BorrowEvent:
+        return pool.event_borrow_by_tx(tx_hash)
+        
+    def borrow_event_block(self, pool:IAPHPool, from_block:int=0, to_block:int=0)->List[BorrowEvent]:
+        return [BorrowEvent(i) for i in pool.event_borrow_by_block(from_block, to_block)]
+
+    def claim_forw_interest_event_tx(self, pool:IAPHPool, tx_hash:str)->ClaimForwInterestEvent:
+        return pool.event_claimforwinterest_by_tx(tx_hash)
+        
+    def claim_forw_interest_event_block(self, pool:IAPHPool, from_block:int=0, to_block:int=0)->List[ClaimForwInterestEvent]:
+        return [ClaimForwInterestEvent(i) for i in pool.event_claimforwinterest_by_block(from_block, to_block)]
+
+    def claim_token_interest_event_tx(self, pool:IAPHPool, tx_hash:str)->ClaimTokenInterestEvent:
+        return pool.event_claimtokeninterest_by_tx(tx_hash)
+        
+    def claim_token_interest_event_block(self, pool:IAPHPool, from_block:int=0, to_block:int=0)->List[ClaimTokenInterestEvent]:
+        return [ClaimForwInterestEvent(i) for i in pool.event_claimtokeninterest_by_block(from_block, to_block)]
+
+    def claim_withdraw_event_tx(self, pool:IAPHPool, tx_hash:str)->WithdrawEvent:
+        return pool.event_withdraw_by_tx(tx_hash)
+        
+    def claim_withdraw_event_block(self, pool:IAPHPool, from_block:int=0, to_block:int=0)->List[WithdrawEvent]:
+        return [ClaimForwInterestEvent(i) for i in pool.event_withdraw_by_block(from_block, to_block)]
 
     def withdraw(self, pool:IAPHPool, nft_id: int, amount: int, is_estimate=False, gas:int=0, gas_price:int=0, nonce:int=0)->Union[TransactionReceipt, int]:
         token:IERC20Metadata = IERC20Metadata(pool.tokenAddress().call(), self.web3)
