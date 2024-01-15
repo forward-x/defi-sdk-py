@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>defi_sdk_py.stake_pool &mdash; fwx-defi-python-sdk 1.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=0b546569"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            fwx-defi-python-sdk
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fwx-defi-python-sdk</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">defi_sdk_py.stake_pool</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for defi_sdk_py.stake_pool</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">web3</span> <span class="kn">import</span> <span class="n">Web3</span><span class="p">,</span> <span class="n">types</span>
+<span class="kn">from</span> <span class="nn">.abi.IStakePool</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.abi.IERC20Metadata</span> <span class="kn">import</span> <span class="n">IERC20Metadata</span>
+<span class="kn">from</span> <span class="nn">.abi.IAPHPool</span> <span class="kn">import</span> <span class="n">IAPHPool</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">parseEther</span><span class="p">,</span> <span class="n">TransactionReceipt</span>
+<span class="kn">from</span> <span class="nn">.address_const</span> <span class="kn">import</span> <span class="n">AddressConst</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+
+<div class="viewcode-block" id="StakePool"><a class="viewcode-back" href="../../defi_sdk_py.html#defi_sdk_py.stake_pool.StakePool">[docs]</a><span class="k">class</span> <span class="nc">StakePool</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">StakePool</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="p">:</span><span class="n">IStakePool</span> <span class="o">=</span> <span class="n">IStakePool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">address_const</span><span class="o">.</span><span class="n">get_stakepool_address</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+
+<div class="viewcode-block" id="StakePool.stake"><a class="viewcode-back" href="../../defi_sdk_py.html#defi_sdk_py.stake_pool.StakePool.stake">[docs]</a>    <span class="k">def</span> <span class="nf">stake</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">is_estimate</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gas</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">gas_price</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nonce</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Union</span><span class="p">[</span><span class="n">TransactionReceipt</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="n">amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOKEN</span><span class="o">.</span><span class="n">FWX</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">contract_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="o">.</span><span class="n">stake</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_transaction</span><span class="p">(</span><span class="n">contract_func</span><span class="p">,</span><span class="n">is_estimate</span><span class="o">=</span><span class="n">is_estimate</span><span class="p">,</span> <span class="n">gas</span><span class="o">=</span><span class="n">gas</span><span class="p">,</span> <span class="n">gas_price</span><span class="o">=</span><span class="n">gas_price</span><span class="p">,</span> <span class="n">nonce</span><span class="o">=</span><span class="n">nonce</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="StakePool.unstake"><a class="viewcode-back" href="../../defi_sdk_py.html#defi_sdk_py.stake_pool.StakePool.unstake">[docs]</a>    <span class="k">def</span> <span class="nf">unstake</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">is_estimate</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gas</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">gas_price</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nonce</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Union</span><span class="p">[</span><span class="n">TransactionReceipt</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="n">amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOKEN</span><span class="o">.</span><span class="n">FWX</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">contract_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="o">.</span><span class="n">unstake</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_transaction</span><span class="p">(</span><span class="n">contract_func</span><span class="p">,</span><span class="n">is_estimate</span><span class="o">=</span><span class="n">is_estimate</span><span class="p">,</span> <span class="n">gas</span><span class="o">=</span><span class="n">gas</span><span class="p">,</span> <span class="n">gas_price</span><span class="o">=</span><span class="n">gas_price</span><span class="p">,</span> <span class="n">nonce</span><span class="o">=</span><span class="n">nonce</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="StakePool.rank_infos"><a class="viewcode-back" href="../../defi_sdk_py.html#defi_sdk_py.stake_pool.StakePool.rank_infos">[docs]</a>    <span class="k">def</span> <span class="nf">rank_infos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rank_number</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">RankInfo</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">RankInfo</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="o">.</span><span class="n">rankInfos</span><span class="p">(</span><span class="n">rank_number</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()))</span></div>
+
+<div class="viewcode-block" id="StakePool.rank_len"><a class="viewcode-back" href="../../defi_sdk_py.html#defi_sdk_py.stake_pool.StakePool.rank_len">[docs]</a>    <span class="k">def</span> <span class="nf">rank_len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="o">.</span><span class="n">rankLen</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="StakePool.pool_start_timestamp"><a class="viewcode-back" href="../../defi_sdk_py.html#defi_sdk_py.stake_pool.StakePool.pool_start_timestamp">[docs]</a>    <span class="k">def</span> <span class="nf">pool_start_timestamp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="o">.</span><span class="n">poolStartTimestamp</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="StakePool.settle_interval"><a class="viewcode-back" href="../../defi_sdk_py.html#defi_sdk_py.stake_pool.StakePool.settle_interval">[docs]</a>    <span class="k">def</span> <span class="nf">settle_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="o">.</span><span class="n">settleInterval</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="StakePool.settle_period"><a class="viewcode-back" href="../../defi_sdk_py.html#defi_sdk_py.stake_pool.StakePool.settle_period">[docs]</a>    <span class="k">def</span> <span class="nf">settle_period</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="o">.</span><span class="n">settlePeriod</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="StakePool.get_stake_info"><a class="viewcode-back" href="../../defi_sdk_py.html#defi_sdk_py.stake_pool.StakePool.get_stake_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_stake_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">StakeInfo</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">StakeInfo</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="o">.</span><span class="n">getStakeInfo</span><span class="p">(</span><span class="n">nft_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()))</span></div>
+    
+<div class="viewcode-block" id="StakePool.get_max_ltv"><a class="viewcode-back" href="../../defi_sdk_py.html#defi_sdk_py.stake_pool.StakePool.get_max_ltv">[docs]</a>    <span class="k">def</span> <span class="nf">get_max_ltv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="o">.</span><span class="n">getMaxLTVBonus</span><span class="p">(</span><span class="n">nft_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, fwx/akio777.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
