@@ -35,3 +35,6 @@ class TransactionReceipt:
 
 def parseEther(web3:Web3,value, decimal:int=18):
     return web3.to_wei(Decimal(value * (10**decimal)), 'wei')
+
+def MAX_UINT_256()->int:
+    return (2**256) - 1
