@@ -10,11 +10,12 @@ from ..library import Library
 from ..helper_core import HelperCore
 from ..helper_membership_and_stake_pool import HelperMembershipAndStakePool
 from ..helper_pool import HelperPool
+from ..helper_future_trade import HelperFutureTrade
 
-from ..utils import *
+from ..utils import Day, Decimal, Hour, MAX_UINT_256, parseEther,TransactionReceipt
 from ..abi.IERC20Metadata import IERC20Metadata
 from typing import Union
-class ChainClient(Library, Core, Pool, Membership, StakePool, HelperCore, HelperMembershipAndStakePool, HelperPool):
+class ChainClient(Library, Core, Pool, Membership, StakePool, HelperCore, HelperMembershipAndStakePool, HelperPool, HelperFutureTrade):
     """
     Client for interacting with a blockchain via the Web3.py library.
 
@@ -123,3 +124,17 @@ class ChainClient(Library, Core, Pool, Membership, StakePool, HelperCore, Helper
             return tx_receipt
         except Exception as err:
             raise err
+    
+    # Day, Decimal, Hour, MAX_UINT_256, parseEther
+
+    def day(self):
+        return Day()
+
+    def hour(self):
+        return Hour()
+    
+    def max_uint_256(self):
+        return MAX_UINT_256()
+    
+    def parseEther(self, value:int, decimal:int=18):
+        return parseEther(self.web3, value, decimal)

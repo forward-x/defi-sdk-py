@@ -330,7 +330,17 @@ class Core:
         :param underlying_token: The underlying token's metadata
         :return: The pair information as a Pair object
         """
-        return Pair(self.core.pairs(collateral_token.__str__(), underlying_token.__str__()).call())
+        pair_byte = self.hash_pair(collateral_token.__str__(), underlying_token.__str__())
+        return pair_byte
+
+    def pairs_by_byte(self, pair_byte)->Pair:
+        """
+        Retrieves the pair information for given pair_byte (hashed from library.hash_pair)
+        
+        :param pair_byte: The string of pair byte
+        :return: The pair information as a Pair object
+        """
+        return Pair(*self.core.pairs(pair_byte).call())
 
     # ACTION
     def deposit_collateral(self, nft_id: int, collateral_token_address: IERC20Metadata, underlying_token_address: IERC20Metadata, amount: int, is_estimate=False, gas:int=0, gas_price:int=0, nonce:int=0)->Union[TransactionReceipt, int]:

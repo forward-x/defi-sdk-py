@@ -32,7 +32,8 @@ get_refferrer = clientFWX.get_refferrer(nft_id=nft_id);
 # mint = clientFWX.mint(nft_id)
 # set_default_membership = clientFWX.set_default_membership(nft_id)
 
-
+pair_USDT_WBNB = clientFWX.pairs(clientFWX.TOKEN.USDT, clientFWX.TOKEN.WBNB)
+pair_USDT_WBNB = clientFWX.pairs_by_byte(pair_USDT_WBNB)
 pair_USDT_WBNB = clientFWX.hash_pair(clientFWX.TOKEN.USDT, clientFWX.TOKEN.WBNB)
 wallets = clientFWX.wallets(nft_id, pair_USDT_WBNB)
 trading_collateral_whitelist = clientFWX.trading_collateral_whitelist(clientFWX.TOKEN.USDT)
@@ -158,3 +159,110 @@ calculate_borrowing_interest = clientFWX.calculate_borrowing_interest(
 
 get_pool_info = clientFWX.get_pool_info(clientFWX.POOLS.USDT, 0.00015)
 get_lending_info = clientFWX.get_lending_info(clientFWX.POOLS.USDT, 5)
+get_unrealized_pnl = clientFWX.get_unrealized_pnl(5, pair_USDT_WBNB)
+get_entry_price = clientFWX.get_entry_price(
+    nft_id=nft_id,
+    pair_byte=pair_USDT_WBNB,
+    is_long=True,
+    contract_size=5,
+    expected_rate=315,
+    slip_page=5
+)
+get_balance_details = clientFWX.get_balance_details(nft_id, pair_USDT_WBNB)
+get_position_margin = clientFWX.get_margin_after_adjust_collateral(
+    nft_id,
+    pair_USDT_WBNB,
+    True,
+    100
+)
+
+get_max_withdrawal = clientFWX.get_max_withdrawal(nft_id, pair_USDT_WBNB)
+
+get_liquidation_price = clientFWX.get_liquidation_price(nft_id, pair_USDT_WBNB)
+
+get_opening_fee = clientFWX.get_opening_fee(
+    nft_id=nft_id,
+    pair_byte=pair_USDT_WBNB,
+    is_long=True,
+    contract_size=5,
+    expected_rate=315,
+    slip_page=5
+)
+
+get_closing_fee = clientFWX.get_closing_fee(
+    nft_id=nft_id,
+    pair_byte=pair_USDT_WBNB,
+    contract_size=5,
+)
+
+get_required_collateral = clientFWX.get_required_collateral(
+    nft_id=nft_id,
+    pair_byte=pair_USDT_WBNB,
+    is_long=True,
+    contract_size=5,
+    leverage=5,
+    expected_rate=315,
+    slip_page=5
+)
+
+get_average_price = clientFWX.get_average_price(
+    nft_id=nft_id,
+    pair_byte=pair_USDT_WBNB,
+    is_long=True,
+    contract_size=5,
+    expected_rate=315,
+    slip_page=5
+)
+
+get_pnl_after_close_position = clientFWX.get_pnl_after_close_position(
+    nft_id=nft_id,
+    pair_byte=pair_USDT_WBNB,
+    contract_size=5,
+)
+
+get_margin_after_close_position = clientFWX.get_margin_after_close_position(
+    nft_id=nft_id,
+    pair_byte=pair_USDT_WBNB,
+    contract_size=5,
+)
+
+get_balance_after_open_position = clientFWX.get_balance_after_open_position(
+    nft_id=nft_id,
+    pair_byte=pair_USDT_WBNB,
+    is_long=True,
+    contract_size=5,
+    expected_rate=315,
+    slip_page=5
+)
+
+get_liquidate_price_after_open_position = clientFWX.get_liquidate_price_after_open_position(
+    nft_id=nft_id,
+    pair_byte=pair_USDT_WBNB,
+    is_long=True,
+    contract_size=5,
+    expected_rate=315,
+    slip_page=5
+)
+
+get_margin_after_open_position = clientFWX.get_margin_after_open_position(
+    nft_id=nft_id,
+    pair_byte=pair_USDT_WBNB,
+    is_long=True,
+    contract_size=5,
+    expected_rate=315,
+    slip_page=5
+)
+
+get_max_contract_size = clientFWX.get_max_contract_size(
+    nft_id=nft_id,
+    pair_byte=pair_USDT_WBNB,
+    is_long=True,
+    leverage=5,
+    expected_rate=315,
+    slip_page=5
+)
+
+get_position_states = clientFWX.get_position_states(nft_id, 1, 10)
+
+get_all_active_positions = clientFWX.get_all_active_positions(nft_id)
+print(get_all_active_positions[0])
