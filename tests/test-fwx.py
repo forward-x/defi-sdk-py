@@ -139,6 +139,22 @@ get_nft_list = clientFWX.get_nft_list(clientFWX.address)
 get_rank_info_list = clientFWX.get_rank_info_list()
 get_stake_info = clientFWX.get_stake_info(5)
 
-# print(clientFWX.TOKEN.BTC.balanceOf("0xC63dD209434079005E51D34e2b22118d75D1cA0C"))
-# event_filter = clientFWX.TOKEN.BTC.eventTransfer(0,0)
-# print(event_filter)
+claimble_interest = clientFWX.claimble_interest(clientFWX.POOLS.USDT, 5)
+claimble_interest_membership = clientFWX.claimble_interest_membership(clientFWX.POOLS.USDT, 5)
+
+get_next_lending_forw_interest = clientFWX.get_next_lending_forw_interest(clientFWX.POOLS.USDT, 100, 0.00015)
+get_next_lending_interest = clientFWX.get_next_lending_interest(clientFWX.POOLS.USDT, 10000)
+
+get_interest_amount_by_deposit_amount = clientFWX.get_interest_amount_by_deposit_amount(clientFWX.POOLS.USDT, 10000, 86400)
+get_deposit_amount_by_interest_amount = clientFWX.get_deposit_amount_by_interest_amount(clientFWX.POOLS.USDT, 10000, 86400)
+
+calculate_borrowing_interest = clientFWX.calculate_borrowing_interest(
+    clientFWX.POOLS.USDT,
+    1000,
+    10,
+    clientFWX.TOKEN.WBNB,
+    86400
+)
+
+get_pool_info = clientFWX.get_pool_info(clientFWX.POOLS.USDT, 0.00015)
+get_lending_info = clientFWX.get_lending_info(clientFWX.POOLS.USDT, 5)

@@ -38,3 +38,9 @@ def parseEther(web3:Web3,value, decimal:int=18):
 
 def MAX_UINT_256()->int:
     return (2**256) - 1
+
+def Day()->int:
+    return 86400
+
+def Hour()->int:
+    return 3600
