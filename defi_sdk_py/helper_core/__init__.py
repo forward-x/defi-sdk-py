@@ -1,10 +1,7 @@
-from web3 import Web3, types
 from ..abi.IHelperCore import *
 from ..abi.IERC20Metadata import IERC20Metadata
 from ..abi.IHelperCore import IHelperCore
-from ..utils import parseEther, TransactionReceipt
-from ..address_const import AddressConst
-from typing import Union, List
+from ..utils import parseEther
 import json
 
 class ActiveLoans:
@@ -39,6 +36,32 @@ class LoanCollateralInfo:
             "removable_collateral" : self.removableCollateral
         })
 
+class SettleBorrowInfo:
+
+    def __init__(self, settledBorrowAmount, settledLTV, rate, precision,) -> None:
+        self.settledBorrowAmount = settledBorrowAmount
+        self.settledLTV = settledLTV
+        self.rate = rate
+        self.precision = precision
+    def __str__(self):
+        return str({
+            "settledBorrowAmount" : self.settledBorrowAmount,
+            "settledLTV" : self.settledLTV,
+            "rate" : self.rate,
+            "precision" : self.precision
+        })
+class BorrowAmountInfo:
+
+    def __init__(self, maxBorrowAmount, maxCollateralAmount) -> None:
+        self.maxBorrowAmount = maxBorrowAmount
+        self.maxCollateralAmount = maxCollateralAmount
+
+    def __str__(self):
+        return str({
+            "maxBorrowAmount" : self.maxBorrowAmount,
+            "maxCollateralAmount" : self.maxCollateralAmount
+        })
+
 class HelperCore:
 
     def __init__(self):
@@ -69,3 +92,60 @@ class HelperCore:
 
     def get_loan_collateral_info(self, nft_id:int, loan_id:int)->LoanCollateralInfo:
         return LoanCollateralInfo(*(self.helper_core.getLoanCollateralInfo(nft_id, loan_id).call()))
+    
+    def get_loan_current_ltv(self, nft_id:int, loan_id:int)->int:
+        return self.helper_core.getLoanCurrentLTV(loan_id, nft_id).call()
+    
+    def is_loan_liquidatable(self, loan_id:int)->bool:
+        return self.helper_core.isLoanLiquidable(loan_id).call()
+    
+    def get_settle_borrow_info(self, nft_id:int, loan_id:int)->SettleBorrowInfo:
+        return SettleBorrowInfo(*(self.helper_core.getSettleBorrowInfo(nft_id, loan_id).call()))
+    
+    def get_pernalt_fee(self, nft_id:int, loan_id:int)->int:
+        return self.helper_core.getPenaltyFee(nft_id, loan_id).call()
+
+    def calculate_max_repay(self, nft_id:int, loan_id:int, gap_time_borrow_interest_second:int )->int:
+        return self.helper_core.calculateMaxRepay(nft_id, loan_id, gap_time_borrow_interest_second).call()
+        
+    def calculate_ltv_for_borrow(self, nft_id:int, loan_id:int, borrow_amount:int, borrow_token:IERC20Metadata, collateral_amount:int, collateral_token:IERC20Metadata)->int:
+        borrow_amount = parseEther(self.web3, borrow_amount, borrow_token.decimals().call())
+        collateral_sent_amount = parseEther(self.web3, collateral_amount, collateral_token.decimals().call())
+        return self.helper_core.calculateLTVForBorrow(
+            nft_id,
+            loan_id,
+            borrow_amount,
+            borrow_token.address,
+            collateral_sent_amount,
+            collateral_token.address
+        ).call()
+    
+    def calculate_ltv_for_repay(self, nft_id:int, loan_id:int, repay_amount:int, is_only_interest:bool)->int:
+        loan = self.loans(nft_id, loan_id)
+        borrow_token:IERC20Metadata = IERC20Metadata(loan.borrowTokenAddress, self.web3)
+        repay_amount = parseEther(self.web3, repay_amount, borrow_token.decimals().call())
+        return self.helper_core.calculateLTVForRepay(nft_id, loan_id, repay_amount, is_only_interest).call()
+
+    def calculate_ltv_for_adjust_collateral(self, nft_id:int, loan_id:int, adjust_amount:int, is_add:bool)->int:
+        loan:Loan = self.loans(nft_id, loan_id)
+        collateral_token:IERC20Metadata = IERC20Metadata(loan.collateralTokenAddress, self.web3)
+        adjust_amount = parseEther(self.web3, adjust_amount, collateral_token.decimals().call())
+        return self.helper_core.calculateLTVForAdjustColla(nft_id, loan_id, adjust_amount, is_add).call()
+    
+    def calculate_borrow_amount(self, nft_id:int, loan_id:int, borrow_amount:int, borrow_token:IERC20Metadata, collateral_sent_amount:int, collateral_token:IERC20Metadata, ltv:int)->BorrowAmountInfo:
+        borrow_amount = parseEther(self.web3, borrow_amount, borrow_token.decimals().call())
+        collateral_sent_amount = parseEther(self.web3, collateral_sent_amount, collateral_token.decimals().call())
+        ltv = parseEther(self.web3, ltv)
+        return BorrowAmountInfo(*(self.helper_core.calculateBorrowAmount(
+            nft_id,
+            loan_id,
+            borrow_amount,
+            borrow_token.address,
+            collateral_sent_amount,
+            collateral_token.address,
+            ltv
+        ).call()))
+    
+
+
+

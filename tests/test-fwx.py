@@ -92,12 +92,52 @@ rank_len = clientFWX.rank_len()
 pool_start_timestamp = clientFWX.pool_start_timestamp()
 settle_interval = clientFWX.settle_interval()
 settle_period = clientFWX.settle_period()
-get_stake_info = clientFWX.get_stake_info(17)
-get_max_ltv = clientFWX.get_max_ltv(17)
+get_stake_info = clientFWX.get_stake_info(nft_id)
+get_max_ltv = clientFWX.get_max_ltv(nft_id)
 
-get_active_loans = clientFWX.get_active_loans(17, 1, 10)
-get_loan_borrow_amount = clientFWX.get_loan_borrow_amount(17,3)
-get_loan_collateral_info = clientFWX.get_loan_collateral_info(17,3)
+get_active_loans = clientFWX.get_active_loans(nft_id, 1, 10)
+get_loan_borrow_amount = clientFWX.get_loan_borrow_amount(nft_id,3)
+get_loan_collateral_info = clientFWX.get_loan_collateral_info(nft_id,3)
+# print(get_active_loans.active_loan_infos[0])
+get_settle_borrow_info = clientFWX.get_settle_borrow_info(nft_id, 1)
+
+calculate_ltv_for_borrow = clientFWX.calculate_ltv_for_borrow(
+    nft_id,
+    1,
+    1000,
+    clientFWX.TOKEN.USDT,
+    100,
+    clientFWX.TOKEN.WBNB
+    )
+
+calculate_ltv_for_repay = clientFWX.calculate_ltv_for_repay(
+    nft_id,
+    1,
+    5000,
+    False
+)
+
+calculate_ltv_for_adjust_collateral = clientFWX.calculate_ltv_for_adjust_collateral(
+    nft_id,
+    1,
+    10,
+    True
+)
+
+calculate_borrow_amount = clientFWX.calculate_borrow_amount(
+    nft_id,
+    1,
+    1000,
+    clientFWX.TOKEN.USDT,
+    10,
+    clientFWX.TOKEN.WBNB,
+    30
+)
+
+get_stake_pool_next_settle_timestamp = clientFWX.get_stake_pool_next_settle_timestamp(clientFWX.stakepool)
+get_nft_list = clientFWX.get_nft_list(clientFWX.address)
+get_rank_info_list = clientFWX.get_rank_info_list()
+get_stake_info = clientFWX.get_stake_info(5)
 
 # print(clientFWX.TOKEN.BTC.balanceOf("0xC63dD209434079005E51D34e2b22118d75D1cA0C"))
 # event_filter = clientFWX.TOKEN.BTC.eventTransfer(0,0)

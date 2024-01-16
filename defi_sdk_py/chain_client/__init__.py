@@ -8,11 +8,12 @@ from ..membership import Membership
 from ..stake_pool import StakePool
 from ..library import Library
 from ..helper_core import HelperCore
+from ..helper_membership_and_stake_pool import HelperMembershipAndStakePool
 
 from ..utils import TransactionReceipt,parseEther
 from ..abi.IERC20Metadata import IERC20Metadata
 from typing import Union
-class ChainClient(Library, Core, Pool, Membership, StakePool, HelperCore):
+class ChainClient(Library, Core, Pool, Membership, StakePool, HelperCore, HelperMembershipAndStakePool):
     """
     Client for interacting with a blockchain via the Web3.py library.
 
