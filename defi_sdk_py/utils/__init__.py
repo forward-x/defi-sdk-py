@@ -2,7 +2,15 @@ from decimal import Decimal
 from web3 import Web3
 
 class TransactionReceipt:
+    """
+    A class representing a transaction receipt, containing details of a confirmed transaction.
+    """
     def __init__(self, transactionHash, transactionIndex, blockHash, blockNumber, fromAddress, toAddress, cumulativeGasUsed, gasUsed, contractAddress, logs, status, logsBloom):
+        """
+        Initializes a TransactionReceipt object with transaction details.
+
+        :param kwargs: A dictionary of transaction receipt details
+        """
         self.transactionHash = transactionHash
         self.transactionIndex = transactionIndex
         self.blockHash = blockHash
@@ -34,6 +42,14 @@ class TransactionReceipt:
         )
 
 def parseEther(web3:Web3,value, decimal:int=18):
+    """
+    Parses the given value into its equivalent in wei, considering the token's decimals.
+
+    :param web3: An instance of a Web3 connection
+    :param value: The value to parse
+    :param decimals: The number of decimals the token uses
+    :return: The parsed value in wei as an integer
+    """
     return web3.to_wei(Decimal(value * (10**decimal)), 'wei')
 
 def MAX_UINT_256()->int:
