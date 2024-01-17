@@ -20,7 +20,9 @@
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="defi_sdk_py.helper_core package" href="defi_sdk_py.helper_core.html" />
+    <link rel="prev" title="defi_sdk_py.core package" href="defi_sdk_py.core.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,33 +44,31 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">defi_sdk_py.fwx_chain package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-defi_sdk_py.fwx_chain.client">defi_sdk_py.fwx_chain.client module</a><ul>
-<li><a class="reference internal" href="#defi_sdk_py.fwx_chain.client.FWXChainClient"><code class="docutils literal notranslate"><span class="pre">FWXChainClient</span></code></a><ul>
-<li><a class="reference internal" href="#defi_sdk_py.fwx_chain.client.FWXChainClient.TOKEN"><code class="docutils literal notranslate"><span class="pre">FWXChainClient.TOKEN</span></code></a></li>
-<li><a class="reference internal" href="#defi_sdk_py.fwx_chain.client.FWXChainClient.POOLS"><code class="docutils literal notranslate"><span class="pre">FWXChainClient.POOLS</span></code></a></li>
-<li><a class="reference internal" href="#defi_sdk_py.fwx_chain.client.FWXChainClient.native"><code class="docutils literal notranslate"><span class="pre">FWXChainClient.native</span></code></a></li>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.html">defi_sdk_py package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.chain_client.html">defi_sdk_py.chain_client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.avax_fuji_chain.html">defi_sdk_py.avax_fuji_chain package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">defi_sdk_py.fwx_chain package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-defi_sdk_py.fwx_chain.client">defi_sdk_py.fwx_chain.client module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#defi_sdk_py.fwx_chain.client.FWXChainClient"><code class="docutils literal notranslate"><span class="pre">FWXChainClient</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-defi_sdk_py.fwx_chain.pools">defi_sdk_py.fwx_chain.pools module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#defi_sdk_py.fwx_chain.pools.Pools"><code class="docutils literal notranslate"><span class="pre">Pools</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-defi_sdk_py.fwx_chain.pre_address">defi_sdk_py.fwx_chain.pre_address module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-defi_sdk_py.fwx_chain.tokens">defi_sdk_py.fwx_chain.tokens module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#defi_sdk_py.fwx_chain.tokens.Tokens"><code class="docutils literal notranslate"><span class="pre">Tokens</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-defi_sdk_py.fwx_chain">Module contents</a></li>
 </ul>
 </li>
 </ul>
-</li>
-<li><a class="reference internal" href="#module-defi_sdk_py.fwx_chain.pools">defi_sdk_py.fwx_chain.pools module</a><ul>
-<li><a class="reference internal" href="#defi_sdk_py.fwx_chain.pools.Pools"><code class="docutils literal notranslate"><span class="pre">Pools</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-defi_sdk_py.fwx_chain.pre_address">defi_sdk_py.fwx_chain.pre_address module</a></li>
-<li><a class="reference internal" href="#module-defi_sdk_py.fwx_chain.tokens">defi_sdk_py.fwx_chain.tokens module</a><ul>
-<li><a class="reference internal" href="#defi_sdk_py.fwx_chain.tokens.Tokens"><code class="docutils literal notranslate"><span class="pre">Tokens</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-defi_sdk_py.fwx_chain">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</div>
+
         </div>
       </div>
     </nav>
@@ -83,6 +83,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="defi_sdk_py.html">defi_sdk_py package</a></li>
       <li class="breadcrumb-item active">defi_sdk_py.fwx_chain package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/defi_sdk_py.fwx_chain.rst.txt" rel="nofollow"> View page source</a>
@@ -104,61 +105,6 @@
 <dt class="sig sig-object py" id="defi_sdk_py.fwx_chain.client.FWXChainClient">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">defi_sdk_py.fwx_chain.client.</span></span><span class="sig-name descname"><span class="pre">FWXChainClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rpc_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">private_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">address_const</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="defi_sdk_py.address_const.html#defi_sdk_py.address_const.AddressConst" title="defi_sdk_py.address_const.AddressConst"><span class="pre">AddressConst</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxFeePerGas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxPriorityFeePerGas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/defi_sdk_py/fwx_chain/client.html#FWXChainClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.fwx_chain.client.FWXChainClient" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="defi_sdk_py.chain_client.html#defi_sdk_py.chain_client.ChainClient" title="defi_sdk_py.chain_client.ChainClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChainClient</span></code></a></p>
-<p>FWXChainClient is a client for interacting with the FWX blockchain.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>rpc_url</strong> (<em>str</em>) – The URL of the FWX blockchain RPC endpoint.</p></li>
-<li><p><strong>private_key</strong> (<em>str</em>) – The private key used for interacting with the blockchain.</p></li>
-<li><p><strong>address_const</strong> (<a class="reference internal" href="defi_sdk_py.address_const.html#defi_sdk_py.address_const.AddressConst" title="defi_sdk_py.address_const.AddressConst"><em>AddressConst</em></a>) – An instance of AddressConst containing relevant address constants.</p></li>
-<li><p><strong>maxFeePerGas</strong> (<em>int</em>) – The maximum fee per gas for transactions.</p></li>
-<li><p><strong>maxPriorityFeePerGas</strong> (<em>int</em>) – The maximum priority fee per gas for transactions.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="defi_sdk_py.fwx_chain.client.FWXChainClient.TOKEN">
-<span class="sig-name descname"><span class="pre">TOKEN</span></span><a class="headerlink" href="#defi_sdk_py.fwx_chain.client.FWXChainClient.TOKEN" title="Permalink to this definition"></a></dt>
-<dd><p>An instance of Tokens for interacting with tokens on the FWX blockchain.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="defi_sdk_py.avax_fuji_chain.html#defi_sdk_py.avax_fuji_chain.tokens.Tokens" title="defi_sdk_py.avax_fuji_chain.tokens.Tokens">Tokens</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="defi_sdk_py.fwx_chain.client.FWXChainClient.POOLS">
-<span class="sig-name descname"><span class="pre">POOLS</span></span><a class="headerlink" href="#defi_sdk_py.fwx_chain.client.FWXChainClient.POOLS" title="Permalink to this definition"></a></dt>
-<dd><p>An instance of Pools for interacting with liquidity pools on the FWX blockchain.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="defi_sdk_py.avax_fuji_chain.html#defi_sdk_py.avax_fuji_chain.pools.Pools" title="defi_sdk_py.avax_fuji_chain.pools.Pools">Pools</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="defi_sdk_py.fwx_chain.client.FWXChainClient.native">
-<span class="sig-name descname"><span class="pre">native</span></span><a class="headerlink" href="#defi_sdk_py.fwx_chain.client.FWXChainClient.native" title="Permalink to this definition"></a></dt>
-<dd><p>Represents the native token (WBNB) on the FWX blockchain.</p>
-</dd></dl>
-
-<p class="rubric">Example</p>
-<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python
-from defi_sdk_py import FWXChainClient</p>
-<p># Instantiate FWX Chain Client
-fwx_client = FWXChainClient(</p>
-<blockquote>
-<div><p>rpc_url=”<a class="reference external" href="https://fwx.example.com/rpc">https://fwx.example.com/rpc</a>”,
-private_key=”your_private_key”,
-address_const=your_address_const_instance,
-maxFeePerGas=your_max_fee_per_gas,
-maxPriorityFeePerGas=your_max_priority_fee_per_gas</p>
-</div></blockquote>
-<section id="id5">
-<h3>)<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
-</section>
 </dd></dl>
 
 </section>
@@ -191,7 +137,10 @@ maxPriorityFeePerGas=your_max_priority_fee_per_gas</p>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="defi_sdk_py.core.html" class="btn btn-neutral float-left" title="defi_sdk_py.core package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="defi_sdk_py.helper_core.html" class="btn btn-neutral float-right" title="defi_sdk_py.helper_core package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
