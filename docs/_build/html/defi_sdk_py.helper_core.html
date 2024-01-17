@@ -47,13 +47,24 @@
 <li><a class="reference internal" href="#">defi_sdk_py.helper_core package</a><ul>
 <li><a class="reference internal" href="#module-defi_sdk_py.helper_core">Module contents</a><ul>
 <li><a class="reference internal" href="#defi_sdk_py.helper_core.ActiveLoans"><code class="docutils literal notranslate"><span class="pre">ActiveLoans</span></code></a></li>
+<li><a class="reference internal" href="#defi_sdk_py.helper_core.BorrowAmountInfo"><code class="docutils literal notranslate"><span class="pre">BorrowAmountInfo</span></code></a></li>
 <li><a class="reference internal" href="#defi_sdk_py.helper_core.HelperCore"><code class="docutils literal notranslate"><span class="pre">HelperCore</span></code></a><ul>
+<li><a class="reference internal" href="#defi_sdk_py.helper_core.HelperCore.calculate_borrow_amount"><code class="docutils literal notranslate"><span class="pre">HelperCore.calculate_borrow_amount()</span></code></a></li>
+<li><a class="reference internal" href="#defi_sdk_py.helper_core.HelperCore.calculate_ltv_for_adjust_collateral"><code class="docutils literal notranslate"><span class="pre">HelperCore.calculate_ltv_for_adjust_collateral()</span></code></a></li>
+<li><a class="reference internal" href="#defi_sdk_py.helper_core.HelperCore.calculate_ltv_for_borrow"><code class="docutils literal notranslate"><span class="pre">HelperCore.calculate_ltv_for_borrow()</span></code></a></li>
+<li><a class="reference internal" href="#defi_sdk_py.helper_core.HelperCore.calculate_ltv_for_repay"><code class="docutils literal notranslate"><span class="pre">HelperCore.calculate_ltv_for_repay()</span></code></a></li>
+<li><a class="reference internal" href="#defi_sdk_py.helper_core.HelperCore.calculate_max_repay"><code class="docutils literal notranslate"><span class="pre">HelperCore.calculate_max_repay()</span></code></a></li>
 <li><a class="reference internal" href="#defi_sdk_py.helper_core.HelperCore.get_active_loans"><code class="docutils literal notranslate"><span class="pre">HelperCore.get_active_loans()</span></code></a></li>
 <li><a class="reference internal" href="#defi_sdk_py.helper_core.HelperCore.get_loan_borrow_amount"><code class="docutils literal notranslate"><span class="pre">HelperCore.get_loan_borrow_amount()</span></code></a></li>
 <li><a class="reference internal" href="#defi_sdk_py.helper_core.HelperCore.get_loan_collateral_info"><code class="docutils literal notranslate"><span class="pre">HelperCore.get_loan_collateral_info()</span></code></a></li>
+<li><a class="reference internal" href="#defi_sdk_py.helper_core.HelperCore.get_loan_current_ltv"><code class="docutils literal notranslate"><span class="pre">HelperCore.get_loan_current_ltv()</span></code></a></li>
+<li><a class="reference internal" href="#defi_sdk_py.helper_core.HelperCore.get_pernalty_fee"><code class="docutils literal notranslate"><span class="pre">HelperCore.get_pernalty_fee()</span></code></a></li>
+<li><a class="reference internal" href="#defi_sdk_py.helper_core.HelperCore.get_settle_borrow_info"><code class="docutils literal notranslate"><span class="pre">HelperCore.get_settle_borrow_info()</span></code></a></li>
+<li><a class="reference internal" href="#defi_sdk_py.helper_core.HelperCore.is_loan_liquidatable"><code class="docutils literal notranslate"><span class="pre">HelperCore.is_loan_liquidatable()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#defi_sdk_py.helper_core.LoanCollateralInfo"><code class="docutils literal notranslate"><span class="pre">LoanCollateralInfo</span></code></a></li>
+<li><a class="reference internal" href="#defi_sdk_py.helper_core.SettleBorrowInfo"><code class="docutils literal notranslate"><span class="pre">SettleBorrowInfo</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -92,26 +103,192 @@
 <dt class="sig sig-object py" id="defi_sdk_py.helper_core.ActiveLoans">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">defi_sdk_py.helper_core.</span></span><span class="sig-name descname"><span class="pre">ActiveLoans</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">active_loans</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">active_loan_infos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interest_owed_per_day</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_cursor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/defi_sdk_py/helper_core.html#ActiveLoans"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.helper_core.ActiveLoans" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a collection of active loans along with their corresponding information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>active_loans</strong> – A list of active Loan objects</p></li>
+<li><p><strong>active_loan_infos</strong> – A list of ActiveLoanInfo objects with detailed loan information</p></li>
+<li><p><strong>interest_owed_per_day</strong> – A list of interest owed per day for each loan</p></li>
+<li><p><strong>new_cursor</strong> – The new cursor position for pagination</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="defi_sdk_py.helper_core.BorrowAmountInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">defi_sdk_py.helper_core.</span></span><span class="sig-name descname"><span class="pre">BorrowAmountInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maxBorrowAmount</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxCollateralAmount</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/defi_sdk_py/helper_core.html#BorrowAmountInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.helper_core.BorrowAmountInfo" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents the information about the maximum borrowable amount and maximum collateral amount.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>maxBorrowAmount</strong> – The maximum amount that can be borrowed</p></li>
+<li><p><strong>maxCollateralAmount</strong> – The maximum amount of collateral that can be used</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="defi_sdk_py.helper_core.HelperCore">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">defi_sdk_py.helper_core.</span></span><span class="sig-name descname"><span class="pre">HelperCore</span></span><a class="reference internal" href="_modules/defi_sdk_py/helper_core.html#HelperCore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.helper_core.HelperCore" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>HelperCore provides utility functions to assist with loan and collateral calculations.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.helper_core.HelperCore.calculate_borrow_amount">
+<span class="sig-name descname"><span class="pre">calculate_borrow_amount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loan_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">borrow_amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">borrow_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">IERC20Metadata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collateral_sent_amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collateral_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">IERC20Metadata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ltv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#defi_sdk_py.helper_core.BorrowAmountInfo" title="defi_sdk_py.helper_core.BorrowAmountInfo"><span class="pre">BorrowAmountInfo</span></a></span></span><a class="reference internal" href="_modules/defi_sdk_py/helper_core.html#HelperCore.calculate_borrow_amount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.helper_core.HelperCore.calculate_borrow_amount" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the maximum amount that can be borrowed and the corresponding collateral amount required based on a specified LTV ratio.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nft_id</strong> – The NFT ID associated with the loan</p></li>
+<li><p><strong>loan_id</strong> – The loan ID</p></li>
+<li><p><strong>borrow_amount</strong> – The amount intended to borrow</p></li>
+<li><p><strong>borrow_token</strong> – The token metadata of the borrowing token</p></li>
+<li><p><strong>collateral_sent_amount</strong> – The amount of collateral provided</p></li>
+<li><p><strong>collateral_token</strong> – The token metadata of the collateral token</p></li>
+<li><p><strong>ltv</strong> – The desired LTV ratio for the loan</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A BorrowAmountInfo object containing the calculated maximum borrow amount and collateral amount</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.helper_core.HelperCore.calculate_ltv_for_adjust_collateral">
+<span class="sig-name descname"><span class="pre">calculate_ltv_for_adjust_collateral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loan_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjust_amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_add</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/helper_core.html#HelperCore.calculate_ltv_for_adjust_collateral"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.helper_core.HelperCore.calculate_ltv_for_adjust_collateral" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the LTV ratio for a loan after adjusting the collateral by a specific amount.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nft_id</strong> – The NFT ID associated with the loan</p></li>
+<li><p><strong>loan_id</strong> – The loan ID</p></li>
+<li><p><strong>adjust_amount</strong> – The amount by which the collateral is being adjusted</p></li>
+<li><p><strong>is_add</strong> – A boolean indicating whether the collateral is being added (True) or removed (False)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The calculated LTV ratio after the collateral adjustment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.helper_core.HelperCore.calculate_ltv_for_borrow">
+<span class="sig-name descname"><span class="pre">calculate_ltv_for_borrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loan_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">borrow_amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">borrow_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">IERC20Metadata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collateral_amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collateral_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">IERC20Metadata</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/helper_core.html#HelperCore.calculate_ltv_for_borrow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.helper_core.HelperCore.calculate_ltv_for_borrow" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the loan-to-value (LTV) ratio for a loan when borrowing a specific amount.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nft_id</strong> – The NFT ID associated with the loan</p></li>
+<li><p><strong>loan_id</strong> – The loan ID</p></li>
+<li><p><strong>borrow_amount</strong> – The amount intended to borrow</p></li>
+<li><p><strong>borrow_token</strong> – The token metadata of the borrowing token</p></li>
+<li><p><strong>collateral_amount</strong> – The amount of collateral provided</p></li>
+<li><p><strong>collateral_token</strong> – The token metadata of the collateral token</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The calculated LTV ratio for the proposed borrow scenario</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.helper_core.HelperCore.calculate_ltv_for_repay">
+<span class="sig-name descname"><span class="pre">calculate_ltv_for_repay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loan_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repay_amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_only_interest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/helper_core.html#HelperCore.calculate_ltv_for_repay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.helper_core.HelperCore.calculate_ltv_for_repay" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the LTV ratio for a loan after repaying a specific amount.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nft_id</strong> – The NFT ID associated with the loan</p></li>
+<li><p><strong>loan_id</strong> – The loan ID</p></li>
+<li><p><strong>repay_amount</strong> – The amount intended to repay</p></li>
+<li><p><strong>is_only_interest</strong> – A boolean indicating whether only the interest is being repaid</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The calculated LTV ratio after the repayment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.helper_core.HelperCore.calculate_max_repay">
+<span class="sig-name descname"><span class="pre">calculate_max_repay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loan_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gap_time_borrow_interest_second</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/helper_core.html#HelperCore.calculate_max_repay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.helper_core.HelperCore.calculate_max_repay" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the maximum repayable amount for a loan given the gap time for borrow interest.
+:param nft_id: The NFT ID associated with the loan
+:param loan_id: The loan ID
+:param gap_time_borrow_interest_second: The gap time in seconds for calculating borrow interest
+:return: The maximum repayable amount for the loan</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="defi_sdk_py.helper_core.HelperCore.get_active_loans">
 <span class="sig-name descname"><span class="pre">get_active_loans</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cursor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_per_page</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#defi_sdk_py.helper_core.ActiveLoans" title="defi_sdk_py.helper_core.ActiveLoans"><span class="pre">ActiveLoans</span></a></span></span><a class="reference internal" href="_modules/defi_sdk_py/helper_core.html#HelperCore.get_active_loans"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.helper_core.HelperCore.get_active_loans" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieves the active loans for a given NFT ID.
+:param nft_id: The NFT ID to query for active loans
+:param cursor: The cursor position for pagination
+:param result_per_page: The number of results per page
+:return: An ActiveLoans object containing a list of active loans and related information</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="defi_sdk_py.helper_core.HelperCore.get_loan_borrow_amount">
 <span class="sig-name descname"><span class="pre">get_loan_borrow_amount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loan_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/helper_core.html#HelperCore.get_loan_borrow_amount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.helper_core.HelperCore.get_loan_borrow_amount" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieves the borrow amount for a specific loan.
+:param nft_id: The NFT ID associated with the loan
+:param loan_id: The loan ID
+:return: The borrow amount for the loan</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="defi_sdk_py.helper_core.HelperCore.get_loan_collateral_info">
 <span class="sig-name descname"><span class="pre">get_loan_collateral_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loan_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#defi_sdk_py.helper_core.LoanCollateralInfo" title="defi_sdk_py.helper_core.LoanCollateralInfo"><span class="pre">LoanCollateralInfo</span></a></span></span><a class="reference internal" href="_modules/defi_sdk_py/helper_core.html#HelperCore.get_loan_collateral_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.helper_core.HelperCore.get_loan_collateral_info" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieves the collateral information for a specific loan.
+:param nft_id: The NFT ID associated with the loan
+:param loan_id: The loan ID
+:return: A LoanCollateralInfo object containing the collateral information for the loan</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.helper_core.HelperCore.get_loan_current_ltv">
+<span class="sig-name descname"><span class="pre">get_loan_current_ltv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loan_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/helper_core.html#HelperCore.get_loan_current_ltv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.helper_core.HelperCore.get_loan_current_ltv" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the current loan-to-value (LTV) ratio for a specific loan.
+:param nft_id: The NFT ID associated with the loan
+:param loan_id: The loan ID
+:return: The current LTV ratio for the loan</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.helper_core.HelperCore.get_pernalty_fee">
+<span class="sig-name descname"><span class="pre">get_pernalty_fee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loan_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/helper_core.html#HelperCore.get_pernalty_fee"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.helper_core.HelperCore.get_pernalty_fee" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the penalty fee for a specific loan.
+:param nft_id: The NFT ID associated with the loan
+:param loan_id: The loan ID
+:return: The penalty fee for the loan</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.helper_core.HelperCore.get_settle_borrow_info">
+<span class="sig-name descname"><span class="pre">get_settle_borrow_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loan_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#defi_sdk_py.helper_core.SettleBorrowInfo" title="defi_sdk_py.helper_core.SettleBorrowInfo"><span class="pre">SettleBorrowInfo</span></a></span></span><a class="reference internal" href="_modules/defi_sdk_py/helper_core.html#HelperCore.get_settle_borrow_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.helper_core.HelperCore.get_settle_borrow_info" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the information required to settle a borrow for a specific loan.
+:param nft_id: The NFT ID associated with the loan
+:param loan_id: The loan ID
+:return: A SettleBorrowInfo object containing the settlement information for the loan</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.helper_core.HelperCore.is_loan_liquidatable">
+<span class="sig-name descname"><span class="pre">is_loan_liquidatable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loan_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/helper_core.html#HelperCore.is_loan_liquidatable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.helper_core.HelperCore.is_loan_liquidatable" title="Permalink to this definition"></a></dt>
+<dd><p>Determines whether a loan is liquidatable.
+:param loan_id: The loan ID to check
+:return: True if the loan is liquidatable, False otherwise</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -119,6 +296,32 @@
 <dt class="sig sig-object py" id="defi_sdk_py.helper_core.LoanCollateralInfo">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">defi_sdk_py.helper_core.</span></span><span class="sig-name descname"><span class="pre">LoanCollateralInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minimumCollateral</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">removableCollateral</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/defi_sdk_py/helper_core.html#LoanCollateralInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.helper_core.LoanCollateralInfo" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents the collateral information for a loan.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>minimumCollateral</strong> – The minimum required collateral for the loan</p></li>
+<li><p><strong>removableCollateral</strong> – The amount of collateral that can be removed without affecting the loan</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="defi_sdk_py.helper_core.SettleBorrowInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">defi_sdk_py.helper_core.</span></span><span class="sig-name descname"><span class="pre">SettleBorrowInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settledBorrowAmount</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settledLTV</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/defi_sdk_py/helper_core.html#SettleBorrowInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.helper_core.SettleBorrowInfo" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents the information required to settle a borrow.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>settledBorrowAmount</strong> – The amount of the borrow that has been settled</p></li>
+<li><p><strong>settledLTV</strong> – The loan-to-value ratio after settlement</p></li>
+<li><p><strong>rate</strong> – The rate used in settlement calculations</p></li>
+<li><p><strong>precision</strong> – The precision of the rate</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

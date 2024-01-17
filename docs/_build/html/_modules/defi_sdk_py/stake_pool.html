@@ -77,40 +77,108 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
 
 <div class="viewcode-block" id="StakePool"><a class="viewcode-back" href="../../defi_sdk_py.stake_pool.html#defi_sdk_py.stake_pool.StakePool">[docs]</a><span class="k">class</span> <span class="nc">StakePool</span><span class="p">:</span>
-
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    StakePool provides functionality to interact with the stake pool smart contracts.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the StakePool by setting up the stake pool contract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">StakePool</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="p">:</span><span class="n">IStakePool</span> <span class="o">=</span> <span class="n">IStakePool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">address_const</span><span class="o">.</span><span class="n">get_stakepool_address</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
 
 <div class="viewcode-block" id="StakePool.stake"><a class="viewcode-back" href="../../defi_sdk_py.stake_pool.html#defi_sdk_py.stake_pool.StakePool.stake">[docs]</a>    <span class="k">def</span> <span class="nf">stake</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">is_estimate</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gas</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">gas_price</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nonce</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Union</span><span class="p">[</span><span class="n">TransactionReceipt</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stakes an amount for a given NFT ID in the stake pool.</span>
+
+<span class="sd">        :param nft_id: The NFT ID to stake for</span>
+<span class="sd">        :param amount: The amount to stake</span>
+<span class="sd">        :param is_estimate: If True, returns the estimated gas for the transaction</span>
+<span class="sd">        :param gas: The gas limit for the transaction</span>
+<span class="sd">        :param gas_price: The gas price for the transaction</span>
+<span class="sd">        :param nonce: The nonce for the transaction</span>
+<span class="sd">        :return: The transaction receipt if not estimating gas, otherwise the estimated gas</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOKEN</span><span class="o">.</span><span class="n">FWX</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
         <span class="n">contract_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="o">.</span><span class="n">stake</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_transaction</span><span class="p">(</span><span class="n">contract_func</span><span class="p">,</span><span class="n">is_estimate</span><span class="o">=</span><span class="n">is_estimate</span><span class="p">,</span> <span class="n">gas</span><span class="o">=</span><span class="n">gas</span><span class="p">,</span> <span class="n">gas_price</span><span class="o">=</span><span class="n">gas_price</span><span class="p">,</span> <span class="n">nonce</span><span class="o">=</span><span class="n">nonce</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="StakePool.unstake"><a class="viewcode-back" href="../../defi_sdk_py.stake_pool.html#defi_sdk_py.stake_pool.StakePool.unstake">[docs]</a>    <span class="k">def</span> <span class="nf">unstake</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">is_estimate</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gas</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">gas_price</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nonce</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Union</span><span class="p">[</span><span class="n">TransactionReceipt</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Unstakes an amount for a given NFT ID from the stake pool.</span>
+
+<span class="sd">        :param nft_id: The NFT ID to unstake from</span>
+<span class="sd">        :param amount: The amount to unstake</span>
+<span class="sd">        :param is_estimate: If True, returns the estimated gas for the transaction</span>
+<span class="sd">        :param gas: The gas limit for the transaction</span>
+<span class="sd">        :param gas_price: The gas price for the transaction</span>
+<span class="sd">        :param nonce: The nonce for the transaction</span>
+<span class="sd">        :return: The transaction receipt if not estimating gas, otherwise the estimated gas</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOKEN</span><span class="o">.</span><span class="n">FWX</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
         <span class="n">contract_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="o">.</span><span class="n">unstake</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_transaction</span><span class="p">(</span><span class="n">contract_func</span><span class="p">,</span><span class="n">is_estimate</span><span class="o">=</span><span class="n">is_estimate</span><span class="p">,</span> <span class="n">gas</span><span class="o">=</span><span class="n">gas</span><span class="p">,</span> <span class="n">gas_price</span><span class="o">=</span><span class="n">gas_price</span><span class="p">,</span> <span class="n">nonce</span><span class="o">=</span><span class="n">nonce</span><span class="p">)</span></div>
     
 <div class="viewcode-block" id="StakePool.rank_infos"><a class="viewcode-back" href="../../defi_sdk_py.stake_pool.html#defi_sdk_py.stake_pool.StakePool.rank_infos">[docs]</a>    <span class="k">def</span> <span class="nf">rank_infos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rank_number</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">RankInfo</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the rank information for a given rank number in the stake pool.</span>
+
+<span class="sd">        :param rank_number: The rank number to query for information</span>
+<span class="sd">        :return: A RankInfo object containing the rank details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">RankInfo</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="o">.</span><span class="n">rankInfos</span><span class="p">(</span><span class="n">rank_number</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()))</span></div>
 
 <div class="viewcode-block" id="StakePool.rank_len"><a class="viewcode-back" href="../../defi_sdk_py.stake_pool.html#defi_sdk_py.stake_pool.StakePool.rank_len">[docs]</a>    <span class="k">def</span> <span class="nf">rank_len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the total number of ranks available in the stake pool.</span>
+
+<span class="sd">        :return: The total number of ranks as an integer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="o">.</span><span class="n">rankLen</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="StakePool.pool_start_timestamp"><a class="viewcode-back" href="../../defi_sdk_py.stake_pool.html#defi_sdk_py.stake_pool.StakePool.pool_start_timestamp">[docs]</a>    <span class="k">def</span> <span class="nf">pool_start_timestamp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the start timestamp of the stake pool.</span>
+
+<span class="sd">        :return: The start timestamp of the pool as an integer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="o">.</span><span class="n">poolStartTimestamp</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="StakePool.settle_interval"><a class="viewcode-back" href="../../defi_sdk_py.stake_pool.html#defi_sdk_py.stake_pool.StakePool.settle_interval">[docs]</a>    <span class="k">def</span> <span class="nf">settle_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the settlement interval for the stake pool.</span>
+
+<span class="sd">        :return: The settlement interval as an integer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="o">.</span><span class="n">settleInterval</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="StakePool.settle_period"><a class="viewcode-back" href="../../defi_sdk_py.stake_pool.html#defi_sdk_py.stake_pool.StakePool.settle_period">[docs]</a>    <span class="k">def</span> <span class="nf">settle_period</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the settlement period for the stake pool.</span>
+
+<span class="sd">        :return: The settlement period as an integer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="o">.</span><span class="n">settlePeriod</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
     
 <div class="viewcode-block" id="StakePool.get_stake_info"><a class="viewcode-back" href="../../defi_sdk_py.stake_pool.html#defi_sdk_py.stake_pool.StakePool.get_stake_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_stake_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">StakeInfo</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the stake information for a given NFT ID in the stake pool.</span>
+
+<span class="sd">        :param nft_id: The NFT ID to query for stake information</span>
+<span class="sd">        :return: A StakeInfo object containing the stake details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">StakeInfo</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="o">.</span><span class="n">getStakeInfo</span><span class="p">(</span><span class="n">nft_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()))</span></div>
     
 <div class="viewcode-block" id="StakePool.get_max_ltv"><a class="viewcode-back" href="../../defi_sdk_py.stake_pool.html#defi_sdk_py.stake_pool.StakePool.get_max_ltv">[docs]</a>    <span class="k">def</span> <span class="nf">get_max_ltv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the maximum loan-to-value (LTV) bonus for a given NFT ID in the stake pool.</span>
+
+<span class="sd">        :param nft_id: The NFT ID to query for the maximum LTV bonus</span>
+<span class="sd">        :return: The maximum LTV bonus as an integer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span><span class="o">.</span><span class="n">getMaxLTVBonus</span><span class="p">(</span><span class="n">nft_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div></div>
 </pre></div>
 

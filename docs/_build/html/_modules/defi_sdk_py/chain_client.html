@@ -78,11 +78,14 @@
 <span class="kn">from</span> <span class="nn">..stake_pool</span> <span class="kn">import</span> <span class="n">StakePool</span>
 <span class="kn">from</span> <span class="nn">..library</span> <span class="kn">import</span> <span class="n">Library</span>
 <span class="kn">from</span> <span class="nn">..helper_core</span> <span class="kn">import</span> <span class="n">HelperCore</span>
+<span class="kn">from</span> <span class="nn">..helper_membership_and_stake_pool</span> <span class="kn">import</span> <span class="n">HelperMembershipAndStakePool</span>
+<span class="kn">from</span> <span class="nn">..helper_pool</span> <span class="kn">import</span> <span class="n">HelperPool</span>
+<span class="kn">from</span> <span class="nn">..helper_future_trade</span> <span class="kn">import</span> <span class="n">HelperFutureTrade</span>
 
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">TransactionReceipt</span><span class="p">,</span><span class="n">parseEther</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">Day</span><span class="p">,</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">Hour</span><span class="p">,</span> <span class="n">MAX_UINT_256</span><span class="p">,</span> <span class="n">parseEther</span><span class="p">,</span><span class="n">TransactionReceipt</span>
 <span class="kn">from</span> <span class="nn">..abi.IERC20Metadata</span> <span class="kn">import</span> <span class="n">IERC20Metadata</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
-<div class="viewcode-block" id="ChainClient"><a class="viewcode-back" href="../../defi_sdk_py.chain_client.html#defi_sdk_py.chain_client.ChainClient">[docs]</a><span class="k">class</span> <span class="nc">ChainClient</span><span class="p">(</span><span class="n">Library</span><span class="p">,</span> <span class="n">Core</span><span class="p">,</span> <span class="n">Pool</span><span class="p">,</span> <span class="n">Membership</span><span class="p">,</span> <span class="n">StakePool</span><span class="p">,</span> <span class="n">HelperCore</span><span class="p">):</span>
+<div class="viewcode-block" id="ChainClient"><a class="viewcode-back" href="../../defi_sdk_py.chain_client.html#defi_sdk_py.chain_client.ChainClient">[docs]</a><span class="k">class</span> <span class="nc">ChainClient</span><span class="p">(</span><span class="n">Library</span><span class="p">,</span> <span class="n">Core</span><span class="p">,</span> <span class="n">Pool</span><span class="p">,</span> <span class="n">Membership</span><span class="p">,</span> <span class="n">StakePool</span><span class="p">,</span> <span class="n">HelperCore</span><span class="p">,</span> <span class="n">HelperMembershipAndStakePool</span><span class="p">,</span> <span class="n">HelperPool</span><span class="p">,</span> <span class="n">HelperFutureTrade</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Client for interacting with a blockchain via the Web3.py library.</span>
 
@@ -190,7 +193,21 @@
             <span class="p">)</span>
             <span class="k">return</span> <span class="n">tx_receipt</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">err</span></div></div>
+            <span class="k">raise</span> <span class="n">err</span></div>
+    
+    <span class="c1"># Day, Decimal, Hour, MAX_UINT_256, parseEther</span>
+
+<div class="viewcode-block" id="ChainClient.day"><a class="viewcode-back" href="../../defi_sdk_py.chain_client.html#defi_sdk_py.chain_client.ChainClient.day">[docs]</a>    <span class="k">def</span> <span class="nf">day</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Day</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ChainClient.hour"><a class="viewcode-back" href="../../defi_sdk_py.chain_client.html#defi_sdk_py.chain_client.ChainClient.hour">[docs]</a>    <span class="k">def</span> <span class="nf">hour</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Hour</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="ChainClient.max_uint_256"><a class="viewcode-back" href="../../defi_sdk_py.chain_client.html#defi_sdk_py.chain_client.ChainClient.max_uint_256">[docs]</a>    <span class="k">def</span> <span class="nf">max_uint_256</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">MAX_UINT_256</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="ChainClient.parseEther"><a class="viewcode-back" href="../../defi_sdk_py.chain_client.html#defi_sdk_py.chain_client.ChainClient.parseEther">[docs]</a>    <span class="k">def</span> <span class="nf">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">decimal</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">18</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">decimal</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

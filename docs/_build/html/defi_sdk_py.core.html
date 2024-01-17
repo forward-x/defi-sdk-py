@@ -70,6 +70,7 @@
 <li><a class="reference internal" href="#defi_sdk_py.core.Core.open_position_event_block"><code class="docutils literal notranslate"><span class="pre">Core.open_position_event_block()</span></code></a></li>
 <li><a class="reference internal" href="#defi_sdk_py.core.Core.open_position_event_tx"><code class="docutils literal notranslate"><span class="pre">Core.open_position_event_tx()</span></code></a></li>
 <li><a class="reference internal" href="#defi_sdk_py.core.Core.pairs"><code class="docutils literal notranslate"><span class="pre">Core.pairs()</span></code></a></li>
+<li><a class="reference internal" href="#defi_sdk_py.core.Core.pairs_by_byte"><code class="docutils literal notranslate"><span class="pre">Core.pairs_by_byte()</span></code></a></li>
 <li><a class="reference internal" href="#defi_sdk_py.core.Core.positions"><code class="docutils literal notranslate"><span class="pre">Core.positions()</span></code></a></li>
 <li><a class="reference internal" href="#defi_sdk_py.core.Core.positions_states"><code class="docutils literal notranslate"><span class="pre">Core.positions_states()</span></code></a></li>
 <li><a class="reference internal" href="#defi_sdk_py.core.Core.repay"><code class="docutils literal notranslate"><span class="pre">Core.repay()</span></code></a></li>
@@ -514,6 +515,20 @@
 <li><p><strong>collateral_token</strong> – The collateral token’s metadata</p></li>
 <li><p><strong>underlying_token</strong> – The underlying token’s metadata</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The pair information as a Pair object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.core.Core.pairs_by_byte">
+<span class="sig-name descname"><span class="pre">pairs_by_byte</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair_byte</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Pair</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/core.html#Core.pairs_by_byte"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.core.Core.pairs_by_byte" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the pair information for given pair_byte (hashed from library.hash_pair)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pair_byte</strong> – The string of pair byte</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The pair information as a Pair object</p>

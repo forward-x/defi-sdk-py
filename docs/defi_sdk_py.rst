@@ -13,6 +13,9 @@ Subpackages
    defi_sdk_py.core
    defi_sdk_py.fwx_chain
    defi_sdk_py.helper_core
+   defi_sdk_py.helper_future_trade
+   defi_sdk_py.helper_membership_and_stake_pool
+   defi_sdk_py.helper_pool
    defi_sdk_py.library
    defi_sdk_py.membership
    defi_sdk_py.pool

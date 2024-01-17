@@ -96,50 +96,134 @@
 <dt class="sig sig-object py" id="defi_sdk_py.stake_pool.StakePool">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">defi_sdk_py.stake_pool.</span></span><span class="sig-name descname"><span class="pre">StakePool</span></span><a class="reference internal" href="_modules/defi_sdk_py/stake_pool.html#StakePool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.stake_pool.StakePool" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>StakePool provides functionality to interact with the stake pool smart contracts.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="defi_sdk_py.stake_pool.StakePool.get_max_ltv">
 <span class="sig-name descname"><span class="pre">get_max_ltv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/stake_pool.html#StakePool.get_max_ltv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.stake_pool.StakePool.get_max_ltv" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieves the maximum loan-to-value (LTV) bonus for a given NFT ID in the stake pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nft_id</strong> – The NFT ID to query for the maximum LTV bonus</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The maximum LTV bonus as an integer</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="defi_sdk_py.stake_pool.StakePool.get_stake_info">
 <span class="sig-name descname"><span class="pre">get_stake_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StakeInfo</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/stake_pool.html#StakePool.get_stake_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.stake_pool.StakePool.get_stake_info" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieves the stake information for a given NFT ID in the stake pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nft_id</strong> – The NFT ID to query for stake information</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A StakeInfo object containing the stake details</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="defi_sdk_py.stake_pool.StakePool.pool_start_timestamp">
 <span class="sig-name descname"><span class="pre">pool_start_timestamp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/stake_pool.html#StakePool.pool_start_timestamp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.stake_pool.StakePool.pool_start_timestamp" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieves the start timestamp of the stake pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The start timestamp of the pool as an integer</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="defi_sdk_py.stake_pool.StakePool.rank_infos">
 <span class="sig-name descname"><span class="pre">rank_infos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rank_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">RankInfo</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/stake_pool.html#StakePool.rank_infos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.stake_pool.StakePool.rank_infos" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieves the rank information for a given rank number in the stake pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rank_number</strong> – The rank number to query for information</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A RankInfo object containing the rank details</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="defi_sdk_py.stake_pool.StakePool.rank_len">
 <span class="sig-name descname"><span class="pre">rank_len</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/stake_pool.html#StakePool.rank_len"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.stake_pool.StakePool.rank_len" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieves the total number of ranks available in the stake pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The total number of ranks as an integer</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="defi_sdk_py.stake_pool.StakePool.settle_interval">
 <span class="sig-name descname"><span class="pre">settle_interval</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/stake_pool.html#StakePool.settle_interval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.stake_pool.StakePool.settle_interval" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieves the settlement interval for the stake pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The settlement interval as an integer</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="defi_sdk_py.stake_pool.StakePool.settle_period">
 <span class="sig-name descname"><span class="pre">settle_period</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/stake_pool.html#StakePool.settle_period"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.stake_pool.StakePool.settle_period" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieves the settlement period for the stake pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The settlement period as an integer</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="defi_sdk_py.stake_pool.StakePool.stake">
 <span class="sig-name descname"><span class="pre">stake</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_estimate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas_price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonce</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="defi_sdk_py.utils.html#defi_sdk_py.utils.TransactionReceipt" title="defi_sdk_py.utils.TransactionReceipt"><span class="pre">TransactionReceipt</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/stake_pool.html#StakePool.stake"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.stake_pool.StakePool.stake" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Stakes an amount for a given NFT ID in the stake pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nft_id</strong> – The NFT ID to stake for</p></li>
+<li><p><strong>amount</strong> – The amount to stake</p></li>
+<li><p><strong>is_estimate</strong> – If True, returns the estimated gas for the transaction</p></li>
+<li><p><strong>gas</strong> – The gas limit for the transaction</p></li>
+<li><p><strong>gas_price</strong> – The gas price for the transaction</p></li>
+<li><p><strong>nonce</strong> – The nonce for the transaction</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transaction receipt if not estimating gas, otherwise the estimated gas</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="defi_sdk_py.stake_pool.StakePool.unstake">
 <span class="sig-name descname"><span class="pre">unstake</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_estimate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas_price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonce</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="defi_sdk_py.utils.html#defi_sdk_py.utils.TransactionReceipt" title="defi_sdk_py.utils.TransactionReceipt"><span class="pre">TransactionReceipt</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/stake_pool.html#StakePool.unstake"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.stake_pool.StakePool.unstake" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Unstakes an amount for a given NFT ID from the stake pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nft_id</strong> – The NFT ID to unstake from</p></li>
+<li><p><strong>amount</strong> – The amount to unstake</p></li>
+<li><p><strong>is_estimate</strong> – If True, returns the estimated gas for the transaction</p></li>
+<li><p><strong>gas</strong> – The gas limit for the transaction</p></li>
+<li><p><strong>gas_price</strong> – The gas price for the transaction</p></li>
+<li><p><strong>nonce</strong> – The nonce for the transaction</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transaction receipt if not estimating gas, otherwise the estimated gas</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

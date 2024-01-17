@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>defi_sdk_py.helper_pool &mdash; fwx-defi-python-sdk 1.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=0b546569"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            fwx-defi-python-sdk
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fwx-defi-python-sdk</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">defi_sdk_py.helper_pool</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for defi_sdk_py.helper_pool</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">..abi.IHelperCore</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">..abi.IHelperPool</span> <span class="kn">import</span> <span class="n">IHelperPool</span>
+<span class="kn">from</span> <span class="nn">..abi.IStakePool</span> <span class="kn">import</span> <span class="n">RankInfo</span>
+<span class="kn">from</span> <span class="nn">..abi.IAPHPool</span> <span class="kn">import</span> <span class="n">IAPHPool</span>
+<span class="kn">from</span> <span class="nn">..abi.IERC20Metadata</span> <span class="kn">import</span> <span class="n">IERC20Metadata</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">parseEther</span><span class="p">,</span><span class="n">Day</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<div class="viewcode-block" id="ClaimableInterest"><a class="viewcode-back" href="../../defi_sdk_py.helper_pool.html#defi_sdk_py.helper_pool.ClaimableInterest">[docs]</a><span class="k">class</span> <span class="nc">ClaimableInterest</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the claimable interest for a stake in a pool.</span>
+
+<span class="sd">    :param tokenInterest: The claimable token interest amount</span>
+<span class="sd">    :param forwInterest: The claimable forward interest amount</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokenInterest</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">forwInterest</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tokenInterest</span> <span class="o">=</span> <span class="n">tokenInterest</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">forwInterest</span> <span class="o">=</span> <span class="n">forwInterest</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">({</span>
+            <span class="s2">&quot;tokenInterest&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenInterest</span><span class="p">,</span>
+            <span class="s2">&quot;forwInterest&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">forwInterest</span>
+        <span class="p">})</span></div>
+
+<div class="viewcode-block" id="BorrowingInterest"><a class="viewcode-back" href="../../defi_sdk_py.helper_pool.html#defi_sdk_py.helper_pool.BorrowingInterest">[docs]</a><span class="k">class</span> <span class="nc">BorrowingInterest</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the borrowing interest details for a loan.</span>
+
+<span class="sd">    :param ltv: The loan-to-value ratio</span>
+<span class="sd">    :param interest: The interest amount</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ltv</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">interest</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ltv</span> <span class="o">=</span> <span class="n">ltv</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interest</span> <span class="o">=</span> <span class="n">interest</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">({</span>
+            <span class="s2">&quot;ltv&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ltv</span><span class="p">,</span>
+            <span class="s2">&quot;interest&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">interest</span>
+        <span class="p">})</span></div>
+
+<div class="viewcode-block" id="PoolInfo"><a class="viewcode-back" href="../../defi_sdk_py.helper_pool.html#defi_sdk_py.helper_pool.PoolInfo">[docs]</a><span class="k">class</span> <span class="nc">PoolInfo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the information about a pool.</span>
+
+<span class="sd">    :param borrowing_interest: The interest rate for borrowing</span>
+<span class="sd">    :param lending_token_interest: The interest rate for token lending</span>
+<span class="sd">    :param lending_forw_interest: The interest rate for forward lending</span>
+<span class="sd">    :param utilization_rate: The utilization rate of the pool</span>
+<span class="sd">    :param p_token_total_supply: The total supply of the pool&#39;s P tokens</span>
+<span class="sd">    :param current_supply: The current supply of the pool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">borrowing_interest</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">lending_token_interest</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">lending_forw_interest</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">utilization_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">p_token_total_supply</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">current_supply</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">borrowing_interest</span> <span class="o">=</span> <span class="n">borrowing_interest</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lending_token_interest</span> <span class="o">=</span> <span class="n">lending_token_interest</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lending_forw_interest</span> <span class="o">=</span> <span class="n">lending_forw_interest</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">utilization_rate</span> <span class="o">=</span> <span class="n">utilization_rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_token_total_supply</span> <span class="o">=</span> <span class="n">p_token_total_supply</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_supply</span> <span class="o">=</span> <span class="n">current_supply</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">({</span>
+            <span class="s2">&quot;borrowing_interest&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">borrowing_interest</span><span class="p">,</span>
+            <span class="s2">&quot;lending_token_interest&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lending_token_interest</span><span class="p">,</span>
+            <span class="s2">&quot;lending_forw_interest&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lending_forw_interest</span><span class="p">,</span>
+            <span class="s2">&quot;utilization_rate&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">utilization_rate</span><span class="p">,</span>
+            <span class="s2">&quot;p_token_total_supply&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_token_total_supply</span><span class="p">,</span>
+            <span class="s2">&quot;current_supply&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_supply</span>
+        <span class="p">})</span></div>
+
+<div class="viewcode-block" id="LendingInfo"><a class="viewcode-back" href="../../defi_sdk_py.helper_pool.html#defi_sdk_py.helper_pool.LendingInfo">[docs]</a><span class="k">class</span> <span class="nc">LendingInfo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the lending information for a stake in a pool.</span>
+
+<span class="sd">    :param lending_balance: The lending balance</span>
+<span class="sd">    :param interest_token_gained: The interest gained in tokens</span>
+<span class="sd">    :param interest_forw_gained: The interest gained in forwards</span>
+<span class="sd">    :param rank: The rank of the lender</span>
+<span class="sd">    :param rank_info: The rank information</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lending_balance</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">interest_token_gained</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">interest_forw_gained</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">rank</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">rank_info</span><span class="p">:</span> <span class="n">RankInfo</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lending_balance</span> <span class="o">=</span> <span class="n">lending_balance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interest_token_gained</span> <span class="o">=</span> <span class="n">interest_token_gained</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interest_forw_gained</span> <span class="o">=</span> <span class="n">interest_forw_gained</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="n">rank</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rank_info</span> <span class="o">=</span> <span class="n">rank_info</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">({</span>
+            <span class="s2">&quot;lending_balance&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lending_balance</span><span class="p">,</span>
+            <span class="s2">&quot;interest_token_gained&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">interest_token_gained</span><span class="p">,</span>
+            <span class="s2">&quot;interest_forw_gained&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">interest_forw_gained</span><span class="p">,</span>
+            <span class="s2">&quot;rank&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span>
+            <span class="s2">&quot;rank_info&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank_info</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>  <span class="c1"># Convert the nested RankInfo to string</span>
+        <span class="p">})</span></div>
+
+<div class="viewcode-block" id="HelperPool"><a class="viewcode-back" href="../../defi_sdk_py.helper_pool.html#defi_sdk_py.helper_pool.HelperPool">[docs]</a><span class="k">class</span> <span class="nc">HelperPool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    HelperPool provides utility functions to assist with pool-related calculations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the HelperPool by setting up the helper pool contract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">HelperPool</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">helper_pool</span><span class="p">:</span><span class="n">IHelperPool</span> <span class="o">=</span> <span class="n">IHelperPool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">address_const</span><span class="o">.</span><span class="n">get_helper_pool_address</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+
+<div class="viewcode-block" id="HelperPool.claimble_interest"><a class="viewcode-back" href="../../defi_sdk_py.helper_pool.html#defi_sdk_py.helper_pool.HelperPool.claimble_interest">[docs]</a>    <span class="k">def</span> <span class="nf">claimble_interest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">ClaimableInterest</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the claimable interest for a given NFT ID in a pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param nft_id: The NFT ID to query for claimable interest</span>
+<span class="sd">        :return: A ClaimableInterest object containing the token and forward interest amounts</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_pool</span><span class="o">.</span><span class="n">claimableInterest</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">ClaimableInterest</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="HelperPool.claimble_interest_membership"><a class="viewcode-back" href="../../defi_sdk_py.helper_pool.html#defi_sdk_py.helper_pool.HelperPool.claimble_interest_membership">[docs]</a>    <span class="k">def</span> <span class="nf">claimble_interest_membership</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">ClaimableInterest</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the claimable interest for a given NFT ID in a pool, accounting for membership.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param nft_id: The NFT ID to query for claimable interest with membership considered</span>
+<span class="sd">        :return: A ClaimableInterest object containing the token and forward interest amounts</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_pool</span><span class="o">.</span><span class="n">claimableInterestMembership</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">ClaimableInterest</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="HelperPool.get_next_lending_forw_interest"><a class="viewcode-back" href="../../defi_sdk_py.helper_pool.html#defi_sdk_py.helper_pool.HelperPool.get_next_lending_forw_interest">[docs]</a>    <span class="k">def</span> <span class="nf">get_next_lending_forw_interest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">new_deposit_amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">forw_price_rate</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the next lending forward interest for a new deposit in a pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param new_deposit_amount: The new deposit amount</span>
+<span class="sd">        :param forw_price_rate: The price rate of the forward token</span>
+<span class="sd">        :return: The next lending forward interest amount</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pool_token</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">tokenAddress</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">forw_token</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">forwAddress</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">new_deposit_amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">new_deposit_amount</span><span class="p">,</span> <span class="n">pool_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">forw_price_rate</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">forw_price_rate</span><span class="p">,</span> <span class="n">forw_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">forw_precision</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">forw_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_pool</span><span class="o">.</span><span class="n">getNextLendingForwInterest</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="n">new_deposit_amount</span><span class="p">,</span> <span class="n">forw_price_rate</span><span class="p">,</span> <span class="n">forw_precision</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HelperPool.get_next_lending_interest"><a class="viewcode-back" href="../../defi_sdk_py.helper_pool.html#defi_sdk_py.helper_pool.HelperPool.get_next_lending_interest">[docs]</a>    <span class="k">def</span> <span class="nf">get_next_lending_interest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">new_deposit_amount</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the next lending interest for a new deposit in a pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param new_deposit_amount: The new deposit amount</span>
+<span class="sd">        :return: The next lending interest amount</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">pool_token</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">tokenAddress</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">new_deposit_amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">new_deposit_amount</span><span class="p">,</span> <span class="n">pool_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_pool</span><span class="o">.</span><span class="n">getNextLendingInterest</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="n">new_deposit_amount</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HelperPool.get_interest_amount_by_deposit_amount"><a class="viewcode-back" href="../../defi_sdk_py.helper_pool.html#defi_sdk_py.helper_pool.HelperPool.get_interest_amount_by_deposit_amount">[docs]</a>    <span class="k">def</span> <span class="nf">get_interest_amount_by_deposit_amount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">deposit_amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">day_second</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="n">Day</span><span class="p">())</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the interest amount based on a deposit amount for a given time period in a pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param deposit_amount: The deposit amount</span>
+<span class="sd">        :param day_second: The time period in seconds for which the interest is calculated (default is one day)</span>
+<span class="sd">        :return: The interest amount for the deposit</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">pool_token</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">tokenAddress</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">deposit_amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">deposit_amount</span><span class="p">,</span> <span class="n">pool_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_pool</span><span class="o">.</span><span class="n">getInterestAmountByDepositAmount</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="n">deposit_amount</span><span class="p">,</span> <span class="n">day_second</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="HelperPool.get_deposit_amount_by_interest_amount"><a class="viewcode-back" href="../../defi_sdk_py.helper_pool.html#defi_sdk_py.helper_pool.HelperPool.get_deposit_amount_by_interest_amount">[docs]</a>    <span class="k">def</span> <span class="nf">get_deposit_amount_by_interest_amount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">interest_amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">day_second</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="n">Day</span><span class="p">())</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the deposit amount required to achieve a target interest amount for a given time period in a pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param interest_amount: The target interest amount</span>
+<span class="sd">        :param day_second: The time period in seconds for which the deposit is calculated (default is one day)</span>
+<span class="sd">        :return: The deposit amount required for the target interest</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pool_token</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">tokenAddress</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">interest_amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">interest_amount</span><span class="p">,</span> <span class="n">pool_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_pool</span><span class="o">.</span><span class="n">getDepositAmountByInterestAmount</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="n">interest_amount</span><span class="p">,</span> <span class="n">day_second</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="HelperPool.calculate_borrowing_interest"><a class="viewcode-back" href="../../defi_sdk_py.helper_pool.html#defi_sdk_py.helper_pool.HelperPool.calculate_borrowing_interest">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_borrowing_interest</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span>
+        <span class="n">borrow_amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">collateral_amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">collateral_token</span><span class="p">:</span><span class="n">IERC20Metadata</span><span class="p">,</span>
+        <span class="n">day_second</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="n">Day</span><span class="p">())</span><span class="o">-&gt;</span><span class="n">BorrowingInterest</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the borrowing interest for a given loan amount and collateral in a pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param borrow_amount: The borrow amount</span>
+<span class="sd">        :param collateral_amount: The collateral amount</span>
+<span class="sd">        :param collateral_token: The collateral token metadata</span>
+<span class="sd">        :param day_second: The time period in seconds for which the interest is calculated (default is one day)</span>
+<span class="sd">        :return: A BorrowingInterest object containing the LTV and interest</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">borrow_token</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">tokenAddress</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">borrow_amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">borrow_amount</span><span class="p">,</span> <span class="n">borrow_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">collateral_amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">collateral_amount</span><span class="p">,</span> <span class="n">collateral_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_pool</span><span class="o">.</span><span class="n">calculateBorrowingInterest</span><span class="p">(</span>
+            <span class="n">pool</span><span class="o">.</span><span class="n">address</span><span class="p">,</span>
+            <span class="n">day_second</span><span class="p">,</span>
+            <span class="n">borrow_amount</span><span class="p">,</span>
+            <span class="n">collateral_amount</span><span class="p">,</span>
+            <span class="n">collateral_token</span><span class="o">.</span><span class="n">address</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">BorrowingInterest</span><span class="p">(</span><span class="o">*</span><span class="n">result</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="HelperPool.get_pool_info"><a class="viewcode-back" href="../../defi_sdk_py.helper_pool.html#defi_sdk_py.helper_pool.HelperPool.get_pool_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_pool_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">forw_price_rate</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">PoolInfo</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves information about a pool, including interest rates, utilization rate, and supply details.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param forw_price_rate: The price rate of the forward token</span>
+<span class="sd">        :return: A PoolInfo object containing detailed information about the pool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">forw_token</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">forwAddress</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">forw_price_rate</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">forw_price_rate</span><span class="p">,</span> <span class="n">forw_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">forw_precision</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">forw_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_pool</span><span class="o">.</span><span class="n">getPoolInfo</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="n">forw_price_rate</span><span class="p">,</span> <span class="n">forw_precision</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">PoolInfo</span><span class="p">(</span><span class="o">*</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HelperPool.get_lending_info"><a class="viewcode-back" href="../../defi_sdk_py.helper_pool.html#defi_sdk_py.helper_pool.HelperPool.get_lending_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_lending_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">LendingInfo</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves lending information for a given NFT ID in a pool, including balance, interest gained, and rank.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param nft_id: The NFT ID to query for lending information</span>
+<span class="sd">        :return: A LendingInfo object containing detailed information about the lending stake</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_pool</span><span class="o">.</span><span class="n">getLendingInfo</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">LendingInfo</span><span class="p">(</span><span class="o">*</span><span class="n">result</span><span class="p">[:</span><span class="mi">4</span><span class="p">],</span> <span class="n">rank_info</span><span class="o">=</span><span class="n">RankInfo</span><span class="p">(</span><span class="o">*</span><span class="n">result</span><span class="p">[</span><span class="mi">4</span><span class="p">]))</span></div></div>
+    
+    
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, fwx/akio777.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

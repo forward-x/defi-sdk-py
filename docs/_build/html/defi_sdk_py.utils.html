@@ -46,6 +46,8 @@
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">defi_sdk_py.utils package</a><ul>
 <li><a class="reference internal" href="#module-defi_sdk_py.utils">Module contents</a><ul>
+<li><a class="reference internal" href="#defi_sdk_py.utils.Day"><code class="docutils literal notranslate"><span class="pre">Day()</span></code></a></li>
+<li><a class="reference internal" href="#defi_sdk_py.utils.Hour"><code class="docutils literal notranslate"><span class="pre">Hour()</span></code></a></li>
 <li><a class="reference internal" href="#defi_sdk_py.utils.MAX_UINT_256"><code class="docutils literal notranslate"><span class="pre">MAX_UINT_256()</span></code></a></li>
 <li><a class="reference internal" href="#defi_sdk_py.utils.TransactionReceipt"><code class="docutils literal notranslate"><span class="pre">TransactionReceipt</span></code></a></li>
 <li><a class="reference internal" href="#defi_sdk_py.utils.parseEther"><code class="docutils literal notranslate"><span class="pre">parseEther()</span></code></a></li>
@@ -84,6 +86,16 @@
 <section id="module-defi_sdk_py.utils">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-defi_sdk_py.utils" title="Permalink to this heading"></a></h2>
 <dl class="py function">
+<dt class="sig sig-object py" id="defi_sdk_py.utils.Day">
+<span class="sig-prename descclassname"><span class="pre">defi_sdk_py.utils.</span></span><span class="sig-name descname"><span class="pre">Day</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/utils.html#Day"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.utils.Day" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="defi_sdk_py.utils.Hour">
+<span class="sig-prename descclassname"><span class="pre">defi_sdk_py.utils.</span></span><span class="sig-name descname"><span class="pre">Hour</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/utils.html#Hour"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.utils.Hour" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="defi_sdk_py.utils.MAX_UINT_256">
 <span class="sig-prename descclassname"><span class="pre">defi_sdk_py.utils.</span></span><span class="sig-name descname"><span class="pre">MAX_UINT_256</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/utils.html#MAX_UINT_256"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.utils.MAX_UINT_256" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
@@ -92,12 +104,26 @@
 <dt class="sig sig-object py" id="defi_sdk_py.utils.TransactionReceipt">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">defi_sdk_py.utils.</span></span><span class="sig-name descname"><span class="pre">TransactionReceipt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transactionHash</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transactionIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blockHash</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blockNumber</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromAddress</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toAddress</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cumulativeGasUsed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gasUsed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contractAddress</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logsBloom</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/defi_sdk_py/utils.html#TransactionReceipt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.utils.TransactionReceipt" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class representing a transaction receipt, containing details of a confirmed transaction.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="defi_sdk_py.utils.parseEther">
 <span class="sig-prename descclassname"><span class="pre">defi_sdk_py.utils.</span></span><span class="sig-name descname"><span class="pre">parseEther</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">web3</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Web3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">18</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/defi_sdk_py/utils.html#parseEther"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.utils.parseEther" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Parses the given value into its equivalent in wei, considering the token’s decimals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>web3</strong> – An instance of a Web3 connection</p></li>
+<li><p><strong>value</strong> – The value to parse</p></li>
+<li><p><strong>decimals</strong> – The number of decimals the token uses</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The parsed value in wei as an integer</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 </section>

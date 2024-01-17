@@ -73,7 +73,38 @@
 <span class="kn">from</span> <span class="nn">web3</span> <span class="kn">import</span> <span class="n">Web3</span>
 <span class="kn">from</span> <span class="nn">.tokens</span> <span class="kn">import</span> <span class="n">Tokens</span>
 <span class="kn">from</span> <span class="nn">.pools</span> <span class="kn">import</span> <span class="n">Pools</span>
+
 <div class="viewcode-block" id="FWXChainClient"><a class="viewcode-back" href="../../../defi_sdk_py.fwx_chain.html#defi_sdk_py.fwx_chain.client.FWXChainClient">[docs]</a><span class="k">class</span> <span class="nc">FWXChainClient</span><span class="p">(</span><span class="n">ChainClient</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    FWXChainClient is a client for interacting with the FWX blockchain.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        rpc_url (str): The URL of the FWX blockchain RPC endpoint.</span>
+<span class="sd">        private_key (str): The private key used for interacting with the blockchain.</span>
+<span class="sd">        address_const (AddressConst): An instance of AddressConst containing relevant address constants.</span>
+<span class="sd">        maxFeePerGas (int): The maximum fee per gas for transactions.</span>
+<span class="sd">        maxPriorityFeePerGas (int): The maximum priority fee per gas for transactions.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        TOKEN (Tokens): An instance of Tokens for interacting with tokens on the FWX blockchain.</span>
+<span class="sd">        POOLS (Pools): An instance of Pools for interacting with liquidity pools on the FWX blockchain.</span>
+<span class="sd">        native: Represents the native token (WBNB) on the FWX blockchain.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        ```python</span>
+<span class="sd">        from defi_sdk_py import FWXChainClient</span>
+
+<span class="sd">        # Instantiate FWX Chain Client</span>
+<span class="sd">        fwx_client = FWXChainClient(</span>
+<span class="sd">            rpc_url=&quot;https://fwx.example.com/rpc&quot;,</span>
+<span class="sd">            private_key=&quot;your_private_key&quot;,</span>
+<span class="sd">            address_const=your_address_const_instance,</span>
+<span class="sd">            maxFeePerGas=your_max_fee_per_gas,</span>
+<span class="sd">            maxPriorityFeePerGas=your_max_priority_fee_per_gas</span>
+<span class="sd">        )</span>
+<span class="sd">        ```</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">rpc_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>

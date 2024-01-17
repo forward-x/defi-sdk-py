@@ -73,14 +73,33 @@
 <span class="kn">from</span> <span class="nn">..abi.IERC20Metadata</span> <span class="kn">import</span> <span class="n">IERC20Metadata</span>
 <span class="kn">from</span> <span class="nn">..address_const</span> <span class="kn">import</span> <span class="n">AddressConst</span>
 <div class="viewcode-block" id="Library"><a class="viewcode-back" href="../../defi_sdk_py.library.html#defi_sdk_py.library.Library">[docs]</a><span class="k">class</span> <span class="nc">Library</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Library provides utility functions and common logic for interacting with the blockchain.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the Library by setting up the library contract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Library</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">library</span><span class="p">:</span><span class="n">APHLibrary</span> <span class="o">=</span> <span class="n">APHLibrary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">address_const</span><span class="o">.</span><span class="n">get_library_address</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the string representation of the library contract&#39;s address.</span>
+
+<span class="sd">        :return: Library contract address as a string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">library</span><span class="o">.</span><span class="n">address</span>
     
 <div class="viewcode-block" id="Library.hash_pair"><a class="viewcode-back" href="../../defi_sdk_py.library.html#defi_sdk_py.library.Library.hash_pair">[docs]</a>    <span class="k">def</span> <span class="nf">hash_pair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collateral_token_address</span><span class="p">:</span><span class="n">IERC20Metadata</span><span class="p">,</span> <span class="n">underlying_token_address</span><span class="p">:</span><span class="n">IERC20Metadata</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the hash for a pair of tokens.</span>
+
+<span class="sd">        :param collateral_token_address: The collateral token contract interface</span>
+<span class="sd">        :param underlying_token_address: The underlying token contract interface</span>
+<span class="sd">        :return: The hash of the token pair as a string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">collateral_token_address</span> <span class="o">=</span> <span class="n">collateral_token_address</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
         <span class="n">underlying_token_address</span> <span class="o">=</span> <span class="n">underlying_token_address</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
         <span class="k">return</span> <span class="s2">&quot;0x&quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">library</span><span class="o">.</span><span class="n">hashPair</span><span class="p">(</span><span class="n">collateral_token_address</span><span class="p">,</span> <span class="n">underlying_token_address</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span><span class="p">()</span></div></div>
