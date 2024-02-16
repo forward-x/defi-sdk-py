@@ -8,6 +8,7 @@ Subpackages
    :maxdepth: 4
 
    defi_sdk_py.address_const
+   defi_sdk_py.avalanche_chain
    defi_sdk_py.avax_fuji_chain
    defi_sdk_py.chain_client
    defi_sdk_py.core

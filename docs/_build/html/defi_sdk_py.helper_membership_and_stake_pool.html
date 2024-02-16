@@ -20,7 +20,9 @@
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="defi_sdk_py.helper_pool package" href="defi_sdk_py.helper_pool.html" />
+    <link rel="prev" title="defi_sdk_py.helper_future_trade package" href="defi_sdk_py.helper_future_trade.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,24 +44,35 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">defi_sdk_py.helper_membership_and_stake_pool package</a><ul>
-<li><a class="reference internal" href="#module-defi_sdk_py.helper_membership_and_stake_pool">Module contents</a><ul>
-<li><a class="reference internal" href="#defi_sdk_py.helper_membership_and_stake_pool.HelperMembershipAndStakePool"><code class="docutils literal notranslate"><span class="pre">HelperMembershipAndStakePool</span></code></a><ul>
-<li><a class="reference internal" href="#defi_sdk_py.helper_membership_and_stake_pool.HelperMembershipAndStakePool.get_nft_list"><code class="docutils literal notranslate"><span class="pre">HelperMembershipAndStakePool.get_nft_list()</span></code></a></li>
-<li><a class="reference internal" href="#defi_sdk_py.helper_membership_and_stake_pool.HelperMembershipAndStakePool.get_rank_info_list"><code class="docutils literal notranslate"><span class="pre">HelperMembershipAndStakePool.get_rank_info_list()</span></code></a></li>
-<li><a class="reference internal" href="#defi_sdk_py.helper_membership_and_stake_pool.HelperMembershipAndStakePool.get_stake_info"><code class="docutils literal notranslate"><span class="pre">HelperMembershipAndStakePool.get_stake_info()</span></code></a></li>
-<li><a class="reference internal" href="#defi_sdk_py.helper_membership_and_stake_pool.HelperMembershipAndStakePool.get_stake_pool_next_settle_timestamp"><code class="docutils literal notranslate"><span class="pre">HelperMembershipAndStakePool.get_stake_pool_next_settle_timestamp()</span></code></a></li>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.html">defi_sdk_py package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.chain_client.html">defi_sdk_py.chain_client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.address_const.html">defi_sdk_py.address_const package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.core.html">defi_sdk_py.core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.pool.html">defi_sdk_py.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.membership.html">defi_sdk_py.membership package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.stake_pool.html">defi_sdk_py.stake_pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.utils.html">defi_sdk_py.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.helper_core.html">defi_sdk_py.helper_core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.helper_pool.html">defi_sdk_py.helper_pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.helper_future_trade.html">defi_sdk_py.helper_future_trade package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">defi_sdk_py.helper_membership_and_stake_pool package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-defi_sdk_py.helper_membership_and_stake_pool">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#defi_sdk_py.helper_membership_and_stake_pool.HelperMembershipAndStakePool"><code class="docutils literal notranslate"><span class="pre">HelperMembershipAndStakePool</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#defi_sdk_py.helper_membership_and_stake_pool.HelperMembershipAndStakePool.get_nft_list"><code class="docutils literal notranslate"><span class="pre">HelperMembershipAndStakePool.get_nft_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#defi_sdk_py.helper_membership_and_stake_pool.HelperMembershipAndStakePool.get_rank_info_list"><code class="docutils literal notranslate"><span class="pre">HelperMembershipAndStakePool.get_rank_info_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#defi_sdk_py.helper_membership_and_stake_pool.HelperMembershipAndStakePool.get_stake_info"><code class="docutils literal notranslate"><span class="pre">HelperMembershipAndStakePool.get_stake_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#defi_sdk_py.helper_membership_and_stake_pool.HelperMembershipAndStakePool.get_stake_pool_next_settle_timestamp"><code class="docutils literal notranslate"><span class="pre">HelperMembershipAndStakePool.get_stake_pool_next_settle_timestamp()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#defi_sdk_py.helper_membership_and_stake_pool.NFTList"><code class="docutils literal notranslate"><span class="pre">NFTList</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#defi_sdk_py.helper_membership_and_stake_pool.NFTList"><code class="docutils literal notranslate"><span class="pre">NFTList</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-</div>
+
         </div>
       </div>
     </nav>
@@ -74,6 +87,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="defi_sdk_py.html">defi_sdk_py package</a></li>
       <li class="breadcrumb-item active">defi_sdk_py.helper_membership_and_stake_pool package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/defi_sdk_py.helper_membership_and_stake_pool.rst.txt" rel="nofollow"> View page source</a>
@@ -169,7 +183,10 @@
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="defi_sdk_py.helper_future_trade.html" class="btn btn-neutral float-left" title="defi_sdk_py.helper_future_trade package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="defi_sdk_py.helper_pool.html" class="btn btn-neutral float-right" title="defi_sdk_py.helper_pool package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

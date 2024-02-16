@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>defi_sdk_py.fwx_chain.client &mdash; fwx-defi-python-sdk 1.0.1 documentation</title>
+  <title>defi_sdk_py.avalanche_chain.pools &mdash; fwx-defi-python-sdk 1.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
@@ -72,7 +72,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">defi_sdk_py.fwx_chain.client</li>
+      <li class="breadcrumb-item active">defi_sdk_py.avalanche_chain.pools</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -81,27 +81,17 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for defi_sdk_py.fwx_chain.client</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">..chain_client</span> <span class="kn">import</span> <span class="n">ChainClient</span>
-<span class="kn">from</span> <span class="nn">..address_const</span> <span class="kn">import</span> <span class="n">AddressConst</span>
+  <h1>Source code for defi_sdk_py.avalanche_chain.pools</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">..abi.IAPHPool</span> <span class="kn">import</span> <span class="n">IAPHPool</span>
 <span class="kn">from</span> <span class="nn">web3</span> <span class="kn">import</span> <span class="n">Web3</span>
-<span class="kn">from</span> <span class="nn">.tokens</span> <span class="kn">import</span> <span class="n">Tokens</span>
-<span class="kn">from</span> <span class="nn">.pools</span> <span class="kn">import</span> <span class="n">Pools</span>
 
-<div class="viewcode-block" id="FWXChainClient"><a class="viewcode-back" href="../../../defi_sdk_py.fwx_chain.html#defi_sdk_py.fwx_chain.client.FWXChainClient">[docs]</a><span class="k">class</span> <span class="nc">FWXChainClient</span><span class="p">(</span><span class="n">ChainClient</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">rpc_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">private_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">address_const</span><span class="p">:</span> <span class="n">AddressConst</span><span class="p">,</span>
-        <span class="n">maxFeePerGas</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
-        <span class="n">maxPriorityFeePerGas</span><span class="p">:</span><span class="nb">int</span>
-    <span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rpc_url</span><span class="p">,</span> <span class="n">private_key</span><span class="p">,</span> <span class="n">address_const</span><span class="p">,</span> <span class="n">maxFeePerGas</span><span class="p">,</span><span class="n">maxPriorityFeePerGas</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">TOKEN</span><span class="p">:</span><span class="n">Tokens</span> <span class="o">=</span> <span class="n">Tokens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">POOLS</span><span class="p">:</span><span class="n">Pools</span> <span class="o">=</span> <span class="n">Pools</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">native</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOKEN</span><span class="o">.</span><span class="n">WBNB</span></div>
+<div class="viewcode-block" id="Pools"><a class="viewcode-back" href="../../../defi_sdk_py.avalanche_chain.html#defi_sdk_py.avalanche_chain.pools.Pools">[docs]</a><span class="k">class</span> <span class="nc">Pools</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">web3</span><span class="p">:</span> <span class="n">Web3</span><span class="p">):</span>
+        <span class="c1"># Generate dynamic attributes based on the keys in json address</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">WAVAX</span><span class="p">:</span><span class="n">IAPHPool</span> <span class="o">=</span> <span class="n">IAPHPool</span><span class="p">(</span><span class="s1">&#39;0x7F91272ff1A0114743D2df95F5905F9613Fd92b3&#39;</span><span class="p">,</span> <span class="n">web3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">USDC</span><span class="p">:</span><span class="n">IAPHPool</span> <span class="o">=</span> <span class="n">IAPHPool</span><span class="p">(</span><span class="s1">&#39;0x94732A5319e1feAcc7d08e08Fdc4C2c7f5123143&#39;</span><span class="p">,</span> <span class="n">web3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CQO</span><span class="p">:</span><span class="n">IAPHPool</span> <span class="o">=</span> <span class="n">IAPHPool</span><span class="p">(</span><span class="s1">&#39;0xc97d9B3971BfE1B8Ac8EA7f990Df721d8f695223&#39;</span><span class="p">,</span> <span class="n">web3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SAVAX</span><span class="p">:</span><span class="n">IAPHPool</span> <span class="o">=</span> <span class="n">IAPHPool</span><span class="p">(</span><span class="s1">&#39;0xe57a4042eA63Df072B2cf6352F9779E4D2445A92&#39;</span><span class="p">,</span> <span class="n">web3</span><span class="p">)</span></div>
 </pre></div>
 
            </div>
