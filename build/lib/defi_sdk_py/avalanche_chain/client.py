@@ -17,4 +17,4 @@ class AvalancheChainClient(ChainClient):
         super().__init__(rpc_url, private_key, address_const, maxFeePerGas,maxPriorityFeePerGas)
         self.TOKEN:Tokens = Tokens(self.web3)
         self.POOLS:Pools = Pools(self.web3)
-        self.native = self.TOKEN.WBNB
+        self.native = self.TOKEN.WAVAX
