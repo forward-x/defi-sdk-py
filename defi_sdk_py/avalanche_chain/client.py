@@ -4,7 +4,7 @@ from web3 import Web3
 from .tokens import Tokens
 from .pools import Pools
 
-class Avalanche(ChainClient):
+class AvalancheChainClient(ChainClient):
 
     def __init__(
         self,
