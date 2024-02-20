@@ -3,6 +3,11 @@ pyproject.toml
 setup.py
 ./defi_sdk_py/__init__.py
 ./defi_sdk_py/address_const/__init__.py
+./defi_sdk_py/avalanche_chain/__init__.py
+./defi_sdk_py/avalanche_chain/client.py
+./defi_sdk_py/avalanche_chain/pools.py
+./defi_sdk_py/avalanche_chain/pre_address.py
+./defi_sdk_py/avalanche_chain/tokens.py
 ./defi_sdk_py/avax_fuji_chain/__init__.py
 ./defi_sdk_py/avax_fuji_chain/client.py
 ./defi_sdk_py/avax_fuji_chain/pools.py
