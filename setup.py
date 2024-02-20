@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="fwx-python-sdk",                     # This is the name of the package
-    version="v1.0.0",                        # The initial release version
+    version="v1.0.4",                        # The initial release version
     author="FWX/xAKIOx",                     # Full name of the author
     description="SDK for intregration with FWX protocol on RPC chain",
     long_description=long_description,      # Long description read from the the readme file
