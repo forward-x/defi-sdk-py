@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>defi_sdk_py.pool &mdash; fwx-defi-python-sdk 1.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=0b546569"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            fwx-defi-python-sdk
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.html">defi_sdk_py package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.chain_client.html">defi_sdk_py.chain_client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.address_const.html">defi_sdk_py.address_const package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.core.html">defi_sdk_py.core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.pool.html">defi_sdk_py.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.membership.html">defi_sdk_py.membership package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.stake_pool.html">defi_sdk_py.stake_pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.utils.html">defi_sdk_py.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_core.html">defi_sdk_py.helper_core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_pool.html">defi_sdk_py.helper_pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_future_trade.html">defi_sdk_py.helper_future_trade package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_membership_and_stake_pool.html">defi_sdk_py.helper_membership_and_stake_pool package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fwx-defi-python-sdk</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">defi_sdk_py.pool</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for defi_sdk_py.pool</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">..abi.IAPHPool</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">..abi.IERC20Metadata</span> <span class="kn">import</span> <span class="n">IERC20Metadata</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">parseEther</span><span class="p">,</span> <span class="n">TransactionReceipt</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<div class="viewcode-block" id="Pool"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool">[docs]</a><span class="k">class</span> <span class="nc">Pool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Pool provides functionality to interact with the pool smart contracts.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the Pool class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Pool.token_address"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.token_address">[docs]</a>    <span class="k">def</span> <span class="nf">token_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the token address of the specified pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :return: The token address as a string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">pool</span><span class="o">.</span><span class="n">tokenAddress</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Pool.lenders"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.lenders">[docs]</a>    <span class="k">def</span> <span class="nf">lenders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Lend</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the lending details for a given NFT ID in the specified pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param nft_id: The NFT ID to query for lending details</span>
+<span class="sd">        :return: A Lend object containing the lending details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Lend</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">lenders</span><span class="p">(</span><span class="n">nft_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()))</span></div>
+
+<div class="viewcode-block" id="Pool.token_holders"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.token_holders">[docs]</a>    <span class="k">def</span> <span class="nf">token_holders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">PoolTokens</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the token holder details for a given NFT ID in the specified pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param nft_id: The NFT ID to query for token holder details</span>
+<span class="sd">        :return: A PoolTokens object containing the token holder details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">PoolTokens</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">tokenHolders</span><span class="p">(</span><span class="n">nft_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()))</span></div>
+
+<div class="viewcode-block" id="Pool.current_supply"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.current_supply">[docs]</a>    <span class="k">def</span> <span class="nf">current_supply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the current supply of the specified pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :return: The current supply as an integer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">pool</span><span class="o">.</span><span class="n">currentSupply</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="Pool.get_next_borrowing_interest"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.get_next_borrowing_interest">[docs]</a>    <span class="k">def</span> <span class="nf">get_next_borrowing_interest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">borrow_amount</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the next borrowing interest for a specified borrow amount in the pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param borrow_amount: The borrow amount to query for interest</span>
+<span class="sd">        :return: The next borrowing interest as an integer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">tokenAddress</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">borrow_amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">borrow_amount</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">pool</span><span class="o">.</span><span class="n">getNextBorrowingInterest</span><span class="p">(</span><span class="n">borrow_amount</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+    <span class="c1"># ACTION</span>
+<div class="viewcode-block" id="Pool.deposit"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.deposit">[docs]</a>    <span class="k">def</span> <span class="nf">deposit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gas</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">gas_price</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nonce</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Union</span><span class="p">[</span><span class="n">TransactionReceipt</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Deposits an amount into the specified pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param nft_id: The NFT ID associated with the deposit</span>
+<span class="sd">        :param amount: The amount to deposit</span>
+<span class="sd">        :param is_estimate: If True, returns the estimated gas for the transaction</span>
+<span class="sd">        :param gas: The gas limit for the transaction</span>
+<span class="sd">        :param gas_price: The gas price for the transaction</span>
+<span class="sd">        :param nonce: The nonce for the transaction</span>
+<span class="sd">        :return: The transaction receipt if not estimating gas, otherwise the estimated gas</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">tokenAddress</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">is_native</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">native</span><span class="o">.</span><span class="n">address</span> <span class="o">==</span> <span class="n">token</span><span class="o">.</span><span class="n">address</span>
+        <span class="n">contract_func</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_transaction</span><span class="p">(</span><span class="n">contract_func</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">amount</span> <span class="k">if</span> <span class="n">is_native</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="n">is_estimate</span><span class="p">,</span> <span class="n">gas</span><span class="o">=</span><span class="n">gas</span><span class="p">,</span> <span class="n">gas_price</span><span class="o">=</span><span class="n">gas_price</span><span class="p">,</span> <span class="n">nonce</span><span class="o">=</span><span class="n">nonce</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Pool.deposit_event_tx"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.deposit_event_tx">[docs]</a>    <span class="k">def</span> <span class="nf">deposit_event_tx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">tx_hash</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">DepositEvent</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the deposit event details by transaction hash.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param tx_hash: The transaction hash to query for deposit event</span>
+<span class="sd">        :return: A DepositEvent object containing the deposit event details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pool</span><span class="o">.</span><span class="n">event_deposit_by_tx</span><span class="p">(</span><span class="n">tx_hash</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="Pool.deposit_event_block"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.deposit_event_block">[docs]</a>    <span class="k">def</span> <span class="nf">deposit_event_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">from_block</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">to_block</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">List</span><span class="p">[</span><span class="n">DepositEvent</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves a list of deposit event details within a block range.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param from_block: The starting block number</span>
+<span class="sd">        :param to_block: The ending block number</span>
+<span class="sd">        :return: A list of DepositEvent objects containing the deposit event details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">DepositEvent</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pool</span><span class="o">.</span><span class="n">event_deposit_by_block</span><span class="p">(</span><span class="n">from_block</span><span class="p">,</span> <span class="n">to_block</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="Pool.activate_rank_event_tx"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.activate_rank_event_tx">[docs]</a>    <span class="k">def</span> <span class="nf">activate_rank_event_tx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">tx_hash</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">ActivateRankEvent</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        Retrieves the activate rank event details by transaction hash.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param tx_hash: The transaction hash to query for activate rank event</span>
+<span class="sd">        :return: An ActivateRankEvent object containing the activate rank event details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pool</span><span class="o">.</span><span class="n">event_activaterank_by_tx</span><span class="p">(</span><span class="n">tx_hash</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="Pool.activate_rank_event_block"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.activate_rank_event_block">[docs]</a>    <span class="k">def</span> <span class="nf">activate_rank_event_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">from_block</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">to_block</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">List</span><span class="p">[</span><span class="n">ActivateRankEvent</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves a list of activate rank event details within a block range.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param from_block: The starting block number</span>
+<span class="sd">        :param to_block: The ending block number</span>
+<span class="sd">        :return: A list of ActivateRankEvent objects containing the activate rank event details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">ActivateRankEvent</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pool</span><span class="o">.</span><span class="n">event_activaterank_by_block</span><span class="p">(</span><span class="n">from_block</span><span class="p">,</span> <span class="n">to_block</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="Pool.borrow_event_tx"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.borrow_event_tx">[docs]</a>    <span class="k">def</span> <span class="nf">borrow_event_tx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">tx_hash</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">BorrowEvent</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the borrow event details by transaction hash.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param tx_hash: The transaction hash to query for borrow event</span>
+<span class="sd">        :return: A BorrowEvent object containing the borrow event details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">pool</span><span class="o">.</span><span class="n">event_borrow_by_tx</span><span class="p">(</span><span class="n">tx_hash</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="Pool.borrow_event_block"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.borrow_event_block">[docs]</a>    <span class="k">def</span> <span class="nf">borrow_event_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">from_block</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">to_block</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">List</span><span class="p">[</span><span class="n">BorrowEvent</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves a list of borrow event details within a block range.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param from_block: The starting block number</span>
+<span class="sd">        :param to_block: The ending block number</span>
+<span class="sd">        :return: A list of BorrowEvent objects containing the borrow event details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">BorrowEvent</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pool</span><span class="o">.</span><span class="n">event_borrow_by_block</span><span class="p">(</span><span class="n">from_block</span><span class="p">,</span> <span class="n">to_block</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="Pool.claim_forw_interest_event_tx"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.claim_forw_interest_event_tx">[docs]</a>    <span class="k">def</span> <span class="nf">claim_forw_interest_event_tx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">tx_hash</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">ClaimForwInterestEvent</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the claim forward interest event details by transaction hash.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param tx_hash: The transaction hash to query for claim forward interest event</span>
+<span class="sd">        :return: A ClaimForwInterestEvent object containing the claim forward interest event details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">pool</span><span class="o">.</span><span class="n">event_claimforwinterest_by_tx</span><span class="p">(</span><span class="n">tx_hash</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="Pool.claim_forw_interest_event_block"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.claim_forw_interest_event_block">[docs]</a>    <span class="k">def</span> <span class="nf">claim_forw_interest_event_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">from_block</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">to_block</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">List</span><span class="p">[</span><span class="n">ClaimForwInterestEvent</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves a list of claim forward interest event details within a block range.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param from_block: The starting block number</span>
+<span class="sd">        :param to_block: The ending block number</span>
+<span class="sd">        :return: A list of ClaimForwInterestEvent objects containing the claim forward interest event details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">ClaimForwInterestEvent</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pool</span><span class="o">.</span><span class="n">event_claimforwinterest_by_block</span><span class="p">(</span><span class="n">from_block</span><span class="p">,</span> <span class="n">to_block</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="Pool.claim_token_interest_event_tx"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.claim_token_interest_event_tx">[docs]</a>    <span class="k">def</span> <span class="nf">claim_token_interest_event_tx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">tx_hash</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">ClaimTokenInterestEvent</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the claim token interest event details by transaction hash.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param tx_hash: The transaction hash to query for claim token interest event</span>
+<span class="sd">        :return: A ClaimTokenInterestEvent object containing the claim token interest event details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">pool</span><span class="o">.</span><span class="n">event_claimtokeninterest_by_tx</span><span class="p">(</span><span class="n">tx_hash</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="Pool.claim_token_interest_event_block"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.claim_token_interest_event_block">[docs]</a>    <span class="k">def</span> <span class="nf">claim_token_interest_event_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">from_block</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">to_block</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">List</span><span class="p">[</span><span class="n">ClaimTokenInterestEvent</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves a list of claim token interest event details within a block range.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param from_block: The starting block number</span>
+<span class="sd">        :param to_block: The ending block number</span>
+<span class="sd">        :return: A list of ClaimTokenInterestEvent objects containing the claim token interest event details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">ClaimForwInterestEvent</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pool</span><span class="o">.</span><span class="n">event_claimtokeninterest_by_block</span><span class="p">(</span><span class="n">from_block</span><span class="p">,</span> <span class="n">to_block</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="Pool.claim_withdraw_event_tx"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.claim_withdraw_event_tx">[docs]</a>    <span class="k">def</span> <span class="nf">claim_withdraw_event_tx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">tx_hash</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">WithdrawEvent</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the withdraw event details by transaction hash.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param tx_hash: The transaction hash to query for withdraw event</span>
+<span class="sd">        :return: A WithdrawEvent object containing the withdraw event details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pool</span><span class="o">.</span><span class="n">event_withdraw_by_tx</span><span class="p">(</span><span class="n">tx_hash</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="Pool.claim_withdraw_event_block"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.claim_withdraw_event_block">[docs]</a>    <span class="k">def</span> <span class="nf">claim_withdraw_event_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">from_block</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">to_block</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">List</span><span class="p">[</span><span class="n">WithdrawEvent</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves a list of withdraw event details within a block range.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param from_block: The starting block number</span>
+<span class="sd">        :param to_block: The ending block number</span>
+<span class="sd">        :return: A list of WithdrawEvent objects containing the withdraw event details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">ClaimForwInterestEvent</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pool</span><span class="o">.</span><span class="n">event_withdraw_by_block</span><span class="p">(</span><span class="n">from_block</span><span class="p">,</span> <span class="n">to_block</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="Pool.withdraw"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.withdraw">[docs]</a>    <span class="k">def</span> <span class="nf">withdraw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gas</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">gas_price</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nonce</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Union</span><span class="p">[</span><span class="n">TransactionReceipt</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Withdraws an amount from the specified pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param nft_id: The NFT ID associated with the withdrawal</span>
+<span class="sd">        :param amount: The amount to withdraw</span>
+<span class="sd">        :param is_estimate: If True, returns the estimated gas for the transaction</span>
+<span class="sd">        :param gas: The gas limit for the transaction</span>
+<span class="sd">        :param gas_price: The gas price for the transaction</span>
+<span class="sd">        :param nonce: The nonce for the transaction</span>
+<span class="sd">        :return: The transaction receipt if not estimating gas, otherwise the estimated gas</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">tokenAddress</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">contract_func</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">withdraw</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_transaction</span><span class="p">(</span><span class="n">contract_func</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="n">is_estimate</span><span class="p">,</span> <span class="n">gas</span><span class="o">=</span><span class="n">gas</span><span class="p">,</span> <span class="n">gas_price</span><span class="o">=</span><span class="n">gas_price</span><span class="p">,</span> <span class="n">nonce</span><span class="o">=</span><span class="n">nonce</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="Pool.active_rank"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.active_rank">[docs]</a>    <span class="k">def</span> <span class="nf">active_rank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gas</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">gas_price</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nonce</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Union</span><span class="p">[</span><span class="n">TransactionReceipt</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Activates the rank for a given NFT ID in the specified pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param nft_id: The NFT ID for which to activate the rank</span>
+<span class="sd">        :param is_estimate: If True, returns the estimated gas for the transaction</span>
+<span class="sd">        :param gas: The gas limit for the transaction</span>
+<span class="sd">        :param gas_price: The gas price for the transaction</span>
+<span class="sd">        :param nonce: The nonce for the transaction</span>
+<span class="sd">        :return: The transaction receipt if not estimating gas, otherwise the estimated gas</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">contract_func</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">activateRank</span><span class="p">(</span><span class="n">nft_id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_transaction</span><span class="p">(</span><span class="n">contract_func</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="n">is_estimate</span><span class="p">,</span> <span class="n">gas</span><span class="o">=</span><span class="n">gas</span><span class="p">,</span> <span class="n">gas_price</span><span class="o">=</span><span class="n">gas_price</span><span class="p">,</span> <span class="n">nonce</span><span class="o">=</span><span class="n">nonce</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pool.claim_all_interest"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.claim_all_interest">[docs]</a>    <span class="k">def</span> <span class="nf">claim_all_interest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gas</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">gas_price</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nonce</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Union</span><span class="p">[</span><span class="n">TransactionReceipt</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Claims all interest for a given NFT ID in the specified pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param nft_id: The NFT ID for which to claim all interest</span>
+<span class="sd">        :param is_estimate: If True, returns the estimated gas for the transaction</span>
+<span class="sd">        :param gas: The gas limit for the transaction</span>
+<span class="sd">        :param gas_price: The gas price for the transaction</span>
+<span class="sd">        :param nonce: The nonce for the transaction</span>
+<span class="sd">        :return: The transaction receipt if not estimating gas, otherwise the estimated gas</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">contract_func</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">claimAllInterest</span><span class="p">(</span><span class="n">nft_id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_transaction</span><span class="p">(</span><span class="n">contract_func</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="n">is_estimate</span><span class="p">,</span> <span class="n">gas</span><span class="o">=</span><span class="n">gas</span><span class="p">,</span> <span class="n">gas_price</span><span class="o">=</span><span class="n">gas_price</span><span class="p">,</span> <span class="n">nonce</span><span class="o">=</span><span class="n">nonce</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pool.claim_token_interest"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.claim_token_interest">[docs]</a>    <span class="k">def</span> <span class="nf">claim_token_interest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gas</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">gas_price</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nonce</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Union</span><span class="p">[</span><span class="n">TransactionReceipt</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Claims token interest for a given NFT ID in the specified pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param nft_id: The NFT ID for which to claim token interest</span>
+<span class="sd">        :param amount: The amount of token interest to claim</span>
+<span class="sd">        :param is_estimate: If True, returns the estimated gas for the transaction</span>
+<span class="sd">        :param gas: The gas limit for the transaction</span>
+<span class="sd">        :param gas_price: The gas price for the transaction</span>
+<span class="sd">        :param nonce: The nonce for the transaction</span>
+<span class="sd">        :return: The transaction receipt if not estimating gas, otherwise the estimated gas</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">tokenAddress</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">contract_func</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">claimTokenInterest</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_transaction</span><span class="p">(</span><span class="n">contract_func</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="n">is_estimate</span><span class="p">,</span> <span class="n">gas</span><span class="o">=</span><span class="n">gas</span><span class="p">,</span> <span class="n">gas_price</span><span class="o">=</span><span class="n">gas_price</span><span class="p">,</span> <span class="n">nonce</span><span class="o">=</span><span class="n">nonce</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pool.claim_forw_interest"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.claim_forw_interest">[docs]</a>    <span class="k">def</span> <span class="nf">claim_forw_interest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gas</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">gas_price</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nonce</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Union</span><span class="p">[</span><span class="n">TransactionReceipt</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Claims forward interest for a given NFT ID in the specified pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param nft_id: The NFT ID for which to claim forward interest</span>
+<span class="sd">        :param amount: The amount of forward interest to claim</span>
+<span class="sd">        :param is_estimate: If True, returns the estimated gas for the transaction</span>
+<span class="sd">        :param gas: The gas limit for the transaction</span>
+<span class="sd">        :param gas_price: The gas price for the transaction</span>
+<span class="sd">        :param nonce: The nonce for the transaction</span>
+<span class="sd">        :return: The transaction receipt if not estimating gas, otherwise the estimated gas</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">forw_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">forwAddress</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">forw_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">contract_func</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">claimForwInterest</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_transaction</span><span class="p">(</span><span class="n">contract_func</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="n">is_estimate</span><span class="p">,</span> <span class="n">gas</span><span class="o">=</span><span class="n">gas</span><span class="p">,</span> <span class="n">gas_price</span><span class="o">=</span><span class="n">gas_price</span><span class="p">,</span> <span class="n">nonce</span><span class="o">=</span><span class="n">nonce</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pool.borrow"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.borrow">[docs]</a>    <span class="k">def</span> <span class="nf">borrow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">borrow_amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">collateral_sent_amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">collateral_token</span><span class="p">:</span><span class="n">IERC20Metadata</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gas</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">gas_price</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nonce</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Union</span><span class="p">[</span><span class="n">TransactionReceipt</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initiates a borrowing transaction in the specified pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param nft_id: The NFT ID associated with the borrowing</span>
+<span class="sd">        :param loan_id: The loan ID for the borrowing</span>
+<span class="sd">        :param borrow_amount: The amount to borrow</span>
+<span class="sd">        :param collateral_sent_amount: The amount of collateral sent</span>
+<span class="sd">        :param collateral_token: The collateral token metadata</span>
+<span class="sd">        :param is_estimate: If True, returns the estimated gas for the transaction</span>
+<span class="sd">        :param gas: The gas limit for the transaction</span>
+<span class="sd">        :param gas_price: The gas price for the transaction</span>
+<span class="sd">        :param nonce: The nonce for the transaction</span>
+<span class="sd">        :return: The transaction receipt if not estimating gas, otherwise the estimated gas</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">borrow_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">tokenAddress</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">borrow_amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">borrow_amount</span><span class="p">,</span> <span class="n">borrow_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">collateral_sent_amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">collateral_sent_amount</span><span class="p">,</span> <span class="n">collateral_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">is_native</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">native</span><span class="o">.</span><span class="n">address</span> <span class="o">==</span> <span class="n">collateral_token</span><span class="o">.</span><span class="n">address</span>
+        <span class="n">contract_func</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">borrow</span><span class="p">(</span><span class="n">loan_id</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">,</span> <span class="n">borrow_amount</span><span class="p">,</span> <span class="n">collateral_sent_amount</span><span class="p">,</span> <span class="n">collateral_token</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_transaction</span><span class="p">(</span><span class="n">contract_func</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">collateral_sent_amount</span> <span class="k">if</span> <span class="n">is_native</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="n">is_estimate</span><span class="p">,</span> <span class="n">gas</span><span class="o">=</span><span class="n">gas</span><span class="p">,</span> <span class="n">gas_price</span><span class="o">=</span><span class="n">gas_price</span><span class="p">,</span> <span class="n">nonce</span><span class="o">=</span><span class="n">nonce</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pool.open_position"><a class="viewcode-back" href="../../defi_sdk_py.pool.html#defi_sdk_py.pool.Pool.open_position">[docs]</a>    <span class="k">def</span> <span class="nf">open_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">is_long</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="n">collateral_token</span><span class="p">:</span><span class="n">IERC20Metadata</span><span class="p">,</span> <span class="n">underlying_token</span><span class="p">:</span><span class="n">IERC20Metadata</span><span class="p">,</span> <span class="n">entry_price</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">leverage</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">slip_page</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gas</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">gas_price</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nonce</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Opens a new position in the specified pool.</span>
+
+<span class="sd">        :param nft_id: The NFT ID associated with the position</span>
+<span class="sd">        :param is_long: A boolean indicating if the position is long (True) or short (False)</span>
+<span class="sd">        :param collateral_token: The collateral token metadata</span>
+<span class="sd">        :param underlying_token: The underlying token metadata</span>
+<span class="sd">        :param entry_price: The entry price for the position</span>
+<span class="sd">        :param size: The size of the position</span>
+<span class="sd">        :param leverage: The leverage for the position</span>
+<span class="sd">        :param slip_page: The slippage percentage</span>
+<span class="sd">        :param is_estimate: If True, returns the estimated gas for the transaction</span>
+<span class="sd">        :param gas: The gas limit for the transaction</span>
+<span class="sd">        :param gas_price: The gas price for the transaction</span>
+<span class="sd">        :param nonce: The nonce for the transaction</span>
+<span class="sd">        :return: The transaction receipt if not estimating gas, otherwise the estimated gas</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">token_of_pool</span> <span class="o">=</span> <span class="n">collateral_token</span> <span class="k">if</span> <span class="n">is_long</span> <span class="k">else</span> <span class="n">underlying_token</span>
+        <span class="n">selected_pool</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">POOLS</span><span class="p">,</span> <span class="n">pool</span><span class="p">)</span> <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">POOLS</span><span class="o">.</span><span class="fm">__dir__</span><span class="p">()</span> <span class="k">if</span> <span class="s2">&quot;_&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">i</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_pool</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;token-not-allow-in-collateral-whitelist&quot;</span><span class="p">)</span>
+        <span class="n">selected_pool</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selected_pool</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">tokenAddress</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">()</span> <span class="o">==</span> <span class="n">token_of_pool</span><span class="o">.</span><span class="n">address</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_pool</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;token-not-allow-in-collateral-whitelist&quot;</span><span class="p">)</span>
+        <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span> <span class="o">=</span> <span class="n">selected_pool</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">entry_price</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">entry_price</span><span class="p">,</span> <span class="n">collateral_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">underlying_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">leverage</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">leverage</span><span class="p">)</span>
+        <span class="n">slip_page</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">slip_page</span><span class="p">)</span>
+        <span class="n">contract_func</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">openPosition</span><span class="p">(</span>
+            <span class="n">nftId</span><span class="o">=</span><span class="n">nft_id</span><span class="p">,</span>
+            <span class="n">collateralTokenAddress</span><span class="o">=</span><span class="n">collateral_token</span><span class="o">.</span><span class="n">address</span><span class="p">,</span>
+            <span class="n">swapTokenAddress</span><span class="o">=</span><span class="n">underlying_token</span><span class="o">.</span><span class="n">address</span> <span class="k">if</span> <span class="n">is_long</span> <span class="k">else</span> <span class="n">collateral_token</span><span class="o">.</span><span class="n">address</span><span class="p">,</span>
+            <span class="n">entryPrice</span><span class="o">=</span><span class="n">entry_price</span><span class="p">,</span>
+            <span class="n">contractSize</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
+            <span class="n">leverage</span><span class="o">=</span><span class="n">leverage</span><span class="p">,</span>
+            <span class="n">slippage</span><span class="o">=</span><span class="n">slip_page</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_transaction</span><span class="p">(</span><span class="n">contract_func</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="n">is_estimate</span><span class="p">,</span> <span class="n">gas</span><span class="o">=</span><span class="n">gas</span><span class="p">,</span> <span class="n">gas_price</span><span class="o">=</span><span class="n">gas_price</span><span class="p">,</span> <span class="n">nonce</span><span class="o">=</span><span class="n">nonce</span><span class="p">)</span></div></div>
+    
+
+
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, fwx/akio777.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

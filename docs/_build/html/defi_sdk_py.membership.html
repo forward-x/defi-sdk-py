@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>defi_sdk_py.membership package &mdash; fwx-defi-python-sdk 1.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=0b546569"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="defi_sdk_py.pool package" href="defi_sdk_py.pool.html" />
+    <link rel="prev" title="defi_sdk_py.library package" href="defi_sdk_py.library.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            fwx-defi-python-sdk
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.html">defi_sdk_py package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.chain_client.html">defi_sdk_py.chain_client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.address_const.html">defi_sdk_py.address_const package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.core.html">defi_sdk_py.core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.pool.html">defi_sdk_py.pool package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">defi_sdk_py.membership package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-defi_sdk_py.membership">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#defi_sdk_py.membership.Membership"><code class="docutils literal notranslate"><span class="pre">Membership</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#defi_sdk_py.membership.Membership.current_pool"><code class="docutils literal notranslate"><span class="pre">Membership.current_pool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#defi_sdk_py.membership.Membership.get_default_membership"><code class="docutils literal notranslate"><span class="pre">Membership.get_default_membership()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#defi_sdk_py.membership.Membership.get_pool_lists"><code class="docutils literal notranslate"><span class="pre">Membership.get_pool_lists()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#defi_sdk_py.membership.Membership.get_previous_pool"><code class="docutils literal notranslate"><span class="pre">Membership.get_previous_pool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#defi_sdk_py.membership.Membership.get_rank"><code class="docutils literal notranslate"><span class="pre">Membership.get_rank()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#defi_sdk_py.membership.Membership.get_rank_pool"><code class="docutils literal notranslate"><span class="pre">Membership.get_rank_pool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#defi_sdk_py.membership.Membership.get_refferrer"><code class="docutils literal notranslate"><span class="pre">Membership.get_refferrer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#defi_sdk_py.membership.Membership.mint"><code class="docutils literal notranslate"><span class="pre">Membership.mint()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#defi_sdk_py.membership.Membership.owner_of"><code class="docutils literal notranslate"><span class="pre">Membership.owner_of()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#defi_sdk_py.membership.Membership.set_default_membership"><code class="docutils literal notranslate"><span class="pre">Membership.set_default_membership()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.stake_pool.html">defi_sdk_py.stake_pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.utils.html">defi_sdk_py.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.helper_core.html">defi_sdk_py.helper_core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.helper_pool.html">defi_sdk_py.helper_pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.helper_future_trade.html">defi_sdk_py.helper_future_trade package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defi_sdk_py.helper_membership_and_stake_pool.html">defi_sdk_py.helper_membership_and_stake_pool package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fwx-defi-python-sdk</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="defi_sdk_py.html">defi_sdk_py package</a></li>
+      <li class="breadcrumb-item active">defi_sdk_py.membership package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/defi_sdk_py.membership.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="defi-sdk-py-membership-package">
+<h1>defi_sdk_py.membership package<a class="headerlink" href="#defi-sdk-py-membership-package" title="Permalink to this heading"></a></h1>
+<section id="module-defi_sdk_py.membership">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-defi_sdk_py.membership" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="defi_sdk_py.membership.Membership">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">defi_sdk_py.membership.</span></span><span class="sig-name descname"><span class="pre">Membership</span></span><a class="reference internal" href="_modules/defi_sdk_py/membership.html#Membership"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.membership.Membership" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Membership provides functionality to interact with the membership smart contracts.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.membership.Membership.current_pool">
+<span class="sig-name descname"><span class="pre">current_pool</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/membership.html#Membership.current_pool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.membership.Membership.current_pool" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the address of the current pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The address of the current pool as a string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.membership.Membership.get_default_membership">
+<span class="sig-name descname"><span class="pre">get_default_membership</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/membership.html#Membership.get_default_membership"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.membership.Membership.get_default_membership" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the default membership level for a given address.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>address</strong> – The address to query the default membership level</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The default membership level as an integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.membership.Membership.get_pool_lists">
+<span class="sig-name descname"><span class="pre">get_pool_lists</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/defi_sdk_py/membership.html#Membership.get_pool_lists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.membership.Membership.get_pool_lists" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves a list of pool addresses that are part of the membership program.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of pool addresses as strings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.membership.Membership.get_previous_pool">
+<span class="sig-name descname"><span class="pre">get_previous_pool</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/membership.html#Membership.get_previous_pool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.membership.Membership.get_previous_pool" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the address of the previous pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The address of the previous pool as a string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.membership.Membership.get_rank">
+<span class="sig-name descname"><span class="pre">get_rank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/membership.html#Membership.get_rank"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.membership.Membership.get_rank" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the rank associated with a given NFT ID in the current pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nft_id</strong> – The NFT ID to query the rank</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rank as an integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.membership.Membership.get_rank_pool">
+<span class="sig-name descname"><span class="pre">get_rank_pool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pool</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">IAPHPool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/membership.html#Membership.get_rank_pool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.membership.Membership.get_rank_pool" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the rank associated with a given NFT ID in a specified pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pool</strong> – The pool contract interface</p></li>
+<li><p><strong>nft_id</strong> – The NFT ID to query the rank</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rank as an integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.membership.Membership.get_refferrer">
+<span class="sig-name descname"><span class="pre">get_refferrer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/membership.html#Membership.get_refferrer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.membership.Membership.get_refferrer" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the referrer associated with a given NFT ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nft_id</strong> – The NFT ID to query the referrer</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The referrer as an integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.membership.Membership.mint">
+<span class="sig-name descname"><span class="pre">mint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">referal_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_estimate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas_price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonce</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="defi_sdk_py.utils.html#defi_sdk_py.utils.TransactionReceipt" title="defi_sdk_py.utils.TransactionReceipt"><span class="pre">TransactionReceipt</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/membership.html#Membership.mint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.membership.Membership.mint" title="Permalink to this definition"></a></dt>
+<dd><p>Mints a new membership NFT with an optional referral ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referal_id</strong> – The referral ID to associate with the minting (default is 0)</p></li>
+<li><p><strong>is_estimate</strong> – If True, returns the estimated gas for the transaction</p></li>
+<li><p><strong>gas</strong> – The gas limit for the transaction</p></li>
+<li><p><strong>gas_price</strong> – The gas price for the transaction</p></li>
+<li><p><strong>nonce</strong> – The nonce for the transaction</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transaction receipt if not estimating gas, otherwise the estimated gas</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.membership.Membership.owner_of">
+<span class="sig-name descname"><span class="pre">owner_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/membership.html#Membership.owner_of"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.membership.Membership.owner_of" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the owner address of a specific NFT ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nft_id</strong> – The NFT ID to query the owner</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The address of the owner as a string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="defi_sdk_py.membership.Membership.set_default_membership">
+<span class="sig-name descname"><span class="pre">set_default_membership</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nft_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_estimate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas_price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonce</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="defi_sdk_py.utils.html#defi_sdk_py.utils.TransactionReceipt" title="defi_sdk_py.utils.TransactionReceipt"><span class="pre">TransactionReceipt</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></span><a class="reference internal" href="_modules/defi_sdk_py/membership.html#Membership.set_default_membership"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#defi_sdk_py.membership.Membership.set_default_membership" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the default membership level for the caller using a given NFT ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nft_id</strong> – The NFT ID to set as the default membership</p></li>
+<li><p><strong>is_estimate</strong> – If True, returns the estimated gas for the transaction</p></li>
+<li><p><strong>gas</strong> – The gas limit for the transaction</p></li>
+<li><p><strong>gas_price</strong> – The gas price for the transaction</p></li>
+<li><p><strong>nonce</strong> – The nonce for the transaction</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transaction receipt if not estimating gas, otherwise the estimated gas</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="defi_sdk_py.library.html" class="btn btn-neutral float-left" title="defi_sdk_py.library package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="defi_sdk_py.pool.html" class="btn btn-neutral float-right" title="defi_sdk_py.pool package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, fwx/akio777.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>defi_sdk_py.helper_core &mdash; fwx-defi-python-sdk 1.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=0b546569"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            fwx-defi-python-sdk
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.html">defi_sdk_py package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.chain_client.html">defi_sdk_py.chain_client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.address_const.html">defi_sdk_py.address_const package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.core.html">defi_sdk_py.core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.pool.html">defi_sdk_py.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.membership.html">defi_sdk_py.membership package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.stake_pool.html">defi_sdk_py.stake_pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.utils.html">defi_sdk_py.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_core.html">defi_sdk_py.helper_core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_pool.html">defi_sdk_py.helper_pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_future_trade.html">defi_sdk_py.helper_future_trade package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_membership_and_stake_pool.html">defi_sdk_py.helper_membership_and_stake_pool package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fwx-defi-python-sdk</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">defi_sdk_py.helper_core</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for defi_sdk_py.helper_core</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">..abi.IHelperCore</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">..abi.IERC20Metadata</span> <span class="kn">import</span> <span class="n">IERC20Metadata</span>
+<span class="kn">from</span> <span class="nn">..abi.IHelperCore</span> <span class="kn">import</span> <span class="n">IHelperCore</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">parseEther</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<div class="viewcode-block" id="ActiveLoans"><a class="viewcode-back" href="../../defi_sdk_py.helper_core.html#defi_sdk_py.helper_core.ActiveLoans">[docs]</a><span class="k">class</span> <span class="nc">ActiveLoans</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents a collection of active loans along with their corresponding information.</span>
+
+<span class="sd">    :param active_loans: A list of active Loan objects</span>
+<span class="sd">    :param active_loan_infos: A list of ActiveLoanInfo objects with detailed loan information</span>
+<span class="sd">    :param interest_owed_per_day: A list of interest owed per day for each loan</span>
+<span class="sd">    :param new_cursor: The new cursor position for pagination</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">active_loans</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">active_loan_infos</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">interest_owed_per_day</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">new_cursor</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active_loans</span><span class="p">:</span><span class="nb">list</span><span class="p">(</span><span class="n">Loan</span><span class="p">)</span> <span class="o">=</span> <span class="n">active_loans</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active_loan_infos</span><span class="p">:</span><span class="nb">list</span><span class="p">(</span><span class="n">ActiveLoanInfo</span><span class="p">)</span> <span class="o">=</span> <span class="n">active_loan_infos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interest_owed_per_day</span><span class="p">:</span><span class="nb">list</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">=</span> <span class="n">interest_owed_per_day</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_cursor</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="n">new_cursor</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">active_loans</span><span class="p">)):</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="nb">str</span><span class="p">({</span>
+                    <span class="s1">&#39;active_loans&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_loans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span>
+                    <span class="s1">&#39;active_loan_infos&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_loan_infos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span>
+                    <span class="s1">&#39;interest_owed_per_day&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">interest_owed_per_day</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="p">})</span>
+            <span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">({</span><span class="s1">&#39;new_cursor&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">new_cursor</span><span class="p">}))</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LoanCollateralInfo"><a class="viewcode-back" href="../../defi_sdk_py.helper_core.html#defi_sdk_py.helper_core.LoanCollateralInfo">[docs]</a><span class="k">class</span> <span class="nc">LoanCollateralInfo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the collateral information for a loan.</span>
+
+<span class="sd">    :param minimumCollateral: The minimum required collateral for the loan</span>
+<span class="sd">    :param removableCollateral: The amount of collateral that can be removed without affecting the loan</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">minimumCollateral</span><span class="p">,</span> <span class="n">removableCollateral</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minimumCollateral</span> <span class="o">=</span> <span class="n">minimumCollateral</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">removableCollateral</span> <span class="o">=</span> <span class="n">removableCollateral</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">({</span>
+            <span class="s2">&quot;minumum_collateral&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">minimumCollateral</span><span class="p">,</span>
+            <span class="s2">&quot;removable_collateral&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">removableCollateral</span>
+        <span class="p">})</span></div>
+
+<div class="viewcode-block" id="SettleBorrowInfo"><a class="viewcode-back" href="../../defi_sdk_py.helper_core.html#defi_sdk_py.helper_core.SettleBorrowInfo">[docs]</a><span class="k">class</span> <span class="nc">SettleBorrowInfo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the information required to settle a borrow.</span>
+
+<span class="sd">    :param settledBorrowAmount: The amount of the borrow that has been settled</span>
+<span class="sd">    :param settledLTV: The loan-to-value ratio after settlement</span>
+<span class="sd">    :param rate: The rate used in settlement calculations</span>
+<span class="sd">    :param precision: The precision of the rate</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settledBorrowAmount</span><span class="p">,</span> <span class="n">settledLTV</span><span class="p">,</span> <span class="n">rate</span><span class="p">,</span> <span class="n">precision</span><span class="p">,)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settledBorrowAmount</span> <span class="o">=</span> <span class="n">settledBorrowAmount</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settledLTV</span> <span class="o">=</span> <span class="n">settledLTV</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rate</span> <span class="o">=</span> <span class="n">rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">precision</span> <span class="o">=</span> <span class="n">precision</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">({</span>
+            <span class="s2">&quot;settledBorrowAmount&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">settledBorrowAmount</span><span class="p">,</span>
+            <span class="s2">&quot;settledLTV&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">settledLTV</span><span class="p">,</span>
+            <span class="s2">&quot;rate&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rate</span><span class="p">,</span>
+            <span class="s2">&quot;precision&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">precision</span>
+        <span class="p">})</span></div>
+<div class="viewcode-block" id="BorrowAmountInfo"><a class="viewcode-back" href="../../defi_sdk_py.helper_core.html#defi_sdk_py.helper_core.BorrowAmountInfo">[docs]</a><span class="k">class</span> <span class="nc">BorrowAmountInfo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the information about the maximum borrowable amount and maximum collateral amount.</span>
+
+<span class="sd">    :param maxBorrowAmount: The maximum amount that can be borrowed</span>
+<span class="sd">    :param maxCollateralAmount: The maximum amount of collateral that can be used</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxBorrowAmount</span><span class="p">,</span> <span class="n">maxCollateralAmount</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxBorrowAmount</span> <span class="o">=</span> <span class="n">maxBorrowAmount</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxCollateralAmount</span> <span class="o">=</span> <span class="n">maxCollateralAmount</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">({</span>
+            <span class="s2">&quot;maxBorrowAmount&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxBorrowAmount</span><span class="p">,</span>
+            <span class="s2">&quot;maxCollateralAmount&quot;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxCollateralAmount</span>
+        <span class="p">})</span></div>
+
+<div class="viewcode-block" id="HelperCore"><a class="viewcode-back" href="../../defi_sdk_py.helper_core.html#defi_sdk_py.helper_core.HelperCore">[docs]</a><span class="k">class</span> <span class="nc">HelperCore</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    HelperCore provides utility functions to assist with loan and collateral calculations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the HelperCore by setting up the helper core contract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">HelperCore</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">helper_core</span><span class="p">:</span><span class="n">IHelperCore</span> <span class="o">=</span> <span class="n">IHelperCore</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">address_const</span><span class="o">.</span><span class="n">get_helper_core_address</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+
+<div class="viewcode-block" id="HelperCore.get_active_loans"><a class="viewcode-back" href="../../defi_sdk_py.helper_core.html#defi_sdk_py.helper_core.HelperCore.get_active_loans">[docs]</a>    <span class="k">def</span> <span class="nf">get_active_loans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">result_per_page</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">ActiveLoans</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the active loans for a given NFT ID.</span>
+<span class="sd">        :param nft_id: The NFT ID to query for active loans</span>
+<span class="sd">        :param cursor: The cursor position for pagination</span>
+<span class="sd">        :param result_per_page: The number of results per page</span>
+<span class="sd">        :return: An ActiveLoans object containing a list of active loans and related information</span>
+<span class="sd">        &quot;&quot;&quot;</span>    
+        <span class="n">active_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_core</span><span class="o">.</span><span class="n">getActiveLoans</span><span class="p">(</span><span class="n">nftId</span><span class="o">=</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">cursor</span><span class="o">=</span><span class="n">cursor</span><span class="p">,</span> <span class="n">resultsPerPage</span><span class="o">=</span><span class="n">result_per_page</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span>
+        <span class="n">active_loans</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">active_loan_infos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">interest_owed_per_day</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_cursor</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">active_loans</span><span class="p">:</span><span class="nb">list</span><span class="p">(</span><span class="n">Loan</span><span class="p">)</span> <span class="o">=</span> <span class="p">[</span><span class="n">Loan</span><span class="p">(</span><span class="o">*</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">active_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">active_loan_infos</span><span class="p">:</span><span class="nb">list</span><span class="p">(</span><span class="n">ActiveLoanInfo</span><span class="p">)</span> <span class="o">=</span> <span class="p">[</span><span class="n">ActiveLoanInfo</span><span class="p">(</span><span class="o">*</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">active_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">interest_owed_per_day</span><span class="p">:</span><span class="nb">list</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">=</span>  <span class="n">active_list</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">new_cursor</span> <span class="o">=</span> <span class="n">active_list</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">ActiveLoans</span><span class="p">(</span>
+            <span class="n">active_loans</span><span class="p">,</span>
+            <span class="n">active_loan_infos</span><span class="p">,</span>
+            <span class="n">interest_owed_per_day</span><span class="p">,</span>
+            <span class="n">new_cursor</span>
+        <span class="p">)</span> </div>
+
+<div class="viewcode-block" id="HelperCore.get_loan_borrow_amount"><a class="viewcode-back" href="../../defi_sdk_py.helper_core.html#defi_sdk_py.helper_core.HelperCore.get_loan_borrow_amount">[docs]</a>    <span class="k">def</span> <span class="nf">get_loan_borrow_amount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the borrow amount for a specific loan.</span>
+<span class="sd">        :param nft_id: The NFT ID associated with the loan</span>
+<span class="sd">        :param loan_id: The loan ID</span>
+<span class="sd">        :return: The borrow amount for the loan</span>
+<span class="sd">        &quot;&quot;&quot;</span>    
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_core</span><span class="o">.</span><span class="n">getLoanBorrowAmount</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HelperCore.get_loan_collateral_info"><a class="viewcode-back" href="../../defi_sdk_py.helper_core.html#defi_sdk_py.helper_core.HelperCore.get_loan_collateral_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_loan_collateral_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">LoanCollateralInfo</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the collateral information for a specific loan.</span>
+<span class="sd">        :param nft_id: The NFT ID associated with the loan</span>
+<span class="sd">        :param loan_id: The loan ID</span>
+<span class="sd">        :return: A LoanCollateralInfo object containing the collateral information for the loan</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">LoanCollateralInfo</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">helper_core</span><span class="o">.</span><span class="n">getLoanCollateralInfo</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()))</span></div>
+    
+<div class="viewcode-block" id="HelperCore.get_loan_current_ltv"><a class="viewcode-back" href="../../defi_sdk_py.helper_core.html#defi_sdk_py.helper_core.HelperCore.get_loan_current_ltv">[docs]</a>    <span class="k">def</span> <span class="nf">get_loan_current_ltv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the current loan-to-value (LTV) ratio for a specific loan.</span>
+<span class="sd">        :param nft_id: The NFT ID associated with the loan</span>
+<span class="sd">        :param loan_id: The loan ID</span>
+<span class="sd">        :return: The current LTV ratio for the loan</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_core</span><span class="o">.</span><span class="n">getLoanCurrentLTV</span><span class="p">(</span><span class="n">loan_id</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="HelperCore.is_loan_liquidatable"><a class="viewcode-back" href="../../defi_sdk_py.helper_core.html#defi_sdk_py.helper_core.HelperCore.is_loan_liquidatable">[docs]</a>    <span class="k">def</span> <span class="nf">is_loan_liquidatable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determines whether a loan is liquidatable.</span>
+<span class="sd">        :param loan_id: The loan ID to check</span>
+<span class="sd">        :return: True if the loan is liquidatable, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_core</span><span class="o">.</span><span class="n">isLoanLiquidable</span><span class="p">(</span><span class="n">loan_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="HelperCore.get_settle_borrow_info"><a class="viewcode-back" href="../../defi_sdk_py.helper_core.html#defi_sdk_py.helper_core.HelperCore.get_settle_borrow_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_settle_borrow_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">SettleBorrowInfo</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the information required to settle a borrow for a specific loan.</span>
+<span class="sd">        :param nft_id: The NFT ID associated with the loan</span>
+<span class="sd">        :param loan_id: The loan ID</span>
+<span class="sd">        :return: A SettleBorrowInfo object containing the settlement information for the loan</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">SettleBorrowInfo</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">helper_core</span><span class="o">.</span><span class="n">getSettleBorrowInfo</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()))</span></div>
+    
+<div class="viewcode-block" id="HelperCore.get_pernalty_fee"><a class="viewcode-back" href="../../defi_sdk_py.helper_core.html#defi_sdk_py.helper_core.HelperCore.get_pernalty_fee">[docs]</a>    <span class="k">def</span> <span class="nf">get_pernalty_fee</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the penalty fee for a specific loan.</span>
+<span class="sd">        :param nft_id: The NFT ID associated with the loan</span>
+<span class="sd">        :param loan_id: The loan ID</span>
+<span class="sd">        :return: The penalty fee for the loan</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_core</span><span class="o">.</span><span class="n">getPenaltyFee</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HelperCore.calculate_max_repay"><a class="viewcode-back" href="../../defi_sdk_py.helper_core.html#defi_sdk_py.helper_core.HelperCore.calculate_max_repay">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_max_repay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">gap_time_borrow_interest_second</span><span class="p">:</span><span class="nb">int</span> <span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the maximum repayable amount for a loan given the gap time for borrow interest.</span>
+<span class="sd">        :param nft_id: The NFT ID associated with the loan</span>
+<span class="sd">        :param loan_id: The loan ID</span>
+<span class="sd">        :param gap_time_borrow_interest_second: The gap time in seconds for calculating borrow interest</span>
+<span class="sd">        :return: The maximum repayable amount for the loan</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_core</span><span class="o">.</span><span class="n">calculateMaxRepay</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">,</span> <span class="n">gap_time_borrow_interest_second</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="HelperCore.calculate_ltv_for_borrow"><a class="viewcode-back" href="../../defi_sdk_py.helper_core.html#defi_sdk_py.helper_core.HelperCore.calculate_ltv_for_borrow">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_ltv_for_borrow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">borrow_amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">borrow_token</span><span class="p">:</span><span class="n">IERC20Metadata</span><span class="p">,</span> <span class="n">collateral_amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">collateral_token</span><span class="p">:</span><span class="n">IERC20Metadata</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the loan-to-value (LTV) ratio for a loan when borrowing a specific amount.</span>
+<span class="sd">        </span>
+<span class="sd">        :param nft_id: The NFT ID associated with the loan</span>
+<span class="sd">        :param loan_id: The loan ID</span>
+<span class="sd">        :param borrow_amount: The amount intended to borrow</span>
+<span class="sd">        :param borrow_token: The token metadata of the borrowing token</span>
+<span class="sd">        :param collateral_amount: The amount of collateral provided</span>
+<span class="sd">        :param collateral_token: The token metadata of the collateral token</span>
+<span class="sd">        :return: The calculated LTV ratio for the proposed borrow scenario</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">borrow_amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">borrow_amount</span><span class="p">,</span> <span class="n">borrow_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">collateral_sent_amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">collateral_amount</span><span class="p">,</span> <span class="n">collateral_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_core</span><span class="o">.</span><span class="n">calculateLTVForBorrow</span><span class="p">(</span>
+            <span class="n">nft_id</span><span class="p">,</span>
+            <span class="n">loan_id</span><span class="p">,</span>
+            <span class="n">borrow_amount</span><span class="p">,</span>
+            <span class="n">borrow_token</span><span class="o">.</span><span class="n">address</span><span class="p">,</span>
+            <span class="n">collateral_sent_amount</span><span class="p">,</span>
+            <span class="n">collateral_token</span><span class="o">.</span><span class="n">address</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="HelperCore.calculate_ltv_for_repay"><a class="viewcode-back" href="../../defi_sdk_py.helper_core.html#defi_sdk_py.helper_core.HelperCore.calculate_ltv_for_repay">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_ltv_for_repay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">repay_amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">is_only_interest</span><span class="p">:</span><span class="nb">bool</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the LTV ratio for a loan after repaying a specific amount.</span>
+<span class="sd">        </span>
+<span class="sd">        :param nft_id: The NFT ID associated with the loan</span>
+<span class="sd">        :param loan_id: The loan ID</span>
+<span class="sd">        :param repay_amount: The amount intended to repay</span>
+<span class="sd">        :param is_only_interest: A boolean indicating whether only the interest is being repaid</span>
+<span class="sd">        :return: The calculated LTV ratio after the repayment</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">loan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loans</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">)</span>
+        <span class="n">borrow_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">loan</span><span class="o">.</span><span class="n">borrowTokenAddress</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">repay_amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">repay_amount</span><span class="p">,</span> <span class="n">borrow_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_core</span><span class="o">.</span><span class="n">calculateLTVForRepay</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">,</span> <span class="n">repay_amount</span><span class="p">,</span> <span class="n">is_only_interest</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HelperCore.calculate_ltv_for_adjust_collateral"><a class="viewcode-back" href="../../defi_sdk_py.helper_core.html#defi_sdk_py.helper_core.HelperCore.calculate_ltv_for_adjust_collateral">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_ltv_for_adjust_collateral</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">adjust_amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">is_add</span><span class="p">:</span><span class="nb">bool</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the LTV ratio for a loan after adjusting the collateral by a specific amount.</span>
+<span class="sd">        </span>
+<span class="sd">        :param nft_id: The NFT ID associated with the loan</span>
+<span class="sd">        :param loan_id: The loan ID</span>
+<span class="sd">        :param adjust_amount: The amount by which the collateral is being adjusted</span>
+<span class="sd">        :param is_add: A boolean indicating whether the collateral is being added (True) or removed (False)</span>
+<span class="sd">        :return: The calculated LTV ratio after the collateral adjustment</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">loan</span><span class="p">:</span><span class="n">Loan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loans</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">)</span>
+        <span class="n">collateral_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">loan</span><span class="o">.</span><span class="n">collateralTokenAddress</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">adjust_amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">adjust_amount</span><span class="p">,</span> <span class="n">collateral_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_core</span><span class="o">.</span><span class="n">calculateLTVForAdjustColla</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">,</span> <span class="n">adjust_amount</span><span class="p">,</span> <span class="n">is_add</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="HelperCore.calculate_borrow_amount"><a class="viewcode-back" href="../../defi_sdk_py.helper_core.html#defi_sdk_py.helper_core.HelperCore.calculate_borrow_amount">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_borrow_amount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">loan_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">borrow_amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">borrow_token</span><span class="p">:</span><span class="n">IERC20Metadata</span><span class="p">,</span> <span class="n">collateral_sent_amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">collateral_token</span><span class="p">:</span><span class="n">IERC20Metadata</span><span class="p">,</span> <span class="n">ltv</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">BorrowAmountInfo</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the maximum amount that can be borrowed and the corresponding collateral amount required based on a specified LTV ratio.</span>
+<span class="sd">        </span>
+<span class="sd">        :param nft_id: The NFT ID associated with the loan</span>
+<span class="sd">        :param loan_id: The loan ID</span>
+<span class="sd">        :param borrow_amount: The amount intended to borrow</span>
+<span class="sd">        :param borrow_token: The token metadata of the borrowing token</span>
+<span class="sd">        :param collateral_sent_amount: The amount of collateral provided</span>
+<span class="sd">        :param collateral_token: The token metadata of the collateral token</span>
+<span class="sd">        :param ltv: The desired LTV ratio for the loan</span>
+<span class="sd">        :return: A BorrowAmountInfo object containing the calculated maximum borrow amount and collateral amount</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">borrow_amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">borrow_amount</span><span class="p">,</span> <span class="n">borrow_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">collateral_sent_amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">collateral_sent_amount</span><span class="p">,</span> <span class="n">collateral_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">ltv</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">ltv</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">BorrowAmountInfo</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">helper_core</span><span class="o">.</span><span class="n">calculateBorrowAmount</span><span class="p">(</span>
+            <span class="n">nft_id</span><span class="p">,</span>
+            <span class="n">loan_id</span><span class="p">,</span>
+            <span class="n">borrow_amount</span><span class="p">,</span>
+            <span class="n">borrow_token</span><span class="o">.</span><span class="n">address</span><span class="p">,</span>
+            <span class="n">collateral_sent_amount</span><span class="p">,</span>
+            <span class="n">collateral_token</span><span class="o">.</span><span class="n">address</span><span class="p">,</span>
+            <span class="n">ltv</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()))</span></div></div>
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, fwx/akio777.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

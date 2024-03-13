@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>defi_sdk_py.membership &mdash; fwx-defi-python-sdk 1.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=0b546569"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            fwx-defi-python-sdk
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.html">defi_sdk_py package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.chain_client.html">defi_sdk_py.chain_client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.address_const.html">defi_sdk_py.address_const package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.core.html">defi_sdk_py.core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.pool.html">defi_sdk_py.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.membership.html">defi_sdk_py.membership package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.stake_pool.html">defi_sdk_py.stake_pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.utils.html">defi_sdk_py.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_core.html">defi_sdk_py.helper_core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_pool.html">defi_sdk_py.helper_pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_future_trade.html">defi_sdk_py.helper_future_trade package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_membership_and_stake_pool.html">defi_sdk_py.helper_membership_and_stake_pool package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fwx-defi-python-sdk</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">defi_sdk_py.membership</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for defi_sdk_py.membership</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">web3</span> <span class="kn">import</span> <span class="n">Web3</span><span class="p">,</span> <span class="n">types</span>
+<span class="kn">from</span> <span class="nn">..abi.IMembership</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">..abi.IERC20Metadata</span> <span class="kn">import</span> <span class="n">IERC20Metadata</span>
+<span class="kn">from</span> <span class="nn">..abi.IAPHPool</span> <span class="kn">import</span> <span class="n">IAPHPool</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">parseEther</span><span class="p">,</span> <span class="n">TransactionReceipt</span>
+<span class="kn">from</span> <span class="nn">..address_const</span> <span class="kn">import</span> <span class="n">AddressConst</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+
+<div class="viewcode-block" id="Membership"><a class="viewcode-back" href="../../defi_sdk_py.membership.html#defi_sdk_py.membership.Membership">[docs]</a><span class="k">class</span> <span class="nc">Membership</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Membership provides functionality to interact with the membership smart contracts.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the Membership by setting up the membership contract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Membership</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">membership</span><span class="p">:</span><span class="n">IMembership</span> <span class="o">=</span> <span class="n">IMembership</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">address_const</span><span class="o">.</span><span class="n">get_membership_address</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Membership.current_pool"><a class="viewcode-back" href="../../defi_sdk_py.membership.html#defi_sdk_py.membership.Membership.current_pool">[docs]</a>    <span class="k">def</span> <span class="nf">current_pool</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the address of the current pool.</span>
+
+<span class="sd">        :return: The address of the current pool as a string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">membership</span><span class="o">.</span><span class="n">currentPool</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Membership.get_default_membership"><a class="viewcode-back" href="../../defi_sdk_py.membership.html#defi_sdk_py.membership.Membership.get_default_membership">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_membership</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the default membership level for a given address.</span>
+
+<span class="sd">        :param address: The address to query the default membership level</span>
+<span class="sd">        :return: The default membership level as an integer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">membership</span><span class="o">.</span><span class="n">getDefaultMembership</span><span class="p">(</span><span class="n">address</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="Membership.get_pool_lists"><a class="viewcode-back" href="../../defi_sdk_py.membership.html#defi_sdk_py.membership.Membership.get_pool_lists">[docs]</a>    <span class="k">def</span> <span class="nf">get_pool_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves a list of pool addresses that are part of the membership program.</span>
+
+<span class="sd">        :return: A list of pool addresses as strings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">membership</span><span class="o">.</span><span class="n">getPoolLists</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="Membership.get_previous_pool"><a class="viewcode-back" href="../../defi_sdk_py.membership.html#defi_sdk_py.membership.Membership.get_previous_pool">[docs]</a>    <span class="k">def</span> <span class="nf">get_previous_pool</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the address of the previous pool.</span>
+
+<span class="sd">        :return: The address of the previous pool as a string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">membership</span><span class="o">.</span><span class="n">getPreviousPool</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="Membership.get_rank"><a class="viewcode-back" href="../../defi_sdk_py.membership.html#defi_sdk_py.membership.Membership.get_rank">[docs]</a>    <span class="k">def</span> <span class="nf">get_rank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the rank associated with a given NFT ID in the current pool.</span>
+
+<span class="sd">        :param nft_id: The NFT ID to query the rank</span>
+<span class="sd">        :return: The rank as an integer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">membership</span><span class="o">.</span><span class="n">getRank</span><span class="p">(</span><span class="n">pool</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">current_pool</span><span class="p">(),</span> <span class="n">tokenId</span><span class="o">=</span><span class="n">nft_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Membership.get_rank_pool"><a class="viewcode-back" href="../../defi_sdk_py.membership.html#defi_sdk_py.membership.Membership.get_rank_pool">[docs]</a>    <span class="k">def</span> <span class="nf">get_rank_pool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span><span class="n">IAPHPool</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the rank associated with a given NFT ID in a specified pool.</span>
+
+<span class="sd">        :param pool: The pool contract interface</span>
+<span class="sd">        :param nft_id: The NFT ID to query the rank</span>
+<span class="sd">        :return: The rank as an integer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">membership</span><span class="o">.</span><span class="n">getRank</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span> <span class="n">nft_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Membership.get_refferrer"><a class="viewcode-back" href="../../defi_sdk_py.membership.html#defi_sdk_py.membership.Membership.get_refferrer">[docs]</a>    <span class="k">def</span> <span class="nf">get_refferrer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the referrer associated with a given NFT ID.</span>
+
+<span class="sd">        :param nft_id: The NFT ID to query the referrer</span>
+<span class="sd">        :return: The referrer as an integer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">membership</span><span class="o">.</span><span class="n">getReferrer</span><span class="p">(</span><span class="n">nft_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Membership.mint"><a class="viewcode-back" href="../../defi_sdk_py.membership.html#defi_sdk_py.membership.Membership.mint">[docs]</a>    <span class="k">def</span> <span class="nf">mint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">referal_id</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">is_estimate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gas</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">gas_price</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nonce</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Union</span><span class="p">[</span><span class="n">TransactionReceipt</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Mints a new membership NFT with an optional referral ID.</span>
+
+<span class="sd">        :param referal_id: The referral ID to associate with the minting (default is 0)</span>
+<span class="sd">        :param is_estimate: If True, returns the estimated gas for the transaction</span>
+<span class="sd">        :param gas: The gas limit for the transaction</span>
+<span class="sd">        :param gas_price: The gas price for the transaction</span>
+<span class="sd">        :param nonce: The nonce for the transaction</span>
+<span class="sd">        :return: The transaction receipt if not estimating gas, otherwise the estimated gas</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">contract_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">membership</span><span class="o">.</span><span class="n">mint</span><span class="p">(</span><span class="n">referal_id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_transaction</span><span class="p">(</span><span class="n">contract_func</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="n">is_estimate</span><span class="p">,</span> <span class="n">gas</span><span class="o">=</span><span class="n">gas</span><span class="p">,</span> <span class="n">gas_price</span><span class="o">=</span><span class="n">gas_price</span><span class="p">,</span> <span class="n">nonce</span><span class="o">=</span><span class="n">nonce</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Membership.set_default_membership"><a class="viewcode-back" href="../../defi_sdk_py.membership.html#defi_sdk_py.membership.Membership.set_default_membership">[docs]</a>    <span class="k">def</span> <span class="nf">set_default_membership</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span><span class="n">is_estimate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gas</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">gas_price</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nonce</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Union</span><span class="p">[</span><span class="n">TransactionReceipt</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the default membership level for the caller using a given NFT ID.</span>
+
+<span class="sd">        :param nft_id: The NFT ID to set as the default membership</span>
+<span class="sd">        :param is_estimate: If True, returns the estimated gas for the transaction</span>
+<span class="sd">        :param gas: The gas limit for the transaction</span>
+<span class="sd">        :param gas_price: The gas price for the transaction</span>
+<span class="sd">        :param nonce: The nonce for the transaction</span>
+<span class="sd">        :return: The transaction receipt if not estimating gas, otherwise the estimated gas</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">contract_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">membership</span><span class="o">.</span><span class="n">setDefaultMembership</span><span class="p">(</span><span class="n">nft_id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_transaction</span><span class="p">(</span><span class="n">contract_func</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="n">is_estimate</span><span class="p">,</span> <span class="n">gas</span><span class="o">=</span><span class="n">gas</span><span class="p">,</span> <span class="n">gas_price</span><span class="o">=</span><span class="n">gas_price</span><span class="p">,</span> <span class="n">nonce</span><span class="o">=</span><span class="n">nonce</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="Membership.owner_of"><a class="viewcode-back" href="../../defi_sdk_py.membership.html#defi_sdk_py.membership.Membership.owner_of">[docs]</a>    <span class="k">def</span> <span class="nf">owner_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the owner address of a specific NFT ID.</span>
+
+<span class="sd">        :param nft_id: The NFT ID to query the owner</span>
+<span class="sd">        :return: The address of the owner as a string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">membership</span><span class="o">.</span><span class="n">ownerOf</span><span class="p">(</span><span class="n">nft_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div></div>
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, fwx/akio777.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

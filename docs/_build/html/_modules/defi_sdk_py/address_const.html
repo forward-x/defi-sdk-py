@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>defi_sdk_py.address_const &mdash; fwx-defi-python-sdk 1.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=0b546569"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            fwx-defi-python-sdk
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.html">defi_sdk_py package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.chain_client.html">defi_sdk_py.chain_client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.address_const.html">defi_sdk_py.address_const package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.core.html">defi_sdk_py.core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.pool.html">defi_sdk_py.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.membership.html">defi_sdk_py.membership package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.stake_pool.html">defi_sdk_py.stake_pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.utils.html">defi_sdk_py.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_core.html">defi_sdk_py.helper_core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_pool.html">defi_sdk_py.helper_pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_future_trade.html">defi_sdk_py.helper_future_trade package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_membership_and_stake_pool.html">defi_sdk_py.helper_membership_and_stake_pool package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fwx-defi-python-sdk</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">defi_sdk_py.address_const</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for defi_sdk_py.address_const</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+
+<div class="viewcode-block" id="AddressConst"><a class="viewcode-back" href="../../defi_sdk_py.address_const.html#defi_sdk_py.address_const.AddressConst">[docs]</a><span class="k">class</span> <span class="nc">AddressConst</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class initializes address constants from a provided configuration dictionary.</span>
+<span class="sd">    It allows retrieval of various blockchain-related addresses.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        return_str (dict): A dictionary representation of all addresses.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        config_data (dict): A dictionary containing configuration data with keys like</span>
+<span class="sd">                            &#39;token&#39;, &#39;pool&#39;, and other blockchain-related addresses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor method</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">return_str</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">config_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;token&quot;</span><span class="p">:</span>
+                <span class="n">token</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">token_key</span><span class="p">,</span> <span class="n">token_address</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">token</span><span class="p">[</span><span class="n">token_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">token_address</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">token</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">return_str</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span> <span class="o">=</span> <span class="n">token</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;pool&quot;</span><span class="p">:</span>
+                <span class="n">pool</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">pool_key</span><span class="p">,</span> <span class="n">pool_address</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">pool</span><span class="p">[</span><span class="n">pool_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">pool_address</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">pool</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">return_str</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span> <span class="o">=</span> <span class="n">pool</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">value</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">return_str</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a JSON string representation of the address constants.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: A JSON formatted string of address constants.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">return_str</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AddressConst.get_library_address"><a class="viewcode-back" href="../../defi_sdk_py.address_const.html#defi_sdk_py.address_const.AddressConst.get_library_address">[docs]</a>    <span class="k">def</span> <span class="nf">get_library_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the library address.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The library address.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">library</span></div>
+
+<div class="viewcode-block" id="AddressConst.get_membership_address"><a class="viewcode-back" href="../../defi_sdk_py.address_const.html#defi_sdk_py.address_const.AddressConst.get_membership_address">[docs]</a>    <span class="k">def</span> <span class="nf">get_membership_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the membership address.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The membership address.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">membership</span></div>
+
+<div class="viewcode-block" id="AddressConst.get_stakepool_address"><a class="viewcode-back" href="../../defi_sdk_py.address_const.html#defi_sdk_py.address_const.AddressConst.get_stakepool_address">[docs]</a>    <span class="k">def</span> <span class="nf">get_stakepool_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the stake pool address.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The stake pool address.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stakepool</span></div>
+
+<div class="viewcode-block" id="AddressConst.get_core_address"><a class="viewcode-back" href="../../defi_sdk_py.address_const.html#defi_sdk_py.address_const.AddressConst.get_core_address">[docs]</a>    <span class="k">def</span> <span class="nf">get_core_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the core address.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The core address.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">core</span></div>
+
+<div class="viewcode-block" id="AddressConst.get_tokens_address"><a class="viewcode-back" href="../../defi_sdk_py.address_const.html#defi_sdk_py.address_const.AddressConst.get_tokens_address">[docs]</a>    <span class="k">def</span> <span class="nf">get_tokens_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves all token addresses.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: A dictionary of token addresses.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span></div>
+
+<div class="viewcode-block" id="AddressConst.get_pools_address"><a class="viewcode-back" href="../../defi_sdk_py.address_const.html#defi_sdk_py.address_const.AddressConst.get_pools_address">[docs]</a>    <span class="k">def</span> <span class="nf">get_pools_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves all pool addresses.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: A dictionary of pool addresses.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span></div>
+
+<div class="viewcode-block" id="AddressConst.get_helper_core_address"><a class="viewcode-back" href="../../defi_sdk_py.address_const.html#defi_sdk_py.address_const.AddressConst.get_helper_core_address">[docs]</a>    <span class="k">def</span> <span class="nf">get_helper_core_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the helper core address.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The helper core address.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_core</span></div>
+
+<div class="viewcode-block" id="AddressConst.get_helper_pool_address"><a class="viewcode-back" href="../../defi_sdk_py.address_const.html#defi_sdk_py.address_const.AddressConst.get_helper_pool_address">[docs]</a>    <span class="k">def</span> <span class="nf">get_helper_pool_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the helper pool address.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The helper pool address.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_pool</span></div>
+
+<div class="viewcode-block" id="AddressConst.get_helper_membership_and_stake_pool_address"><a class="viewcode-back" href="../../defi_sdk_py.address_const.html#defi_sdk_py.address_const.AddressConst.get_helper_membership_and_stake_pool_address">[docs]</a>    <span class="k">def</span> <span class="nf">get_helper_membership_and_stake_pool_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the helper membership and stake pool address.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The helper membership and stake pool address.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_membership_and_stakepool</span></div>
+
+<div class="viewcode-block" id="AddressConst.get_helper_future_trade_address"><a class="viewcode-back" href="../../defi_sdk_py.address_const.html#defi_sdk_py.address_const.AddressConst.get_helper_future_trade_address">[docs]</a>    <span class="k">def</span> <span class="nf">get_helper_future_trade_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the helper future trade address.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The helper future trade address.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_futuretrade</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, fwx/akio777.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

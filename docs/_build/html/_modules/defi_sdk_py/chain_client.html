@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>defi_sdk_py.chain_client &mdash; fwx-defi-python-sdk 1.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=0b546569"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            fwx-defi-python-sdk
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.html">defi_sdk_py package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.chain_client.html">defi_sdk_py.chain_client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.address_const.html">defi_sdk_py.address_const package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.core.html">defi_sdk_py.core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.pool.html">defi_sdk_py.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.membership.html">defi_sdk_py.membership package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.stake_pool.html">defi_sdk_py.stake_pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.utils.html">defi_sdk_py.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_core.html">defi_sdk_py.helper_core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_pool.html">defi_sdk_py.helper_pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_future_trade.html">defi_sdk_py.helper_future_trade package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_membership_and_stake_pool.html">defi_sdk_py.helper_membership_and_stake_pool package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fwx-defi-python-sdk</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">defi_sdk_py.chain_client</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for defi_sdk_py.chain_client</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">web3</span> <span class="kn">import</span> <span class="n">Web3</span><span class="p">,</span> <span class="n">HTTPProvider</span><span class="p">,</span> <span class="n">types</span>
+<span class="kn">from</span> <span class="nn">web3.middleware</span> <span class="kn">import</span> <span class="n">geth_poa_middleware</span>
+<span class="kn">from</span> <span class="nn">..address_const</span> <span class="kn">import</span> <span class="n">AddressConst</span>
+
+<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">Core</span>
+<span class="kn">from</span> <span class="nn">..pool</span> <span class="kn">import</span> <span class="n">Pool</span>
+<span class="kn">from</span> <span class="nn">..membership</span> <span class="kn">import</span> <span class="n">Membership</span>
+<span class="kn">from</span> <span class="nn">..stake_pool</span> <span class="kn">import</span> <span class="n">StakePool</span>
+<span class="kn">from</span> <span class="nn">..library</span> <span class="kn">import</span> <span class="n">Library</span>
+<span class="kn">from</span> <span class="nn">..helper_core</span> <span class="kn">import</span> <span class="n">HelperCore</span>
+<span class="kn">from</span> <span class="nn">..helper_membership_and_stake_pool</span> <span class="kn">import</span> <span class="n">HelperMembershipAndStakePool</span>
+<span class="kn">from</span> <span class="nn">..helper_pool</span> <span class="kn">import</span> <span class="n">HelperPool</span>
+<span class="kn">from</span> <span class="nn">..helper_future_trade</span> <span class="kn">import</span> <span class="n">HelperFutureTrade</span>
+
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">Day</span><span class="p">,</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">Hour</span><span class="p">,</span> <span class="n">MAX_UINT_256</span><span class="p">,</span> <span class="n">parseEther</span><span class="p">,</span><span class="n">TransactionReceipt</span>
+<span class="kn">from</span> <span class="nn">..abi.IERC20Metadata</span> <span class="kn">import</span> <span class="n">IERC20Metadata</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<div class="viewcode-block" id="ChainClient"><a class="viewcode-back" href="../../defi_sdk_py.chain_client.html#defi_sdk_py.chain_client.ChainClient">[docs]</a><span class="k">class</span> <span class="nc">ChainClient</span><span class="p">(</span><span class="n">Library</span><span class="p">,</span> <span class="n">Core</span><span class="p">,</span> <span class="n">Pool</span><span class="p">,</span> <span class="n">Membership</span><span class="p">,</span> <span class="n">StakePool</span><span class="p">,</span> <span class="n">HelperCore</span><span class="p">,</span> <span class="n">HelperMembershipAndStakePool</span><span class="p">,</span> <span class="n">HelperPool</span><span class="p">,</span> <span class="n">HelperFutureTrade</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Client for interacting with a blockchain via the Web3.py library.</span>
+
+<span class="sd">    This client provides methods to connect to a blockchain node, send transactions, and query balances.</span>
+
+<span class="sd">    :param rpc_url: URL of the blockchain node RPC interface</span>
+<span class="sd">    :param private_key: Private key for signing transactions </span>
+<span class="sd">    :param address_const: Constants for blockchain addresses (more details in address constants module)</span>
+<span class="sd">    :param maxFeePerGas: Maximum fee per gas willing to pay in wei</span>
+<span class="sd">    :param maxPriorityFeePerGas: Priority fee per gas to incentivize miners</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">rpc_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">private_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">address_const</span><span class="p">:</span> <span class="n">AddressConst</span><span class="p">,</span>
+        <span class="n">maxFeePerGas</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">maxPriorityFeePerGas</span><span class="p">:</span><span class="nb">int</span>
+    <span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;init chain client&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rpc_url</span> <span class="o">=</span> <span class="n">rpc_url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">private_key</span> <span class="o">=</span> <span class="n">private_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">address_const</span><span class="p">:</span><span class="n">AddressConst</span> <span class="o">=</span> <span class="n">address_const</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">web3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect_to_web3</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxFeePerGas</span><span class="o">=</span><span class="n">maxFeePerGas</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxPriorityFeePerGas</span><span class="o">=</span><span class="n">maxPriorityFeePerGas</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ChainClient.connect_to_web3"><a class="viewcode-back" href="../../defi_sdk_py.chain_client.html#defi_sdk_py.chain_client.ChainClient.connect_to_web3">[docs]</a>    <span class="k">def</span> <span class="nf">connect_to_web3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;try connecting to chain&quot;</span><span class="p">)</span>
+        <span class="n">web3</span><span class="p">:</span> <span class="n">Web3</span> <span class="o">=</span> <span class="n">Web3</span><span class="p">(</span><span class="n">HTTPProvider</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpc_url</span><span class="p">))</span>
+        <span class="n">web3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">default_account</span> <span class="o">=</span> <span class="n">web3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">account</span><span class="o">.</span><span class="n">from_key</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">private_key</span><span class="p">)</span><span class="o">.</span><span class="n">address</span>
+        <span class="n">web3</span><span class="o">.</span><span class="n">middleware_onion</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="n">geth_poa_middleware</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="n">web3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">default_account</span>
+        <span class="k">if</span> <span class="n">web3</span><span class="o">.</span><span class="n">is_connected</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connected to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rpc_url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to connect to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rpc_url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">web3</span></div>
+    
+<div class="viewcode-block" id="ChainClient.get_balance"><a class="viewcode-back" href="../../defi_sdk_py.chain_client.html#defi_sdk_py.chain_client.ChainClient.get_balance">[docs]</a>    <span class="k">def</span> <span class="nf">get_balance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the balance of the default account.</span>
+
+<span class="sd">        :return: The balance of the account in wei</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">get_balance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChainClient.approve"><a class="viewcode-back" href="../../defi_sdk_py.chain_client.html#defi_sdk_py.chain_client.ChainClient.approve">[docs]</a>    <span class="k">def</span> <span class="nf">approve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span><span class="n">IERC20Metadata</span><span class="p">,</span> <span class="n">spender</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gas</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">gas_price</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nonce</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">TransactionReceipt</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Approves a spender to withdraw tokens from the default account.</span>
+
+<span class="sd">        :param token: The token contract interface (can use with built-in ChainClient.TOKEN.&lt;TOKEN_SYMBOL&gt;)</span>
+<span class="sd">        :param spender: The address of the spender</span>
+<span class="sd">        :param amount: The amount of tokens to approve</span>
+<span class="sd">        :param is_estimate: Whether to estimate the gas for the transaction</span>
+<span class="sd">        :param gas: The gas limit for the transaction</span>
+<span class="sd">        :param gas_price: The gas price for the transaction</span>
+<span class="sd">        :param nonce: The nonce for the transaction</span>
+<span class="sd">        :return: The transaction receipt if not estimating gas, otherwise the estimated gas</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">contract_func</span> <span class="o">=</span> <span class="n">token</span><span class="o">.</span><span class="n">approve</span><span class="p">(</span><span class="n">spender</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_transaction</span><span class="p">(</span><span class="n">contract_func</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">is_estimate</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChainClient.send_transaction"><a class="viewcode-back" href="../../defi_sdk_py.chain_client.html#defi_sdk_py.chain_client.ChainClient.send_transaction">[docs]</a>    <span class="k">def</span> <span class="nf">send_transaction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abi_func</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">is_estimate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gas</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">gas_price</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nonce</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Union</span><span class="p">[</span><span class="n">TransactionReceipt</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sends a transaction to the blockchain.</span>
+
+<span class="sd">        :param abi_func: The contract function to call (ChainClient built-in)</span>
+<span class="sd">        :param value: The value in wei to send with the transaction</span>
+<span class="sd">        :param is_estimate: Whether to estimate the gas for the transaction</span>
+<span class="sd">        :param gas: The gas limit for the transaction</span>
+<span class="sd">        :param gas_price: The gas price for the transaction</span>
+<span class="sd">        :param nonce: The nonce for the transaction</span>
+<span class="sd">        :return: The transaction receipt if not estimating gas</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">built_tx</span> <span class="o">=</span> <span class="n">abi_func</span><span class="o">.</span><span class="n">build_transaction</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s1">&#39;gasPrice&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">gas_price</span> <span class="k">if</span> <span class="n">gas_price</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">gas_price</span><span class="p">,</span>
+                    <span class="s1">&#39;value&#39;</span> <span class="p">:</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">is_estimate</span> <span class="k">else</span> <span class="n">value</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+            <span class="n">built_tx</span><span class="p">[</span><span class="s1">&#39;nonce&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">get_transaction_count</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="p">)</span> <span class="k">if</span> <span class="n">nonce</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">nonce</span>
+            <span class="n">built_tx</span><span class="p">[</span><span class="s1">&#39;gas&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">built_tx</span><span class="p">[</span><span class="s1">&#39;gas&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">gas</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">gas</span>
+            <span class="k">if</span> <span class="n">is_estimate</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">estimate_gas</span><span class="p">(</span><span class="n">built_tx</span><span class="p">)</span>
+            <span class="n">signed_tx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">account</span><span class="o">.</span><span class="n">sign_transaction</span><span class="p">(</span><span class="n">built_tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">private_key</span><span class="p">)</span>
+            <span class="n">tx_hash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">send_raw_transaction</span><span class="p">(</span><span class="n">signed_tx</span><span class="o">.</span><span class="n">rawTransaction</span><span class="p">)</span>
+            <span class="n">tx_receipt</span><span class="p">:</span><span class="n">types</span><span class="o">.</span><span class="n">TxReceipt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">wait_for_transaction_receipt</span><span class="p">(</span><span class="n">tx_hash</span><span class="p">)</span>
+            <span class="n">tx_receipt</span><span class="p">:</span><span class="n">TransactionReceipt</span> <span class="o">=</span> <span class="n">TransactionReceipt</span><span class="p">(</span>
+                <span class="n">transactionHash</span><span class="o">=</span><span class="n">tx_receipt</span><span class="o">.</span><span class="n">transactionHash</span><span class="o">.</span><span class="n">hex</span><span class="p">(),</span>
+                <span class="n">transactionIndex</span><span class="o">=</span><span class="n">tx_receipt</span><span class="o">.</span><span class="n">transactionIndex</span><span class="p">,</span>
+                <span class="n">blockHash</span><span class="o">=</span><span class="n">tx_receipt</span><span class="o">.</span><span class="n">blockHash</span><span class="o">.</span><span class="n">hex</span><span class="p">(),</span>
+                <span class="n">blockNumber</span><span class="o">=</span><span class="n">tx_receipt</span><span class="o">.</span><span class="n">blockNumber</span><span class="p">,</span>
+                <span class="n">fromAddress</span><span class="o">=</span><span class="n">tx_receipt</span><span class="p">[</span><span class="s2">&quot;from&quot;</span><span class="p">],</span>
+                <span class="n">toAddress</span><span class="o">=</span><span class="n">tx_receipt</span><span class="o">.</span><span class="n">to</span><span class="p">,</span>
+                <span class="n">cumulativeGasUsed</span><span class="o">=</span><span class="n">tx_receipt</span><span class="o">.</span><span class="n">cumulativeGasUsed</span><span class="p">,</span>
+                <span class="n">gasUsed</span><span class="o">=</span><span class="n">tx_receipt</span><span class="o">.</span><span class="n">gasUsed</span><span class="p">,</span>
+                <span class="n">contractAddress</span><span class="o">=</span><span class="n">tx_receipt</span><span class="o">.</span><span class="n">contractAddress</span><span class="p">,</span>
+                <span class="n">logs</span><span class="o">=</span><span class="n">tx_receipt</span><span class="o">.</span><span class="n">logs</span><span class="p">,</span>  <span class="c1"># This might need to be processed further if logs are complex objects</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">tx_receipt</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
+                <span class="n">logsBloom</span><span class="o">=</span><span class="n">tx_receipt</span><span class="o">.</span><span class="n">logsBloom</span><span class="o">.</span><span class="n">hex</span><span class="p">()</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">tx_receipt</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">err</span></div>
+    
+    <span class="c1"># Day, Decimal, Hour, MAX_UINT_256, parseEther</span>
+
+<div class="viewcode-block" id="ChainClient.day"><a class="viewcode-back" href="../../defi_sdk_py.chain_client.html#defi_sdk_py.chain_client.ChainClient.day">[docs]</a>    <span class="k">def</span> <span class="nf">day</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Day</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ChainClient.hour"><a class="viewcode-back" href="../../defi_sdk_py.chain_client.html#defi_sdk_py.chain_client.ChainClient.hour">[docs]</a>    <span class="k">def</span> <span class="nf">hour</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Hour</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="ChainClient.max_uint_256"><a class="viewcode-back" href="../../defi_sdk_py.chain_client.html#defi_sdk_py.chain_client.ChainClient.max_uint_256">[docs]</a>    <span class="k">def</span> <span class="nf">max_uint_256</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">MAX_UINT_256</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="ChainClient.parseEther"><a class="viewcode-back" href="../../defi_sdk_py.chain_client.html#defi_sdk_py.chain_client.ChainClient.parseEther">[docs]</a>    <span class="k">def</span> <span class="nf">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">decimal</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">18</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">decimal</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, fwx/akio777.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

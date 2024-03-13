@@ -1,0 +1,39 @@
+Metadata-Version: 2.1
+Name: fwx-python-sdk
+Version: 1.0.5
+Summary: SDK for intregration with FWX protocol on RPC chain
+Home-page: UNKNOWN
+Author: FWX/xAKIOx
+License: UNKNOWN
+Description: # defi-sdk-py
+        
+        # Installation
+        
+        ```bash
+        pip install git+https://github.com/forward-x/defi-sdk-py
+        ```
+        
+        # Usage
+        
+        ### Declare client for each chain, example AVAX-FUJI
+        
+        ```python
+        from defi_sdk_py.avax_fuji_chain import ADDRESS as FUJI_ADDRESS
+        from defi_sdk_py.avax_fuji_chain import AVAXFUJIChainClient
+        client = AVAXFUJIChainClient(
+            rpc_url=FUJI_RPC_URL,
+            private_key=<YOUR_PRIVATE_KEY>,
+            address_const=FUJI_ADDRESS,
+            maxFeePerGas=3000000,
+            maxPriorityFeePerGas=2000000,
+        )
+        
+        # other logic / function ...
+        ```
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3.8
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown

@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>defi_sdk_py.helper_future_trade &mdash; fwx-defi-python-sdk 1.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=0b546569"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            fwx-defi-python-sdk
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.html">defi_sdk_py package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.chain_client.html">defi_sdk_py.chain_client package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.address_const.html">defi_sdk_py.address_const package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.core.html">defi_sdk_py.core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.pool.html">defi_sdk_py.pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.membership.html">defi_sdk_py.membership package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.stake_pool.html">defi_sdk_py.stake_pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.utils.html">defi_sdk_py.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_core.html">defi_sdk_py.helper_core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_pool.html">defi_sdk_py.helper_pool package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_future_trade.html">defi_sdk_py.helper_future_trade package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defi_sdk_py.helper_membership_and_stake_pool.html">defi_sdk_py.helper_membership_and_stake_pool package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fwx-defi-python-sdk</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">defi_sdk_py.helper_future_trade</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for defi_sdk_py.helper_future_trade</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">..abi.IHelperCore</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">..abi.IHelperFutureTrade</span> <span class="kn">import</span> <span class="n">IHelperFutureTrade</span><span class="p">,</span> <span class="n">PositionState</span><span class="p">,</span> <span class="n">PositionData</span>
+<span class="kn">from</span> <span class="nn">..abi.IERC20Metadata</span> <span class="kn">import</span> <span class="n">IERC20Metadata</span>
+<span class="kn">from</span> <span class="nn">..abi.IAPHCore</span> <span class="kn">import</span> <span class="n">Pair</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">parseEther</span><span class="p">,</span><span class="n">Day</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+
+<div class="viewcode-block" id="GetPositionStates"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.GetPositionStates">[docs]</a><span class="k">class</span> <span class="nc">GetPositionStates</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the state of positions along with pagination information.</span>
+
+<span class="sd">    :param position_states: A list of PositionState objects</span>
+<span class="sd">    :param next_cursor: The cursor for the next page of results</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position_states</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PositionState</span><span class="p">],</span> <span class="n">next_cursor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position_states</span> <span class="o">=</span> <span class="n">position_states</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_cursor</span> <span class="o">=</span> <span class="n">next_cursor</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">({</span>
+            <span class="s2">&quot;position_states&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">position_states</span><span class="p">],</span>
+            <span class="s2">&quot;next_cursor&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_cursor</span>
+        <span class="p">})</span></div>
+
+<div class="viewcode-block" id="UnrealizedPNL"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.UnrealizedPNL">[docs]</a><span class="k">class</span> <span class="nc">UnrealizedPNL</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the unrealized profit or loss (PNL) and return on equity (ROE).</span>
+
+<span class="sd">    :param pnl: The unrealized profit or loss</span>
+<span class="sd">    :param roe: The return on equity</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pnl</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">roe</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pnl</span> <span class="o">=</span> <span class="n">pnl</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">roe</span> <span class="o">=</span> <span class="n">roe</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">({</span>
+            <span class="s2">&quot;PNL&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pnl</span><span class="p">,</span>
+            <span class="s2">&quot;ROE&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">roe</span>
+        <span class="p">})</span></div>
+
+<div class="viewcode-block" id="EntryPrice"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.EntryPrice">[docs]</a><span class="k">class</span> <span class="nc">EntryPrice</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the entry price details of a position.</span>
+
+<span class="sd">    :param entry_price: The entry price of the position</span>
+<span class="sd">    :param swap_fee: The swap fee incurred</span>
+<span class="sd">    :param swap_size: The size of the swap</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry_price</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">swap_fee</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">swap_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entry_price</span> <span class="o">=</span> <span class="n">entry_price</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">swap_fee</span> <span class="o">=</span> <span class="n">swap_fee</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">swap_size</span> <span class="o">=</span> <span class="n">swap_size</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">({</span>
+            <span class="s2">&quot;entry_price&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_price</span><span class="p">,</span>
+            <span class="s2">&quot;swap_fee&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap_fee</span><span class="p">,</span>
+            <span class="s2">&quot;swap_size&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap_size</span>
+        <span class="p">})</span></div>
+
+<div class="viewcode-block" id="GetBalanceDetails"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.GetBalanceDetails">[docs]</a><span class="k">class</span> <span class="nc">GetBalanceDetails</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the balance details of an account.</span>
+
+<span class="sd">    :param free_balance: The free balance that is not used as margin</span>
+<span class="sd">    :param used_balance: The balance used as margin</span>
+<span class="sd">    :param total_balance: The total balance of the account</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">free_balance</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">used_balance</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">total_balance</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">free_balance</span> <span class="o">=</span> <span class="n">free_balance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">used_balance</span> <span class="o">=</span> <span class="n">used_balance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_balance</span> <span class="o">=</span> <span class="n">total_balance</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">({</span>
+            <span class="s2">&quot;free_balance&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">free_balance</span><span class="p">,</span>
+            <span class="s2">&quot;used_balance&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">used_balance</span><span class="p">,</span>
+            <span class="s2">&quot;total_balance&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_balance</span>
+        <span class="p">})</span></div>
+
+<div class="viewcode-block" id="OpeningClosingFee"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.OpeningClosingFee">[docs]</a><span class="k">class</span> <span class="nc">OpeningClosingFee</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the fees associated with opening or closing a position.</span>
+
+<span class="sd">    :param swap_fee: The fee for swapping</span>
+<span class="sd">    :param trading_fee: The fee for trading</span>
+<span class="sd">    :param total_fee: The total fee incurred</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">swap_fee</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">trading_fee</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">total_fee</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">swap_fee</span> <span class="o">=</span> <span class="n">swap_fee</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trading_fee</span> <span class="o">=</span> <span class="n">trading_fee</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_fee</span> <span class="o">=</span> <span class="n">total_fee</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">({</span>
+            <span class="s2">&quot;swap_fee&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap_fee</span><span class="p">,</span>
+            <span class="s2">&quot;trading_fee&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_fee</span><span class="p">,</span>
+            <span class="s2">&quot;total_fee&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_fee</span>
+        <span class="p">})</span></div>
+
+<div class="viewcode-block" id="HelperFutureTrade"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade">[docs]</a><span class="k">class</span> <span class="nc">HelperFutureTrade</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    HelperFutureTrade provides utility functions to assist with future trade calculations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the HelperFutureTrade by setting up the helper future trade contract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">HelperFutureTrade</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="p">:</span><span class="n">IHelperFutureTrade</span> <span class="o">=</span> <span class="n">IHelperFutureTrade</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">address_const</span><span class="o">.</span><span class="n">get_helper_future_trade_address</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+
+<div class="viewcode-block" id="HelperFutureTrade.get_unrealized_pnl"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_unrealized_pnl">[docs]</a>    <span class="k">def</span> <span class="nf">get_unrealized_pnl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">pair_byte</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">UnrealizedPNL</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the unrealized profit or loss (PNL) and return on equity (ROE) for a given position.</span>
+<span class="sd">        </span>
+<span class="sd">        :param nft_id: The NFT ID associated with the position</span>
+<span class="sd">        :param pair_byte: The byte representation of the pair associated with the position</span>
+<span class="sd">        :return: An UnrealizedPNL object containing the PNL and ROE</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">UnrealizedPNL</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getUnrealizedPNL</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">pair_byte</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="HelperFutureTrade.get_entry_price"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_entry_price">[docs]</a>    <span class="k">def</span> <span class="nf">get_entry_price</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">pair_byte</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">is_long</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span>
+        <span class="n">contract_size</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">expected_rate</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">slip_page</span><span class="p">:</span><span class="nb">int</span>
+    <span class="p">)</span><span class="o">-&gt;</span><span class="n">EntryPrice</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the entry price for a new position.</span>
+<span class="sd">        </span>
+<span class="sd">        :param nft_id: The NFT ID associated with the position</span>
+<span class="sd">        :param pair_byte: The byte representation of the pair associated with the position</span>
+<span class="sd">        :param is_long: A boolean indicating if the position is long (True) or short (False)</span>
+<span class="sd">        :param contract_size: The size of the contract</span>
+<span class="sd">        :param expected_rate: The expected rate for the position</span>
+<span class="sd">        :param slip_page: The slippage percentage</span>
+<span class="sd">        :return: An EntryPrice object containing the entry price, swap fee, and swap size</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pair</span><span class="p">:</span><span class="n">Pair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pairs_by_byte</span><span class="p">(</span><span class="n">pair_byte</span><span class="p">)</span>
+        <span class="n">collateral_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">underlying_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">contract_size</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">contract_size</span><span class="p">,</span> <span class="n">underlying_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">expected_rate</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">expected_rate</span><span class="p">,</span> <span class="n">collateral_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">slip_page</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">slip_page</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">EntryPrice</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getEntryPrice</span><span class="p">(</span>
+            <span class="n">nft_id</span><span class="p">,</span>
+            <span class="n">pair_byte</span><span class="p">,</span>
+            <span class="n">is_long</span><span class="p">,</span>
+            <span class="n">contract_size</span><span class="p">,</span>
+            <span class="n">expected_rate</span><span class="p">,</span>
+            <span class="n">slip_page</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">())</span></div>
+    
+<div class="viewcode-block" id="HelperFutureTrade.get_balance_details"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_balance_details">[docs]</a>    <span class="k">def</span> <span class="nf">get_balance_details</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">pair_byte</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">GetBalanceDetails</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the balance details for a given NFT ID and pair.</span>
+<span class="sd">        </span>
+<span class="sd">        :param nft_id: The NFT ID associated with the position</span>
+<span class="sd">        :param pair_byte: The byte representation of the pair associated with the position</span>
+<span class="sd">        :return: A GetBalanceDetails object containing the free, used, and total balance details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GetBalanceDetails</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getBalanceDetails</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">pair_byte</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()))</span></div>
+    
+<div class="viewcode-block" id="HelperFutureTrade.get_position_margin"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_position_margin">[docs]</a>    <span class="k">def</span> <span class="nf">get_position_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">pair_byte</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the margin requirement for a given position.</span>
+<span class="sd">        </span>
+<span class="sd">        :param nft_id: The NFT ID associated with the position</span>
+<span class="sd">        :param pair_byte: The byte representation of the pair associated with the position</span>
+<span class="sd">        :return: The margin requirement for the position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getPositionMargin</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">pair_byte</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HelperFutureTrade.get_max_withdrawal"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_max_withdrawal">[docs]</a>    <span class="k">def</span> <span class="nf">get_max_withdrawal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">pair_byte</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the maximum amount that can be withdrawn from the margin of a given position.</span>
+<span class="sd">        </span>
+<span class="sd">        :param nft_id: The NFT ID associated with the position</span>
+<span class="sd">        :param pair_byte: The byte representation of the pair associated with the position</span>
+<span class="sd">        :return: The maximum withdrawal amount</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getMaxWithdrawal</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">pair_byte</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HelperFutureTrade.get_liquidation_price"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_liquidation_price">[docs]</a>    <span class="k">def</span> <span class="nf">get_liquidation_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">pair_byte</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the liquidation price for a given position.</span>
+<span class="sd">        </span>
+<span class="sd">        :param nft_id: The NFT ID associated with the position</span>
+<span class="sd">        :param pair_byte: The byte representation of the pair associated with the position</span>
+<span class="sd">        :return: The liquidation price</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getLiquidationPrice</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">pair_byte</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HelperFutureTrade.get_margin_after_adjust_collateral"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_margin_after_adjust_collateral">[docs]</a>    <span class="k">def</span> <span class="nf">get_margin_after_adjust_collateral</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+        <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">pair_byte</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">is_add</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span>
+        <span class="n">amount</span><span class="p">:</span><span class="nb">int</span>
+    <span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the margin after adjusting the collateral for a given position.</span>
+<span class="sd">        </span>
+<span class="sd">        :param nft_id: The NFT ID associated with the position</span>
+<span class="sd">        :param pair_byte: The byte representation of the pair associated with the position</span>
+<span class="sd">        :param is_add: A boolean indicating if collateral is being added (True) or removed (False)</span>
+<span class="sd">        :param amount: The amount of collateral to adjust</span>
+<span class="sd">        :return: The margin after collateral adjustment</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pair</span><span class="p">:</span><span class="n">Pair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pairs_by_byte</span><span class="p">(</span><span class="n">pair_byte</span><span class="p">)</span>
+        <span class="n">collateral_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">amount</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">collateral_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getMarginAfterAdjustCollateral</span><span class="p">(</span>
+            <span class="n">nft_id</span><span class="p">,</span>
+            <span class="n">pair_byte</span><span class="p">,</span>
+            <span class="n">is_add</span><span class="p">,</span>
+            <span class="n">amount</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HelperFutureTrade.get_opening_fee"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_opening_fee">[docs]</a>    <span class="k">def</span> <span class="nf">get_opening_fee</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+        <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">pair_byte</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">is_long</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span>
+        <span class="n">contract_size</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">expected_rate</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">slip_page</span><span class="p">:</span><span class="nb">int</span>
+    <span class="p">)</span><span class="o">-&gt;</span><span class="n">OpeningClosingFee</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the opening fee for initiating a new position.</span>
+
+<span class="sd">        :param nft_id: The NFT ID associated with the position</span>
+<span class="sd">        :param pair_byte: The byte representation of the pair associated with the position</span>
+<span class="sd">        :param is_long: A boolean indicating if the position is long (True) or short (False)</span>
+<span class="sd">        :param contract_size: The size of the contract</span>
+<span class="sd">        :param expected_rate: The expected rate for the position</span>
+<span class="sd">        :param slip_page: The slippage percentage</span>
+<span class="sd">        :return: An OpeningClosingFee object containing the swap fee, trading fee, and total fee for opening the position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pair</span><span class="p">:</span><span class="n">Pair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pairs_by_byte</span><span class="p">(</span><span class="n">pair_byte</span><span class="p">)</span>
+        <span class="n">collateral_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">underlying_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">contract_size</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">contract_size</span><span class="p">,</span> <span class="n">underlying_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">expected_rate</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">expected_rate</span><span class="p">,</span> <span class="n">collateral_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">slip_page</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">slip_page</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">OpeningClosingFee</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getOpeningFee</span><span class="p">(</span>
+            <span class="n">nft_id</span><span class="p">,</span>
+            <span class="n">pair_byte</span><span class="p">,</span>
+            <span class="n">is_long</span><span class="p">,</span>
+            <span class="n">contract_size</span><span class="p">,</span>
+            <span class="n">expected_rate</span><span class="p">,</span>
+            <span class="n">slip_page</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="HelperFutureTrade.get_closing_fee"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_closing_fee">[docs]</a>    <span class="k">def</span> <span class="nf">get_closing_fee</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+        <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">pair_byte</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">contract_size</span><span class="p">:</span><span class="nb">int</span>
+    <span class="p">)</span><span class="o">-&gt;</span><span class="n">OpeningClosingFee</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the closing fee for terminating an existing position.</span>
+
+<span class="sd">        :param nft_id: The NFT ID associated with the position</span>
+<span class="sd">        :param pair_byte: The byte representation of the pair associated with the position</span>
+<span class="sd">        :param contract_size: The size of the contract being closed</span>
+<span class="sd">        :return: An OpeningClosingFee object containing the swap fee, trading fee, and total fee for closing the position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pair</span><span class="p">:</span><span class="n">Pair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pairs_by_byte</span><span class="p">(</span><span class="n">pair_byte</span><span class="p">)</span>
+        <span class="n">underlying_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">contract_size</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">contract_size</span><span class="p">,</span> <span class="n">underlying_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">OpeningClosingFee</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getClosingFee</span><span class="p">(</span>
+            <span class="n">nft_id</span><span class="p">,</span>
+            <span class="n">pair_byte</span><span class="p">,</span>
+            <span class="n">contract_size</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">())</span></div>
+    
+<div class="viewcode-block" id="HelperFutureTrade.get_required_collateral"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_required_collateral">[docs]</a>    <span class="k">def</span> <span class="nf">get_required_collateral</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+        <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">pair_byte</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">is_long</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span>
+        <span class="n">contract_size</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">leverage</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">expected_rate</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">slip_page</span><span class="p">:</span><span class="nb">int</span>
+    <span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the required collateral for opening a position with specified leverage.</span>
+
+<span class="sd">        :param nft_id: The NFT ID associated with the position</span>
+<span class="sd">        :param pair_byte: The byte representation of the pair associated with the position</span>
+<span class="sd">        :param is_long: A boolean indicating if the position is long (True) or short (False)</span>
+<span class="sd">        :param contract_size: The size of the contract</span>
+<span class="sd">        :param leverage: The leverage being used for the position</span>
+<span class="sd">        :param expected_rate: The expected rate for the position</span>
+<span class="sd">        :param slip_page: The slippage percentage</span>
+<span class="sd">        :return: The required collateral amount</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">pair</span><span class="p">:</span><span class="n">Pair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pairs_by_byte</span><span class="p">(</span><span class="n">pair_byte</span><span class="p">)</span>
+        <span class="n">collateral_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">underlying_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">contract_size</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">contract_size</span><span class="p">,</span> <span class="n">underlying_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">expected_rate</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">expected_rate</span><span class="p">,</span> <span class="n">collateral_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">slip_page</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">slip_page</span><span class="p">)</span>
+        <span class="n">leverage</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">leverage</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getRequiredCollateral</span><span class="p">(</span>
+            <span class="n">nft_id</span><span class="p">,</span>
+            <span class="n">pair_byte</span><span class="p">,</span>
+            <span class="n">is_long</span><span class="p">,</span>
+            <span class="n">contract_size</span><span class="p">,</span>
+            <span class="n">leverage</span><span class="p">,</span>
+            <span class="n">expected_rate</span><span class="p">,</span>
+            <span class="n">slip_page</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HelperFutureTrade.get_average_price"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_average_price">[docs]</a>    <span class="k">def</span> <span class="nf">get_average_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+        <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">pair_byte</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">is_long</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span>
+        <span class="n">contract_size</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">expected_rate</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">slip_page</span><span class="p">:</span><span class="nb">int</span>
+    <span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the average entry price for a position after considering the expected rate and slippage.</span>
+
+<span class="sd">        :param nft_id: The NFT ID associated with the position</span>
+<span class="sd">        :param pair_byte: The byte representation of the pair associated with the position</span>
+<span class="sd">        :param is_long: A boolean indicating if the position is long (True) or short (False)</span>
+<span class="sd">        :param contract_size: The size of the contract</span>
+<span class="sd">        :param expected_rate: The expected rate for the position</span>
+<span class="sd">        :param slip_page: The slippage percentage</span>
+<span class="sd">        :return: The average entry price</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">pair</span><span class="p">:</span><span class="n">Pair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pairs_by_byte</span><span class="p">(</span><span class="n">pair_byte</span><span class="p">)</span>
+        <span class="n">collateral_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">underlying_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">contract_size</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">contract_size</span><span class="p">,</span> <span class="n">underlying_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">expected_rate</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">expected_rate</span><span class="p">,</span> <span class="n">collateral_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">slip_page</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">slip_page</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getAveragePrice</span><span class="p">(</span>
+            <span class="n">nft_id</span><span class="p">,</span>
+            <span class="n">pair_byte</span><span class="p">,</span>
+            <span class="n">is_long</span><span class="p">,</span>
+            <span class="n">contract_size</span><span class="p">,</span>
+            <span class="n">expected_rate</span><span class="p">,</span>
+            <span class="n">slip_page</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HelperFutureTrade.get_pnl_after_close_position"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_pnl_after_close_position">[docs]</a>    <span class="k">def</span> <span class="nf">get_pnl_after_close_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">pair_byte</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">contract_size</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">UnrealizedPNL</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the profit or loss (PNL) after closing a position.</span>
+
+<span class="sd">        :param nft_id: The NFT ID associated with the position</span>
+<span class="sd">        :param pair_byte: The byte representation of the pair associated with the position</span>
+<span class="sd">        :param contract_size: The size of the contract being closed</span>
+<span class="sd">        :return: An UnrealizedPNL object containing the PNL and ROE after closing the position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pair</span><span class="p">:</span><span class="n">Pair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pairs_by_byte</span><span class="p">(</span><span class="n">pair_byte</span><span class="p">)</span>
+        <span class="n">underlying_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">contract_size</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">contract_size</span><span class="p">,</span> <span class="n">underlying_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">UnrealizedPNL</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getPNLAfterClosePosition</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">pair_byte</span><span class="p">,</span> <span class="n">contract_size</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">())</span></div>
+    
+<div class="viewcode-block" id="HelperFutureTrade.get_margin_after_close_position"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_margin_after_close_position">[docs]</a>    <span class="k">def</span> <span class="nf">get_margin_after_close_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">pair_byte</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">contract_size</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the remaining margin after closing a position.</span>
+
+<span class="sd">        :param nft_id: The NFT ID associated with the position</span>
+<span class="sd">        :param pair_byte: The byte representation of the pair associated with the position</span>
+<span class="sd">        :param contract_size: The size of the contract being closed</span>
+<span class="sd">        :return: The remaining margin after closing the position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pair</span><span class="p">:</span><span class="n">Pair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pairs_by_byte</span><span class="p">(</span><span class="n">pair_byte</span><span class="p">)</span>
+        <span class="n">underlying_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">contract_size</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">contract_size</span><span class="p">,</span> <span class="n">underlying_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getMarginAfterClosePosition</span><span class="p">(</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">pair_byte</span><span class="p">,</span> <span class="n">contract_size</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="HelperFutureTrade.get_balance_after_open_position"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_balance_after_open_position">[docs]</a>    <span class="k">def</span> <span class="nf">get_balance_after_open_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+        <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">pair_byte</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">is_long</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span>
+        <span class="n">contract_size</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">expected_rate</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">slip_page</span><span class="p">:</span><span class="nb">int</span>
+    <span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the account balance after opening a new position.</span>
+
+<span class="sd">        :param nft_id: The NFT ID associated with the position</span>
+<span class="sd">        :param pair_byte: The byte representation of the pair associated with the position</span>
+<span class="sd">        :param is_long: A boolean indicating if the position is long (True) or short (False)</span>
+<span class="sd">        :param contract_size: The size of the contract</span>
+<span class="sd">        :param expected_rate: The expected rate for the position</span>
+<span class="sd">        :param slip_page: The slippage percentage</span>
+<span class="sd">        :return: The account balance after opening the position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">pair</span><span class="p">:</span><span class="n">Pair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pairs_by_byte</span><span class="p">(</span><span class="n">pair_byte</span><span class="p">)</span>
+        <span class="n">collateral_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">underlying_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">contract_size</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">contract_size</span><span class="p">,</span> <span class="n">underlying_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">expected_rate</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">expected_rate</span><span class="p">,</span> <span class="n">collateral_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">slip_page</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">slip_page</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getBalanceAfterOpenPosition</span><span class="p">(</span>
+            <span class="n">nft_id</span><span class="p">,</span>
+            <span class="n">pair_byte</span><span class="p">,</span>
+            <span class="n">is_long</span><span class="p">,</span>
+            <span class="n">contract_size</span><span class="p">,</span>
+            <span class="n">expected_rate</span><span class="p">,</span>
+            <span class="n">slip_page</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HelperFutureTrade.get_liquidate_price_after_open_position"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_liquidate_price_after_open_position">[docs]</a>    <span class="k">def</span> <span class="nf">get_liquidate_price_after_open_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+        <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">pair_byte</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">is_long</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span>
+        <span class="n">contract_size</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">expected_rate</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">slip_page</span><span class="p">:</span><span class="nb">int</span>
+    <span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the liquidation price for a position immediately after it is opened.</span>
+
+<span class="sd">        :param nft_id: The NFT ID associated with the position</span>
+<span class="sd">        :param pair_byte: The byte representation of the pair associated with the position</span>
+<span class="sd">        :param is_long: A boolean indicating if the position is long (True) or short (False)</span>
+<span class="sd">        :param contract_size: The size of the contract</span>
+<span class="sd">        :param expected_rate: The expected rate for the position</span>
+<span class="sd">        :param slip_page: The slippage percentage</span>
+<span class="sd">        :return: The liquidation price immediately after opening the position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pair</span><span class="p">:</span><span class="n">Pair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pairs_by_byte</span><span class="p">(</span><span class="n">pair_byte</span><span class="p">)</span>
+        <span class="n">collateral_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">underlying_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">contract_size</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">contract_size</span><span class="p">,</span> <span class="n">underlying_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">expected_rate</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">expected_rate</span><span class="p">,</span> <span class="n">collateral_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">slip_page</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">slip_page</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getLiqPriceAfterOpenPosition</span><span class="p">(</span>
+            <span class="n">nft_id</span><span class="p">,</span>
+            <span class="n">pair_byte</span><span class="p">,</span>
+            <span class="n">is_long</span><span class="p">,</span>
+            <span class="n">contract_size</span><span class="p">,</span>
+            <span class="n">expected_rate</span><span class="p">,</span>
+            <span class="n">slip_page</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HelperFutureTrade.get_margin_after_open_position"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_margin_after_open_position">[docs]</a>    <span class="k">def</span> <span class="nf">get_margin_after_open_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+        <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">pair_byte</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">is_long</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span>
+        <span class="n">contract_size</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">expected_rate</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">slip_page</span><span class="p">:</span><span class="nb">int</span>
+    <span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the margin requirement after opening a new position.</span>
+
+<span class="sd">        :param nft_id: The NFT ID associated with the position</span>
+<span class="sd">        :param pair_byte: The byte representation of the pair associated with the position</span>
+<span class="sd">        :param is_long: A boolean indicating if the position is long (True) or short (False)</span>
+<span class="sd">        :param contract_size: The size of the contract</span>
+<span class="sd">        :param expected_rate: The expected rate for the position</span>
+<span class="sd">        :param slip_page: The slippage percentage</span>
+<span class="sd">        :return: The margin requirement after the position has been opened</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pair</span><span class="p">:</span><span class="n">Pair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pairs_by_byte</span><span class="p">(</span><span class="n">pair_byte</span><span class="p">)</span>
+        <span class="n">collateral_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">underlying_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">contract_size</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">contract_size</span><span class="p">,</span> <span class="n">underlying_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">expected_rate</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">expected_rate</span><span class="p">,</span> <span class="n">collateral_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">slip_page</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">slip_page</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getMarginAfterOpenPosition</span><span class="p">(</span>
+            <span class="n">nft_id</span><span class="p">,</span>
+            <span class="n">pair_byte</span><span class="p">,</span>
+            <span class="n">is_long</span><span class="p">,</span>
+            <span class="n">contract_size</span><span class="p">,</span>
+            <span class="n">expected_rate</span><span class="p">,</span>
+            <span class="n">slip_page</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HelperFutureTrade.get_max_contract_size"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_max_contract_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_max_contract_size</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">pair_byte</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">is_long</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span>
+        <span class="n">leverage</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">expected_rate</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">slip_page</span><span class="p">:</span><span class="nb">int</span>
+    <span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the maximum contract size that can be opened based on the available margin and leverage.</span>
+
+<span class="sd">        :param nft_id: The NFT ID associated with the position</span>
+<span class="sd">        :param pair_byte: The byte representation of the pair associated with the position</span>
+<span class="sd">        :param is_long: A boolean indicating if the position is long (True) or short (False)</span>
+<span class="sd">        :param leverage: The leverage being used for the position</span>
+<span class="sd">        :param expected_rate: The expected rate for the position</span>
+<span class="sd">        :param slip_page: The slippage percentage</span>
+<span class="sd">        :return: The maximum contract size that can be opened</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pair</span><span class="p">:</span><span class="n">Pair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pairs_by_byte</span><span class="p">(</span><span class="n">pair_byte</span><span class="p">)</span>
+        <span class="n">collateral_token</span><span class="p">:</span><span class="n">IERC20Metadata</span> <span class="o">=</span> <span class="n">IERC20Metadata</span><span class="p">(</span><span class="n">pair</span><span class="o">.</span><span class="n">pair0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">)</span>
+        <span class="n">expected_rate</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">expected_rate</span><span class="p">,</span> <span class="n">collateral_token</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span><span class="o">.</span><span class="n">call</span><span class="p">())</span>
+        <span class="n">slip_page</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">slip_page</span><span class="p">)</span>
+        <span class="n">leverage</span> <span class="o">=</span> <span class="n">parseEther</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">web3</span><span class="p">,</span> <span class="n">leverage</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getMaxContractSize</span><span class="p">(</span>
+            <span class="n">nft_id</span><span class="p">,</span>
+            <span class="n">pair_byte</span><span class="p">,</span>
+            <span class="n">is_long</span><span class="p">,</span>
+            <span class="n">leverage</span><span class="p">,</span>
+            <span class="n">expected_rate</span><span class="p">,</span>
+            <span class="n">slip_page</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="HelperFutureTrade.get_position_states"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_position_states">[docs]</a>    <span class="k">def</span> <span class="nf">get_position_states</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">result_per_page</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">GetPositionStates</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the states of positions for a given NFT ID, along with pagination information.</span>
+
+<span class="sd">        :param nft_id: The NFT ID associated with the positions</span>
+<span class="sd">        :param cursor: The cursor position for pagination</span>
+<span class="sd">        :param result_per_page: The number of results per page</span>
+<span class="sd">        :return: A GetPositionStates object containing a list of position states and the next cursor position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pos_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getPositionStates</span><span class="p">(</span><span class="n">nftId</span><span class="o">=</span><span class="n">nft_id</span><span class="p">,</span> <span class="n">cursor</span><span class="o">=</span><span class="n">cursor</span><span class="p">,</span> <span class="n">resultsPerPage</span><span class="o">=</span><span class="n">result_per_page</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">GetPositionStates</span><span class="p">(</span>
+            <span class="n">position_states</span><span class="o">=</span> <span class="p">[</span><span class="n">PositionState</span><span class="p">(</span><span class="o">*</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pos_state</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+            <span class="n">next_cursor</span><span class="o">=</span><span class="n">pos_state</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="HelperFutureTrade.get_all_active_positions"><a class="viewcode-back" href="../../defi_sdk_py.helper_future_trade.html#defi_sdk_py.helper_future_trade.HelperFutureTrade.get_all_active_positions">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_active_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nft_id</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">List</span><span class="p">[</span><span class="n">PositionData</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves all active positions for a given NFT ID.</span>
+
+<span class="sd">        :param nft_id: The NFT ID associated with the positions</span>
+<span class="sd">        :return: A list of PositionData objects representing all active positions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">PositionData</span><span class="p">(</span><span class="o">*</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">helper_future_trade</span><span class="o">.</span><span class="n">getAllActivePositions</span><span class="p">(</span><span class="n">nftId</span><span class="o">=</span><span class="n">nft_id</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">())]</span></div></div>
+
+    
+    
+    
+
+
+    
+
+
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, fwx/akio777.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
